@@ -25,11 +25,11 @@ class _LogisticaModulePageState extends State<LogisticaModulePage> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Logistica')),
+            appBar: AppBar(title: const Text('Logística')),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text('Erro ao abrir Logistica: ${snapshot.error}'),
+                child: Text('Erro ao abrir Logística: ${snapshot.error}'),
               ),
             ),
           );

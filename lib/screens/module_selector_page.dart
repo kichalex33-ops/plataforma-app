@@ -12,12 +12,12 @@ class ModuleSelectorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Andrade Gestao em Saude')),
+      appBar: AppBar(title: const Text('Andrade Gestão em Saúde')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
           const Text(
-            'Selecione o modulo',
+            'Selecione o módulo',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w800,
@@ -31,8 +31,8 @@ class ModuleSelectorPage extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           _ModuleCard(
-            title: 'Logistica',
-            subtitle: 'Abre o modulo LogiSaude preservado.',
+            title: 'Logística',
+            subtitle: 'Abre o módulo LogiSaúde preservado.',
             icon: Icons.local_shipping,
             color: _gold,
             onTap: () {
@@ -44,7 +44,7 @@ class ModuleSelectorPage extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           _ModuleCard(
-            title: 'ACE Territorial',
+            title: 'ACE',
             subtitle: 'Abre as telas territoriais preservadas.',
             icon: Icons.home_work,
             color: _navy,

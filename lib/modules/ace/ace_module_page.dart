@@ -40,11 +40,11 @@ class _AceModulePageState extends State<AceModulePage> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Scaffold(
-            appBar: AppBar(title: const Text('ACE Territorial')),
+            appBar: AppBar(title: const Text('ACE')),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text('Erro ao abrir ACE Territorial: ${snapshot.error}'),
+                child: Text('Erro ao abrir ACE: ${snapshot.error}'),
               ),
             ),
           );
@@ -60,7 +60,7 @@ class _AceModulePageState extends State<AceModulePage> {
           data: ace_theme.AppTheme.theme,
           child: Scaffold(
             drawer: const _AceDrawer(),
-            appBar: AppBar(title: const Text('ACE Territorial')),
+            appBar: AppBar(title: const Text('ACE')),
             body: IndexedStack(index: _index, children: _pages),
             bottomNavigationBar: NavigationBar(
               selectedIndex: _index,
@@ -89,7 +89,7 @@ class _AceModulePageState extends State<AceModulePage> {
                 NavigationDestination(
                   icon: Icon(Icons.bar_chart_outlined),
                   selectedIcon: Icon(Icons.bar_chart),
-                  label: 'Relatorios',
+                  label: 'Relatórios',
                 ),
               ],
             ),
@@ -121,7 +121,7 @@ class _AceDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
                   Text(
-                    'ACE Territorial',
+                    'ACE',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -129,7 +129,7 @@ class _AceDrawer extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text('Modulo preservado', style: TextStyle(color: Colors.white70)),
+                  Text('Módulo preservado', style: TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
@@ -142,7 +142,7 @@ class _AceDrawer extends StatelessWidget {
             _item(context, Icons.analytics, 'LIRA/LIA', const LiraLiaPage()),
             _item(context, Icons.warning, 'Areas prioritarias', const AreasPrioritariasPage()),
             _item(context, Icons.supervisor_account, 'Supervisor', const TerritorioSupervisorPage()),
-            _item(context, Icons.bar_chart, 'Relatorios', const RelatoriosPage()),
+            _item(context, Icons.bar_chart, 'Relatórios', const RelatoriosPage()),
             _item(context, Icons.cloud_sync, 'Central de sync', const SyncCenterPage()),
           ],
         ),

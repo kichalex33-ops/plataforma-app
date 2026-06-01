@@ -38,7 +38,7 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Usuario ou senha invalidos.')),
+      const SnackBar(content: Text('Usuário ou senha inválidos.')),
     );
   }
 
@@ -88,7 +88,7 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Gestao em Saude',
+                      'Gestão em Saúde',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 17,

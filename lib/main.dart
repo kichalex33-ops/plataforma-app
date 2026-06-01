@@ -16,7 +16,7 @@ class AndradeDemoUnificadaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Andrade Gestao em Saude',
+      title: 'Andrade Gestão em Saúde',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

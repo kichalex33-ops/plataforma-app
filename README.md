@@ -1,36 +1,38 @@
 # Andrade Demo Unificada
 
-Demo mobile Flutter da Plataforma Municipal de Saude, reunindo uma entrada unica com identidade Andrade Gestao em Saude e acesso aos modulos preservados de Logistica e ACE Territorial.
+Demo mobile Flutter da Plataforma Municipal de Saúde, reunindo uma entrada única com identidade Andrade Gestão em Saúde e acesso aos módulos preservados de Logística e ACE.
 
 ## Credenciais
 
 - Login: `Alex`
 - Senha: `1234`
 
-## Modulos
+## Módulos
 
-- **Logistica**: reaproveita a copia local do app LogiSaude em `modules/logistica`.
-- **ACE Territorial**: reaproveita a copia local do app ACE em `modules/ace`.
+- **Logística**: reaproveita a cópia local do app LogiSaúde em `modules/logistica`.
+- **ACE**: reaproveita a cópia local do app ACE em `modules/ace`.
 
-Os layouts internos dos modulos foram preservados. A identidade visual padrao foi aplicada por tokens de cor nas copias locais dos modulos.
+Os layouts internos dos módulos foram preservados. A identidade visual padrão foi aplicada por tokens de cor nas cópias locais dos módulos.
 
-## Como rodar
+## Como rodar após clonar o repositório
 
 ```powershell
-cd "C:\dev\plataforma\app\plataforma teste"
+git clone https://github.com/kichalex33-ops/plataforma-app.git
+cd plataforma-app
 C:\flutter\bin\flutter.bat pub get
-C:\flutter\bin\dart.bat analyze --no-fatal-warnings
 C:\flutter\bin\flutter.bat run
 ```
 
-## Validacao
+## Comandos de validação
 
 ```powershell
 C:\flutter\bin\flutter.bat pub get
 C:\flutter\bin\dart.bat analyze --no-fatal-warnings
 C:\flutter\bin\flutter.bat test
+C:\flutter\bin\flutter.bat build apk --debug
 ```
 
-## Documentacao
+## Documentação
 
-Veja o relatorio em `docs/RELATORIO_DEMO_UNIFICADA.md`.
+- `docs/RELATORIO_DEMO_UNIFICADA.md`
+- `docs/PLANO_MELHORIAS_DEMO.md`
