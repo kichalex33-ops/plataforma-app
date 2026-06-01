@@ -1,0 +1,36 @@
+FASE 1
+[x] CRUD de PE
+[x] Histórico de visitas
+[x] SQLite
+[x] Exclusão de PE
+[ ] Status automático
+[ ] Dashboard
+[ ] Busca
+[ ] Filtros
+
+FASE 2
+[ ] GPS obrigatório
+[ ] Foto obrigatória
+[ ] Registro entrada/saída
+[ ] Município
+
+FASE 3
+[ ] BTI
+[ ] Fórmula automática
+[ ] Histórico BTI
+
+FASE 4
+[ ] Ovitrampas
+[ ] Positivas
+[ ] Coletas
+
+FASE 5
+[ ] Mapa territorial
+[ ] Camadas
+[ ] Heatmaps
+[ ] Histórico anual
+
+FASE 6
+[ ] Painel web
+[ ] Supabase
+[ ] Multiusuário

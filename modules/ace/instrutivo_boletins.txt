@@ -1,0 +1,595 @@
+                                                                                                                                    1
+
+ INSTRUTIVO DE PREENCHIMENTO DOS BOLETINS DE CAMPO DO FAD
+
+                      PROGRAMA NACIONAL DE CONTROLE DA DENGUE
+
+ Adaptado pelo Programa Estadual de Controle da Dengue/RS (PECD/RS) e pela Seção
+                de Reservatórios e Vetores (ResVet) do LACEN/RS - junho 2013
+
+Índice
+Formulário FAD 03 – Vigilância Entomológica....................................................... 2
+Instrutivo preenchimento FAD 03........................................................................... 3
+Formulário FAD 01 – Registro diário do serviço antivetorial – frente.................... 5
+Instrutivo preenchimento FAD 01 – frente............................................................. 6
+Formulário FAD 01 - Registro diário do serviço antivetorial – verso...................... 9
+Instrutivo preenchimento FAD 01 – verso.............................................................. 10
+FAD 02 - Etiqueta para remessa de espécimes .................................................... 11
+Instrutivo preenchimento FAD 02 .......................................................................... 11
+Formulário FAD 07 – Resumo semanal do serviço antivetorial............................. 12
+Instrutivo preenchimento FAD 07........................................................................... 13
+Formulário FAD 04 – Registro diário de aplicações a ultra baixo volume............. 15
+Instrutivo preenchimento FAD 04........................................................................... 16
+Formulário FAD UBV2 – Registro diário de UBV................................................... 17
+Instrutivo preenchimento FAD UBV2...................................................................... 18
+Formulário FAD UBV3 – Registro semanal de UBV.............................................. 19
+Instrutivo preenchimento FAD UBV3..................................................................... 20
+2
+                                                                                                                                    3
+
+PROGRAMA NACIONAL DE CONTROLE DA DENGUE - PNCD
+VIGILÂNCIA ENTOMOLÓGICA - FAD –03
+
+CONTROLE: Número que o FAD gera na hora da digitação.
+
+Município: nome oficial do município. Ex. CAÇAPAVA DO SUL
+
+Código e nome da localidade: 00001 CENTRO
+
+Categoria da localidade: BAIRRO ou POVOADO (BIR) ou (PV)
+
+Zona – Área parcial de uma localidade que se quer particularizar. No campo existente
+coloca-se o numero da zona, que é restrita a um bairro. Ex. zona 1, localidade = Centro
+(como a área não esta zoneada fica em branco).
+
+Semana Epidemiológica: Utilizar calendário epidemiológico.
+
+Armadilha: Utilizar o número do tipo de armadilha utilizada: 1-Ovitrampa ou 2-
+Larvitrampa.
+
+CAMPO
+
+Endereço: Preencher com o endereço onde foi instalada a armadilha.
+
+Número quarteirão: Preencher com o nº do quarteirão.
+
+Tipo Imóvel: Preencher com o tipo de imóvel: R – Residência – C – Comercial – O –
+Outros.
+
+Identificação da Armadilha: Preencher com a identificação da armadilha.
+
+Datas
+Instalação: Preencher com a data que a armadilha foi instalada. Nos casos de
+desaparecimento da armadilha, considerar a data de instalação mais recente.
+Coleta: Preencher com a data que a armadilha foi visitada.
+
+Localização: Preencher com um local referência para facilitar a localização da armadilha
+instalada.
+
+Tubitos / Palhetas:
+Chave: Preencher quando a armadilha for positiva com o nº 1-Ovitrampa ou nº 2-
+Larvitrampa.
+No: Preencher com o nº da amostra (um tubito por armadilha positiva).
+
+Ocorrência: Preencher com o código da ocorrência (conforme descrito no rodapé do
+boletim): 1 – Casa fechada, 2 – Intervalo entre instalação e coleta maior que 7 dias; 3 -
+Armadilha ou palheta desaparecida/quebrada/removida, 4 – Armadilha seca.
+
+LABORATÓRIO
+
+Quantidade: Ovos: Preencher com a quantidade de ovos presentes na palheta; Larvas:
+preencher com a quantidade larvas do tubito correspondente.
+
+Espécie (aeg-alb-outras): Preencher com a quantidade de cada espécie encontrada.
+                                                                                                                                    4
+
+- Total de quarteirões: Informar o número total de quarteirões trabalhados.
+
+- Total de imóves: Informar o número total de imóveis visitados.
+
+- Total de armadilhas instaladas: Informar o número total de armadilhas instaladas (nº
+compatível com as armadilhas visitadas).
+
+- Total de tubitos/palhetas: Informar o número total de tubitos ou palhetas coletados.
+
+- Total de ovos: Informar o número total de ovos coletados.
+
+- Total de larvas: Informar o número total de larvas identificadas.
+
+- Total de aeg.: Informar o número total de larvas de Aedes aegypti identificadas.
+
+- Total de alb.: Informar o número total de larvas Aedes albopictus identificadas.
+
+- Total de outras: Informar o número total de outras larvas identificadas.
+
+Assinatura do Agente – é a identificação pessoal do servidor que está realizando o
+trabalho.
+
+Assinatura do Supervisor – é a identificação pessoal do servidor que está realizando o
+trabalho.
+
+Assinatura do Laboratorista – é a identificação pessoal do servidor que realizou os
+exames (observação: na maioria dos formulários não está impresso Assinatura do
+Laboratorista nesta 3ª linha, e sim Assinatura do Supervisor. Mas é para o laboratorista
+assinar).
+
+Data de entrada: Registrar a data de recebimento das amostras no laboratório
+(observação: na maioria dos formulários não existe esse campo. Portanto, a data de
+entrada deve ser escrita abaixo da Assinatura do Laboratorista).
+
+Data de conclusão: Preencher com a data em que foi realizado o exame (observação:
+na maioria dos formulários não existe esse campo. Portanto, a Data de conclusão deve
+ser escrita ou abaixo ou ao lado da Data de entrada).
+
+Importante aos laboratoristas: A Vigilância Entomológica com armadilha, para digitação
+no SISFAD, só considera os ovos e as larvas. Se a amostra apresentar pupas e/ou
+adulto, o laboratorista deve anotar no pé da página a quantidade e a espécie
+identificadas.
+
+(Para relembrar As informações referentes ao total de: quarteirões, imóveis, armadilhas
+instaladas, armadilhas positivas e tubitos/palhetas devem ser preenchidas pelos agentes
+de Campo. Total de: ovos, larvas, aeg., alb. e outras devem ser preenchidos pelos
+Laboratoristas).
+5
+                                                                                   6
+
+PROGRAMA NACIONAL DE CONTROLE DA DENGUE - PNCD
+REGISTRO DIÁRIO DO SERVIÇO ANTIVETORIAL - FAD - 01 - FRENTE
+
+Município: nome oficial do município. Ex. CAÇAPAVA DO SUL
+
+Código e nome da localidade: 00001 CENTRO
+
+Categoria da localidade: BAIRRO ou POVOADO (BIR) ou (PV)
+
+Zona – Área parcial de uma localidade que se quer particularizar. No campo existente
+coloca-se o número da zona, que é restrita a um bairro. Ex. zona 1, localidade = Centro
+(como a área não está zoneada fica em branco).
+
+Tipo – 1- Sede (todos os bairros da cidade)
+          2- Outros (área rural)
+
+Concluída: S: Quando foi trabalhado o último quarteirão da zona. Nos municípios que
+estão zoneados, da localidade.
+
+Data da atividade: Dia, mês e ano em que o trabalho foi realizado.
+
+Ciclo/ano: é o que define a periodicidade do trabalho que se está realizando ou realizou.
+Os ciclos têm sua numeração inicial (Ex: 01-2012) só durante o ano considerado. No ano
+seguinte inicia-se a numeração com o 1º ciclo.
+
+Atividade: Colocar o número referente à atividade que esta sendo desenvolvida, usando-
+
+se: 1- LI; 2- LI+T; 3- PE; 4- T; 5-DF; 6-PVE. Os boletins devem ser preenchidos
+
+separadamente por atividade (a única atividade que pode e deve ser preenchida junta é o
+
+LI+T).
+
+Por atividade,
+
+1- LI (Levantamento de Índice) término do ciclo quando terminar todas as localidades do
+
+município;
+
+2- LI + T (Levantamento de Índice mais Tratamento) seis ciclos no ano;
+
+3- PE (Pontos Estratégicos), seguir tabela;
+
+4- TRAT (Tratamento Químico);         } Devem ter sua seqüência própria de ciclos
+5- DF (Delimitação de Foco);             definida.
+6- PVE (Pesquisa Vetorial Especial);
+
+                            PESQUISA ENTOMOLÓGICA/TRATAMENTO
+
+Número (Nº) do quarteirão: preencher com o número recebido no reconhecimento
+geográfico da localidade, ou na sua atualização, realizados pelos agentes-supervisores.
+Sequencia (Seq.): É a subdivisão do quarteirão, onde o número do quarteirão originário
+é preservado. Ex.: se o quarteirão original 10 foi subdividido em dois, teremos o
+quarteirão original nº 10 e as seqüências 10/1 e 10/2.
+
+Lado: São as faces do quarteirão. Se um quarteirão possui 4 lados, o lado 1, será o lado
+onde o agente inicia o trabalho,ou seja, o lado que no RG é o inicio do quarteirão, a
+próxima face será lado 2 e assim sucessivamente.
+
+Nome do Logradouro: Nome oficial existente em placa ou conhecida pelos moradores
+da mesma.
+
+Número (Nº): Preencher com o número oficial (da prefeitura) do imóvel.
+                                                                               7
+
+Sequencia-Número(Seq): Nos casos onde não existam números oficiais, usar
+seqüências dos números oficiais; os TB estão inclusos (seja por haver mais de um imóvel
+com o mesmo número ou haver sem numeração na mesma rua). Ex. residência, nº 24, as
+próximas construídas em lotes antes vazios e que não tem número, etc. preencher com
+24-1, 24-2.
+
+Complemento (Compl): Será utilizado para nº de apartamento, salas comerciais.
+
+Tipo do Imóvel: Imóvel é a unidade básica de infestação do serviço antivetorial,
+caracterizada por ter ou não uma edificação. No caso de possuir edificação é utilizado
+para residência, comércio, e outros fins.
+Preencher o campo com uma das seguintes siglas, conforme convenção localizada no
+rodapé do formulário:
+R - residência
+C - comércio
+TB - terreno baldio
+PE - ponto estratégico
+O - outro
+
+Hora de entrada: Preencher com a hora e os minutos em que o servidor entrar no
+imóvel. Ex: 08h20min
+
+Visita: Preencher o campo com N de normal e R de recuperação.
+
+Pendência: Preencher o campo com R de Recusado ou F de Fechado, conforme
+convenção localizada no rodapé do formulário.
+
+Número de depósito inspecionado: Preencher com o número de                  depósitos
+inspecionados por tipo de depósitos, no imóvel trabalhado no levantamento.
+Conforme rodapé do verso do boletim diário:
+A1 – Caixa d’água (elevado)
+A2 – Outros depósitos de armazenamento de água (baixo)
+B – Pequenos depósitos móveis
+C - Depósitos fixos
+D1 – Pneus e outros materiais rodantes
+D2 – Lixo (recipientes plásticos, latas) sucatas, entulhos
+E – Depósitos naturais
+
+Imóvel inspecionado (LI): Marcar com um X o imóvel que foi trabalhado para o
+Levantamento de Índice.
+
+Coleta amostra
+Número da amostra
+Inicial: é o primeiro número seqüencial da primeira amostra coletada no imóvel. Ex: 001.
+Final: é o último número seqüencial da última amostra coletada no imóvel. Ex: 010
+Quantidade de Tubitos: Preencher com o número total de tubitos coletados no imóvel.
+Ex: 10
+
+Depósitos Eliminados: Preencher com o número de depósitos eliminados do imóvel, ou
+seja, aqueles que foram destruídos ou inutilizados como criadouro, para todas as
+atividades.
+
+Imóveis Tratados: Preencher com X os imóveis inspecionados que foram tratados de
+forma mecânica, biológica ou química.
+                                                                                                                                    8
+
+Tratamento
+Focal:
+Larvicida (1): Temephos utilizado em depósito de Água para Consumo Humano.
+Ex: Tipo: L1 - Qtde.(Gramas): 5 - Qtde. dep. trat: 1
+Larvicida (2): Temephos utilizado em depósito de Água não reservada para Consumo
+Humano.
+Ex. Tipo: L2 - Qtde.(Gramas): 50 - Qtde. dep. trat: 8
+
+Perifocal:
+Adulticida: Tipo: Utilizar legenda referente ao tipo de inseticida (conforme legenda de
+cada inseticida) – Qtde. cargas: Preencher com o número de cargas abertas no imóvel.
+
+SOMAR AS COLUNAS NECESSÁRIAS
+
+Assinatura do Agente – é a identificação pessoal do servidor que está realizando o
+trabalho.
+
+Assinatura do Supervisor – é a identificação pessoal do servidor que está realizando o
+trabalho.
+9
+                                                                                                                                  10
+
+REGISTRO DIÁRIO DO SERVIÇO ANTIVETORIAL - FAD - 01 - VERSO
+RESUMO DO TRABALHO DE CAMPO
+
+Transcrever os totais de:
+Número de imóveis trabalhados por tipo → Residência, Comércio, TB, PE, Outro,
+Total
+Número de imóveis → Trat. Focal, Trat. Perifocal, Inspecionados e Recuperados;
+Número de Tubitos/Amostras coletadas;
+Pendência: recusados e fechados;
+Número de depósitos inspecionados por tipo → A1, A2, C, D1, D2, E, Total;
+
+Depósitos:
+Eliminados,
+Tratados → tipo de larvicida 1 e larvicida 2, somar as gramas e quantidade de depósitos
+tratados;
+
+Adulticida: tipo e quantidade de cargas;
+
+Transcrever:
+Número e dos quarteirões trabalhados;
+Número e Seqüência dos quarteirões concluídos.
+
+                                       RESUMO DO LABORATÓRIO
+
+Número e Seqüência dos quarteirões com Aedes aegypti
+Número e Seqüência dos quarteirões com Aedes albopictus
+
+Número depósitos com espécimes, por tipo: Preencher com a soma dos depósitos
+positivos (A1, A2, B,C, D1, D2, E, TOTAL) com espécimes (Aedes aegypti, Aedes
+albopictus). O termo espécime é sinônimo de exemplar.
+
+Número de imóveis com espécimes, por tipo: Preencher com a soma dos imóveis
+positivos com espécime (Aedes aegypti, Aedes albopictus, outros) por tipo de imóvel (R,
+C, TB, PE, O, TOTAL).
+
+Número de exemplares: Preencher com a quantidade de Larvas, Pupas, Exúvia de pupa
+e Adultos por espécies (Aedes aegypti, Aedes albopictus, outros).
+
+Data da entrada: Preencher com a data da entrada do material no laboratório.
+
+Data da conclusão: Preencher com a data da realização do exame.
+
+Laboratório: Preencher com o nome do laboratório onde foi realizado o exame da
+amostra.
+
+Laboratorista: Preencher com o nome legível do laboratorista.
+
+Assinatura: Preencher com a assinatura do laboratorista que realizou os exames.
+                                                                                                                                  11
+
+ETIQUETA PARA REMESSA DE ESPÉCIMES - FAD - 02
+
+         Os dados nesta etiqueta devem ser anotados à lápis pelo agente de campo, com
+letra legível, quando houver coleta. A etiqueta deve ser enrolada no tubito / tubo de
+ensaio, e presa por atilho. As informações devem ser compatíveis com os formulários
+preenchidos no momento da visita do agente aos imóveis.
+Nº da amostra: Escrever o número da amostra. Relembrando que cada agente do
+município deve iniciar em 1 (um) e numerar até 999 (novecentos e noventa e nove),
+ininterruptamente. Após 999, iniciar em 1 novamente.
+Município: Escrever o nome do município.
+Bairro: Escrever o nome do bairro/localidade.
+Estrato: Escrever o número do estrato trabalhado, quando aplicável. Por exemplo,
+quando se faz coletas no LIRAa – Levantamento de Índice Rápido para Aedes aegypti.
+Quart: Escrever o número do quarteirão.
+Casa nº: Escrever o número da casa ou edifício com apartamento.
+Rua: Escrever o nome da rua/avenida.
+Depósito: Escrever o depósito (neste item, cabe identificar se é armadilha ou PE).
+Código do depósito: Escrever o código do depósito (A1,A2,B,C,D1,D2 ou E).
+Nº de larvas e pupas: Escrever quantidade de larvas e pupas coletadas.
+Agente: Escrever o nome legível do agente.
+Data: Escrever a data da coleta.
+Laboratório:nº de larvas/pupas
+Ae aegypti: Larvas__Pupas__: Escrever quantidade de Larvas e Pupas de Ae. aegypti
+identificadas.
+Ae albopictus: Larvas__Pupas__: Escrever quantidade de Larvas e Pupas de Ae.
+albopictus identificadas.
+Outros: Larvas__Pupas__: Escrever quantidade de Larvas e Pupas de Outras espécies
+identificadas.
+
+         Após análise da amostra, e preenchimento pelo laboratorista, a etiqueta deve ser
+grampeada no verso esquerdo superior do formulário que originou esta coleta.
+12
+                                                                                                                                  13
+
+PROGRAMA NACIONAL DE CONTROLE DA DENGUE - PNCD
+REGISTRO DIÁRIO DO SERVIÇO ANTIVETORIAL - FAD - 07
+
+Controle Digitação: Número que o FAD gera na hora da digitação.
+
+Município: nome oficial do município. Ex: CAÇAPAVA DO SUL
+
+Código e nome da localidade: 00001 CENTRO
+
+Zona – Área parcial de uma localidade que se quer particularizar. No campo existente
+coloca-se o número da zona, que é restrita a um bairro. Ex. zona 1, localidade = Centro
+(como a área não esta zoneada fica em branco).
+
+Categoria da localidade: BAIRRO ou POVOADO (BIR) ou (PV)
+
+Tipo – 1- Sede (todos os bairros da cidade)
+          2- Outros (área rural)
+
+Ciclo/ano: é o que define a periodicidade do trabalho que se está realizando ou foi
+realizado. Os ciclos têm sua numeração inicial (Ex: 01-2011) só durante o ano
+considerado. No ano seguinte inicia-se a numeração com o 1º ciclo.
+
+Data início: Primeiro dia da semana Epidemiológica.
+Data final: Último dia da semana Epidemiológica.
+
+Concluído: S: Quando foi trabalhado o último quarteirão da zona. Nos municípios que
+estão zoneados, da localidade.
+
+Semana Epidemiológica (Sem.Epidem.): Utilizar calendário epidemiológico
+
+Atividade: Colocar o número referente à atividade que está sendo desenvolvida, usando-
+se: 1- LI; 2- LI+T; 3- PE; 4 - T; 5-DF; 6-PVE. Os boletins devem ser preenchidos
+separadamente por atividade (a única atividade que pode e deve ser preenchida junta é o
+LI+T – exclusivamente para municípios infestados).
+
+                                 RESUMO DO TRABALHO DE CAMPO
+
+Total de quarteirões concluídos: preencher com o total de quarteirões.
+
+Número de imóveis trabalhados por tipo: Preencher com a soma dos imóveis
+trabalhados por tipo. Ex: residência 17; comércio 10; terreno baldio 5 = TOTAL = 32.
+
+Número de imóveis
+Trat. Focal: Preencher com a soma dos imóveis tratados.
+Trat. Perifocal: Preencher com a soma dos imóveis tratados.
+Inspecionados: Preencher com a soma dos imóveis inspecionados.
+
+Amostras Coletadas: Preencher com a quantidade de tubitos coletados.
+
+Pendência: Recusa, Fechados: Preencher com a soma dos imóveis não trabalhados.
+                     Recuperados: Preencher com a soma dos imóveis recuperados.
+
+Número de depósitos inspecionados por tipo: Preencher com a soma dos depósitos
+inspecionados por tipo: A1, A2, B, C, D1, D2, E, Total.
+                                                                                                                                  14
+
+Depósito Eliminado: Preencher com a soma dos depósitos eliminados.
+
+Depósitos Tratados:
+Larvicida (1): Utilizar para preenchimento com tratamento mecânico
+Ex: Tipo: 99
+Qtde. (Gramas): 0
+Qtde.dep.trat.: soma dos depósitos tratados mecanicamente.
+Larvicida (2): Utilizar para preenchimento com larvicida (conforme legenda referente ao
+tipo de larvicida).
+Ex: Tipo: L1
+Qtde. (Gramas): quantidade em gramas
+Qtde.dep.trat.: soma dos depósitos tratados com larvicidas.
+
+Adulticida:
+Tipo: Utilizar legenda referente ao tipo de inseticida.
+Qtide (Cargas): Preencher com a soma de cargas utilizadas.
+
+Total de Agentes na semana: Preencher com a soma dos agentes que trabalharam na
+semana. Ex: 2 agentes trabalharam 5 dias da semana, então total de agentes =10
+Total de Dias Trabalhados na semana: Preencher com a soma dos dias trabalhados.
+
+                                       RESUMO DO LABORATÓRIO
+
+Número de depósitos com espécimes, por tipo: Preencher com a soma dos depósitos
+positivos (A1, A2, B,C, D1, D2, E, TOTAL) com espécimes (Aedes aegypti, Aedes
+albopictus).
+
+Número de imóveis com espécimes, por tipo: Preencher com a soma dos imóveis
+positivos com espécimes (Aedes aegypti, Aedes albopictus, outros) por tipo de imóvel (R,
+C, TB, PE, O, TOTAL).
+
+Número de exemplares: Preencher com a quantidade de Larvas, Pupas, Exúvia de pupa
+e Adultos por espécies (Aedes aegypti, Aedes albopictus, outros).
+
+Número e sequência dos quarteirões com Aedes aegypti: Preencher com o número
+do (s) quarteirão (ões) e seqüência com Aedes aegypti.
+
+Número e sequência dos quarteirões com Aedes albopictus: Preencher com o
+número do (s) quarteirão (ões) e seqüência com Aedes albopictus.
+
+Número e sequência dos quarteirões com Aedes aegypti + Aedes albopictus:
+Preencher com o número do (s) quarteirão (ões) e seqüência com encontro simultâneo
+de Aedes aegypti e Aedes albopictus.
+
+Visto do Supervisor: Preencher com visto do supervisor de campo.
+
+Data do visto: Preencher com a data do visto.
+
+Este formulário tem por finalidade consolidar os dados das atividades de campo e
+laboratório por localidade.
+É a soma dos dados do verso do(s) registro(s) diário(s) do serviço antivetorial (FAD–01).
+
+A DIGITAÇÃO SERÁ FEITA NO FAD POR MEIO DO RESUMO SEMANAL DO SERVIÇO
+ANTIVETORIAL (FAD – 07).
+15
+                                                                                                                                  16
+
+PROGRAMA NACIONAL DE CONTROLE DA DENGUE - PNCD
+REGISTRO DIÁRIO DE APLICAÇÕES A ULTRA BAIXO VOLUME - Bloqueio de caso - FAD –04
+
+Controle Digitação: Número que o FAD gera na hora da digitação.
+
+Município: nome oficial do município. Ex: CAÇAPAVA DO SUL
+
+Código e Nome da Localidade: 00001 CENTRO
+
+Semana epidemiológica: Utilizar calendário epidemiológico
+
+Atividade realizada com uma aplicação única com equipamento portátil, no período não
+epidêmico.
+
+                                             Parâmetros Técnicos
+
+Inseticida: Preencher com o nome do inseticida autorizado a ser utilizado conforme as
+instruções vigentes do MS.
+Formulação e Concentração Produto Comercial: Preencher com o tipo de
+apresentação do produto CE= Concentrado Emulsionável; EA= Emulsão Aquosa.
+Dose de Ingrediente Ativo: Preencher com a dose de ingrediente ativo preconizado pelo
+MS.
+Vazão (ml/min): Preencher com a vazão do equipamento de aplicação costal
+motorizado.
+Identificação Equipamento: Preencher com os dados de identificação do equipamento
+de aplicação (número, código).
+
+Endereço do Paciente: Preencher com o endereço do paciente notificado pelo serviço
+de vigilância epidemiológica.
+Data do Comunicado: Preencher com a data da comunicação da ocorrência pela
+vigilância epidemiológica.
+Número notificação (SINAN): Preencher com o número fornecido pela vigilância
+epidemiológica.
+Número Quarteirão do Caso: Preencher com o número do quarteirão do caso
+notificado.
+Número dos Quarteirões Programados: Preencher com o número dos quarteirões que
+deverão ser tratados com UBV portátil, conforme indicação do Manual de Normas
+Técnicas do PNCD.
+
+                                              Atividade de campo
+
+Número do Quarteirão Trabalhado: Preencher com o número do quarteirão em que foi
+realizado o trabalho.
+Número de Imóveis Tratados: Preencher com o total de imóveis existentes no
+quarteirão trabalhado.
+Tempo de Aplicação (min) : Preencher com o tempo gasto em minutos para realização
+do trabalhado no quarteirão.
+Local (P=Peri; I= Intra; IP= Intra/Peri): Preencher com os locais de aplicação: P=
+Peridomicílio, I= Intradomicílio, IP= Intra e Peridomicílio.
+Consumo (L):
+Calda: Informar o quantitativo - em litros, da solução utilizada no equipamento.
+Combustível: Preencher com o quantitativo, em litros, de combustível gasto no
+quarteirão.
+
+Operador 1 e Operador 2: Preencher com o nome legível dos servidores responsáveis
+pela operação.
+
+A DIGITAÇÃO SERÁ FEITA NO FAD POR MEIO DO REGISTRO DIÁRIO.
+17
+                                                                                                                                  18
+
+PROGRAMA NACIONAL DE CONTROLE DA DENGUE - PNCD
+REGISTRO DIÁRIO DE UBV - FAD –UBV2
+
+Município: nome oficial do município. Ex: CAÇAPAVA DO SUL
+
+Equipamento: 1-Pesado ou 2-Portátil
+
+Tipo de atividade de Nebulização: 1-Surto/Epidemia ou 3-Portátil p/apoio a UBV
+pesado.
+
+Semana Epidemiológica: Utilizar calendário epidemiológico
+
+Inseticida: Preencher com o nome do inseticida autorizado para utilização no programa
+conforme as instruções vigentes do MS.
+
+Formulação e concentração produto comercial
+
+Dose de ingrediente ativo g/ha: Preencher com a dose de ingrediente ativo preconizado
+pelo MS.
+
+Vazão prevista (ml/minuto): Preencher com a vazão do equipamento.
+
+Dia: Preencher com o dia da realização da atividade.
+
+Localidade (código/nome): 00001 CENTRO
+
+Categoria da Localidade: BAIRRO ou POVOADO (BIR) ou (PV)
+
+Ciclo/Ciclos programados: Preencher com o número do ciclo que está sendo realizado
+e o número de ciclos que serão realizados/programados. Ex: 01/04.
+
+Quarteirões tratados: Preencher com o número dos quarteirões em que o trabalho foi
+realizado.
+
+Tempo de aplicação (minutos): Preencher com o tempo gasto em minutos para
+realização do trabalho.
+
+Consumo (litros)
+Calda: Preencher com o quantitativo de calda (solução), em litros, aplicada nos
+quarteirões.
+Combustível: Preencher com o quantitativo, em litros, de combustível gasto nos
+quarteirões, no equipamento e no veiculo.
+
+Km percorrido: Preencher com a quilometragem feita no percurso.
+
+Motorista, Operador 1 e Operador 2: Preencher com o nome legível dos servidores
+responsáveis pela operação.
+19
+                                                                                                                                  20
+
+PROGRAMA NACIONAL DE CONTROLE DA DENGUE - PNCD
+RESUMO SEMANAL DE UBV - FAD - UBV3
+
+Controle Digitação: Número que o FAD gera na hora da digitação.
+
+ESTE FORMULÁRIO É USADO PARA RESUMO DAS ATIVIDADES DE UBV.
+O RESUMO SEMANAL É REALIZADO POR LOCALIDADE.
+A DIGITAÇÃO SERÁ FEITA NO FAD POR MEIO DO RESUMO SEMANAL DE UBV.
+
