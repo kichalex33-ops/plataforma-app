@@ -7,6 +7,7 @@ import '../../core/app_info.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../motorista/eventos/eventos_pendentes_page.dart';
+import '../../motorista/fase6/fase6_status_page.dart';
 import '../../motorista/operacional/logistica_fluxo_viagem_pages.dart';
 import '../../motorista/simulacao/corrida_simulada_service.dart';
 import '../../motorista/sync/driver_sync_panel.dart';
@@ -216,6 +217,18 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const EventosPendentesPage()),
+              );
+            },
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          QuickActionCard(
+            icon: Icons.hub,
+            title: 'Fase 6 - Integracoes',
+            subtitle: 'Webhook, WhatsApp, SUS e frota em modo preparado.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const Fase6StatusPage()),
               );
             },
           ),
