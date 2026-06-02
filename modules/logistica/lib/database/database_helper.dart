@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../core/logistica/logistica_demo_config.dart';
 import '../core/logistica/logistica_mock_seed.dart';
 import '../models/exclusao_log_model.dart';
 
@@ -17,7 +18,9 @@ class DatabaseHelper {
 
     _database = await _initDB('logisaude.db');
     await ensureLogisticaMvpSchema(_database!);
-    await LogisticaMockSeed(_database!).seedIfEmpty();
+    if (LogisticaDemoConfig.demoSeedEnabled) {
+      await LogisticaMockSeed(_database!).seedIfEmpty();
+    }
     return _database!;
   }
 

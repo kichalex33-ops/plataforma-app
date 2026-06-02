@@ -2,7 +2,7 @@
 
 ## Base técnica implementada
 
-A etapa 3 criou uma base offline-first própria para transporte sanitário dentro do módulo Logística, sem remover as tabelas legadas do LogiSaúde.
+A etapa 3 criou uma base offline-first própria para transporte sanitário dentro do módulo Logística, sem remover as tabelas legadas do próprio módulo.
 
 Arquivos principais:
 
@@ -145,14 +145,20 @@ Campos:
 - `created_at`
 - `updated_at`
 
-## Seed mockado
+## Seed de homologação
 
 Arquivo: `logistica_mock_seed.dart`
 
-Criado para demonstração sem backend:
+Criado para homologação sem backend, mas desligado por padrão. O seed só roda quando o app for iniciado com:
+
+```powershell
+C:\flutter\bin\flutter.bat run --dart-define=DEMO_SEED_ENABLED=true
+```
+
+Quando habilitado, cria:
 
 - 2 veículos.
-- 2 motoristas.
+- 2 motoristas, incluindo `Alex` com id `motorista-local`.
 - 3 viagens.
 - 8 pacientes.
 - Pacientes com acessibilidade.
@@ -160,7 +166,7 @@ Criado para demonstração sem backend:
 - 1 ocorrência de paciente ausente.
 - 1 aviso da central.
 
-O seed roda apenas quando `logistica_viagens` está vazia.
+Com `DEMO_SEED_ENABLED=false`, o app não cria dados falsos e a tela de viagens permanece vazia até receber viagens atribuídas pelo painel.
 
 ## Pendências
 

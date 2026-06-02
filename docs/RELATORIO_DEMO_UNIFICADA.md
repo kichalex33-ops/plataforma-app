@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Foi criada uma demo mobile isolada em `C:\dev\plataforma\app\plataforma teste`, sem alterar os projetos originais `logisaude` e `APP_LOGISTICA_MUNICIPAL_ENTREGA`.
+Foi criada uma demo mobile isolada em `C:\dev\plataforma\app\plataforma teste`, sem alterar os projetos originais de Logística e ACE.
 
 ## Arquivos criados na demo
 
@@ -18,14 +18,14 @@ Foi criada uma demo mobile isolada em `C:\dev\plataforma\app\plataforma teste`, 
 
 Para aplicar a identidade visual padrão sem alterar os projetos originais, os dois apps foram copiados para dentro da demo:
 
-- `modules/logistica`: cópia local de `C:\dev\plataforma\app\logisaude`
+- `modules/logistica`: cópia local do módulo Logística
 - `modules/ace`: cópia local de `C:\dev\plataforma\app\APP_LOGISTICA_MUNICIPAL_ENTREGA`
 
 Foram excluídos da cópia apenas artefatos gerados como `.dart_tool`, `build` e arquivos de lock/plugins gerados.
 
 ## Apps reaproveitados
 
-- `modules/logistica`: usado como dependência local `logisaude_driver`.
+- `modules/logistica`: usado como dependência local do módulo Logística.
 - `modules/ace`: usado como dependência local `controle_ace`.
 
 ## Adaptações mínimas
@@ -33,7 +33,7 @@ Foram excluídos da cópia apenas artefatos gerados como `.dart_tool`, `build` e
 - Criada tela inicial institucional com identidade Andrade Gestão em Saúde.
 - Criado login local da demo com `Alex / 1234`.
 - Criada tela simples de seleção com os módulos `Logística` e `ACE`.
-- Criado wrapper `LogisticaModulePage` para inicializar banco/tema do LogiSaúde e abrir o app original sem o login interno.
+- Criado wrapper `LogisticaModulePage` para inicializar banco/tema da Logística e abrir o app original sem o login interno.
 - Criado wrapper `AceModulePage` para inicializar banco do ACE e abrir telas originais em uma casca mínima de navegação.
 - Aplicada a paleta visual Andrade nas cópias locais dos módulos, alterando apenas tokens de cor em:
   - `modules/logistica/lib/core/theme/app_colors.dart`
@@ -41,7 +41,7 @@ Foram excluídos da cópia apenas artefatos gerados como `.dart_tool`, `build` e
 
 ## Layouts preservados
 
-- O layout interno do LogiSaúde foi preservado; somente a paleta da cópia local foi ajustada.
+- O layout interno da Logística foi preservado; somente a paleta da cópia local foi ajustada.
 - As telas internas do ACE (`PE`, `Visitas`, `Quarteirões`, `Mapa`, `BTI`, `Ovitrampas`, `LIRA/LIA`, `Relatórios` e outras) foram preservadas; somente a paleta da cópia local foi ajustada.
 - A identidade Andrade foi aplicada apenas no login e na seleção de módulos da demo.
 

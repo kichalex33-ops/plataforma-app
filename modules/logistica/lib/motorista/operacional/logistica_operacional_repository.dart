@@ -20,23 +20,35 @@ class LogisticaTripSnapshot {
 
   String get viagemId => viagem['id_local']?.toString() ?? '';
   double? get kmInicial => (viagem['km_inicial'] as num?)?.toDouble();
-  String get status => viagem['status']?.toString() ?? StatusViagem.aguardando.dbValue;
+  String get status =>
+      viagem['status']?.toString() ?? StatusViagem.aguardando.dbValue;
   int get totalPacientes => passageiros.length;
   int get totalAcessibilidade => pacientes
-      .where((item) => (item['acessibilidade']?.toString() ?? 'nenhuma') != 'nenhuma')
+      .where(
+        (item) =>
+            (item['acessibilidade']?.toString() ?? 'nenhuma') != 'nenhuma',
+      )
       .length;
   int get transportados => passageiros
-      .where((item) => item['status_ida']?.toString() == StatusPacienteIda.embarcado.dbValue)
+      .where(
+        (item) =>
+            item['status_ida']?.toString() ==
+            StatusPacienteIda.embarcado.dbValue,
+      )
       .length;
   int get ausentesDesistentes => passageiros
-      .where((item) =>
-          item['status_ida']?.toString() == StatusPacienteIda.ausente.dbValue ||
-          item['status_ida']?.toString() == StatusPacienteIda.desistiu.dbValue)
+      .where(
+        (item) =>
+            item['status_ida']?.toString() ==
+                StatusPacienteIda.ausente.dbValue ||
+            item['status_ida']?.toString() ==
+                StatusPacienteIda.desistiu.dbValue,
+      )
       .length;
   double get totalDespesas => despesas.fold(
-        0,
-        (total, item) => total + ((item['valor'] as num?)?.toDouble() ?? 0),
-      );
+    0,
+    (total, item) => total + ((item['valor'] as num?)?.toDouble() ?? 0),
+  );
 }
 
 class LogisticaOperacionalRepository {
@@ -46,12 +58,15 @@ class LogisticaOperacionalRepository {
   LogisticaOperacionalRepository({
     DatabaseHelper? databaseHelper,
     LogisticaOfflineQueue? queue,
-  })  : databaseHelper = databaseHelper ?? DatabaseHelper.instance,
-        queue = queue ?? const LogisticaOfflineQueue();
+  }) : databaseHelper = databaseHelper ?? DatabaseHelper.instance,
+       queue = queue ?? const LogisticaOfflineQueue();
 
   Future<List<LogisticaTripSnapshot>> listarViagensDoDia() async {
     final db = await databaseHelper.database;
-    final viagens = await db.query('logistica_viagens', orderBy: 'data_consulta ASC');
+    final viagens = await db.query(
+      'logistica_viagens',
+      orderBy: 'data_consulta ASC',
+    );
     final snapshots = <LogisticaTripSnapshot>[];
     for (final viagem in viagens) {
       snapshots.add(await carregarSnapshot(viagem['id_local']!.toString()));
@@ -124,10 +139,11 @@ class LogisticaOperacionalRepository {
       'km_inicial': kmSaida,
       'saida_em': now,
     });
-    await _enqueue(
-      TipoEventoSync.viagemIniciada,
-      {'viagem_id': viagemId, 'km_saida': kmSaida, 'saida_em': now},
-    );
+    await _enqueue(TipoEventoSync.viagemIniciada, {
+      'viagem_id': viagemId,
+      'km_saida': kmSaida,
+      'saida_em': now,
+    });
   }
 
   Future<void> marcarPaciente({
@@ -157,7 +173,8 @@ class LogisticaOperacionalRepository {
       'passageiro_id': passageiroId,
       'status': status.dbValue,
     });
-    if (status == StatusPacienteIda.ausente || status == StatusPacienteIda.desistiu) {
+    if (status == StatusPacienteIda.ausente ||
+        status == StatusPacienteIda.desistiu) {
       await registrarOcorrencia(
         viagemId: viagemId,
         tipo: status == StatusPacienteIda.ausente
@@ -186,7 +203,7 @@ class LogisticaOperacionalRepository {
       'id_servidor': null,
       'viagem_id_local': viagemId,
       'veiculo_id_local': 'vei-001',
-      'motorista_id_local': 'mot-001',
+      'motorista_id_local': 'motorista-local',
       'local': 'Despesa local',
       'tipo': 'despesa',
       'litros': 1.0,
@@ -210,7 +227,8 @@ class LogisticaOperacionalRepository {
       'logistica_passageiros_viagem',
       {
         'status_volta': status.dbValue,
-        'justificativa_retorno': status == StatusPacienteVolta.justificado ||
+        'justificativa_retorno':
+            status == StatusPacienteVolta.justificado ||
                 status == StatusPacienteVolta.naoRetornou
             ? 'Justificado no app'
             : null,
@@ -242,9 +260,7 @@ class LogisticaOperacionalRepository {
     await _enqueue(TipoEventoSync.retornoIniciado, {'viagem_id': viagemId});
   }
 
-  Future<void> concluirDesembarqueVolta({
-    required String passageiroId,
-  }) async {
+  Future<void> concluirDesembarqueVolta({required String passageiroId}) async {
     await marcarRetorno(
       passageiroId: passageiroId,
       status: StatusPacienteVolta.desembarcado,
@@ -283,11 +299,11 @@ class LogisticaOperacionalRepository {
     await registrarOcorrencia(
       viagemId: viagemId,
       tipo: TipoOcorrencia.panico,
-      descricao: 'PANICO acionado pelo motorista.',
+      descricao: 'Pânico acionado pelo motorista.',
     );
     await _enqueue(TipoEventoSync.panicoAcionado, {
       'viagem_id': viagemId,
-      'mensagem': 'Central sera notificada quando houver conexao',
+      'mensagem': 'Central será notificada quando houver conexão',
     });
   }
 
@@ -300,7 +316,7 @@ class LogisticaOperacionalRepository {
       'viagem_id_local': viagemId,
       'passageiro_id_local': passageiroId,
       'paciente_id_local': passageiroId,
-      'tipo': 'presenca',
+      'tipo': 'presença',
       'foto_path': 'mock/comprovante.jpg',
       'created_at': now,
       'updated_at': now,
@@ -325,7 +341,7 @@ class LogisticaOperacionalRepository {
       'id_local': 'oco-${DateTime.now().microsecondsSinceEpoch}',
       'id_servidor': null,
       'viagem_id_local': viagemId,
-      'motorista_id_local': 'mot-001',
+      'motorista_id_local': 'motorista-local',
       'paciente_id_local': pacienteId,
       'tipo': tipo.dbValue,
       'descricao': descricao,
@@ -355,7 +371,10 @@ class LogisticaOperacionalRepository {
     );
   }
 
-  Future<void> _enqueue(TipoEventoSync tipo, Map<String, dynamic> payload) async {
+  Future<void> _enqueue(
+    TipoEventoSync tipo,
+    Map<String, dynamic> payload,
+  ) async {
     final db = await databaseHelper.database;
     final item = queue.criarItem(tipoEvento: tipo, payload: payload);
     await db.insert('logistica_sync_items', item.toMap());

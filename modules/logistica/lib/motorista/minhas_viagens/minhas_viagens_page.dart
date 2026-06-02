@@ -43,7 +43,7 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
       MotoristaModel(
         id: motoristaId,
         nome: 'Motorista local',
-        municipio: 'Municipio local',
+        municipio: 'Município local',
       );
 
   @override
@@ -113,7 +113,7 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
                   title: 'Status do servidor',
                   description: controller.servidorOnline
                       ? 'Viagens podem ser atualizadas pelo backend.'
-                      : 'Mostrando dados locais disponiveis offline.',
+                      : 'Mostrando dados locais disponíveis offline.',
                   child: const DriverSyncPanel(),
                 ),
               ),
@@ -131,9 +131,9 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
                     : controller.viagens.isEmpty
                     ? const EmptyStateCard(
                         icon: Icons.route,
-                        title: 'Nenhuma viagem atribuida',
+                        title: 'Nenhuma viagem atribuída',
                         message:
-                            'As proximas viagens aparecem aqui quando o painel web atribuir rotas ao motorista.',
+                            'As próximas viagens aparecem aqui quando o painel atribuir rotas ao motorista.',
                       )
                     : RefreshIndicator(
                         onRefresh: () => controller.carregar(motoristaId),
@@ -141,7 +141,7 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
                           padding: const EdgeInsets.all(AppSpacing.md),
                           children: [
                             SectionHeader(
-                              title: 'Viagens atribuidas',
+                              title: 'Viagens atribuídas',
                               subtitle:
                                   '${controller.viagens.length} viagem(ns) para este motorista.',
                             ),
@@ -170,8 +170,7 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
                                       resumo.possuiAcessibilidade,
                                   tipoVisual: _tipoVisual(viagem),
                                   onTap: () => _abrirDetalhe(index),
-                                  onPreparacao: () =>
-                                      _iniciarPreparacao(index),
+                                  onPreparacao: () => _iniciarPreparacao(index),
                                 ),
                               );
                             }),
@@ -187,9 +186,9 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
   }
 
   String _tipoVisual(ViagemModel viagem) {
-    if (viagem.isTransferencia) return 'Transferencia';
+    if (viagem.isTransferencia) return 'Transferência';
     if (viagem.isRetorno) return 'Retorno';
-    if (viagem.isPrioritaria) return 'Prioritaria';
+    if (viagem.isPrioritaria) return 'Prioritária';
     return 'Comum';
   }
 }
@@ -304,7 +303,7 @@ class _ViagemCard extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: onPreparacao,
                   icon: const Icon(Icons.fact_check),
-                  label: const Text('Iniciar Preparacao'),
+                  label: const Text('Iniciar Preparação'),
                 ),
               ),
             ],
@@ -316,8 +315,8 @@ class _ViagemCard extends StatelessWidget {
 
   Color _corTipo(String tipo) {
     return switch (tipo) {
-      'Prioritaria' => const Color(0xFFC62828),
-      'Transferencia' => const Color(0xFF1565C0),
+      'Prioritária' => const Color(0xFFC62828),
+      'Transferência' => const Color(0xFF1565C0),
       'Retorno' => const Color(0xFF6A1B9A),
       _ => AppColors.primary,
     };

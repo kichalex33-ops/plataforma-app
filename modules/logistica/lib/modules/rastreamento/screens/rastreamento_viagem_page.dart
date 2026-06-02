@@ -17,7 +17,7 @@ class RastreamentoViagemPage extends StatefulWidget {
 }
 
 class _RastreamentoViagemPageState extends State<RastreamentoViagemPage> {
-  static const viagemSimuladaId = 'simulado-logisaude-001';
+  static const viagemSimuladaId = 'simulado-logistica-001';
   static const rotaNome = 'UBS Centro -> Hospital de Clinicas de POA';
 
   final repository = RastreamentoRepository();
@@ -39,7 +39,7 @@ class _RastreamentoViagemPageState extends State<RastreamentoViagemPage> {
       nome: 'RS-124',
       latitude: -29.64742,
       longitude: -51.31684,
-      status: 'Saida do municipio confirmada',
+      status: 'Saída do município confirmada',
       detalhe: 'GPS simulado ativo, fila local pendente de sync',
       minuto: 14,
       velocidade: 58,
@@ -182,7 +182,7 @@ class _RastreamentoViagemPageState extends State<RastreamentoViagemPage> {
     return Scaffold(
       appBar: widget.embed
           ? null
-          : AppBar(title: const Text('LogiSaude - Rastreio GPS')),
+          : AppBar(title: const Text('Logística - Rastreio GPS')),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.md),
         children: [
@@ -236,7 +236,7 @@ class _StatusViagemCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 const Expanded(
                   child: Text(
-                    'Viagem LogiSaude 001',
+                    'Viagem Logística 001',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                   ),
                 ),
@@ -375,7 +375,7 @@ class _OperacaoAoVivoCard extends StatelessWidget {
             const Divider(),
             _FluxoTile(
               icon: Icons.phone_android,
-              title: 'App LogiSaude',
+              title: 'App Logística',
               text:
                   'Grava viagem, passageiros, eventos e pontos GPS no SQLite antes de tentar sincronizar.',
               destaque:
@@ -621,7 +621,7 @@ class _MapaRotaPainter extends CustomPainter {
 
   void _drawLabels(Canvas canvas, Size size, _Bounds bounds) {
     final labels = const [
-      _GeoLabel('Municipio origem', -29.62, -51.36),
+      _GeoLabel('Município origem', -29.62, -51.36),
       _GeoLabel('Eldorado do Sul', -30.08, -51.60),
       _GeoLabel('Porto Alegre', -30.03, -51.22),
       _GeoLabel('Centro historico', -30.03, -51.23),

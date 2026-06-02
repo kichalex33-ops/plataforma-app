@@ -35,7 +35,7 @@ class _AuditoriaPageState extends State<AuditoriaPage> {
 
   String formatarData(String valor) {
     final data = DateTime.tryParse(valor);
-    if (data == null) return valor.isEmpty ? 'Data nao informada' : valor;
+    if (data == null) return valor.isEmpty ? 'Data não informada' : valor;
 
     final dia = data.day.toString().padLeft(2, '0');
     final mes = data.month.toString().padLeft(2, '0');
@@ -161,13 +161,13 @@ class _AuditoriaPageState extends State<AuditoriaPage> {
               _LinhaAuditoria(
                 icon: Icons.person,
                 texto: item.motorista.isEmpty
-                    ? 'Motorista nao informado'
+                    ? 'Motorista não informado'
                     : item.motorista,
               ),
               _LinhaAuditoria(
                 icon: Icons.location_city,
                 texto: item.municipio.isEmpty
-                    ? 'Municipio nao informado'
+                    ? 'Município não informado'
                     : item.municipio,
               ),
               const SizedBox(height: AppSpacing.sm),

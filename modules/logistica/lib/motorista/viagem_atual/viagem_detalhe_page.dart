@@ -97,7 +97,7 @@ class _ViagemDetalhePageState extends State<ViagemDetalhePage> {
           const SizedBox(height: AppSpacing.md),
           const SectionHeader(
             title: 'Dados operacionais',
-            subtitle: 'Informacoes da viagem atribuida pelo painel.',
+            subtitle: 'Informações da viagem atribuída pelo painel.',
           ),
           _DetalheCard(
             icon: Icons.info_outline,
@@ -127,7 +127,7 @@ class _ViagemDetalhePageState extends State<ViagemDetalhePage> {
             ),
           const SizedBox(height: AppSpacing.md),
           const SectionHeader(
-            title: 'Execucao da viagem',
+            title: 'Execução da viagem',
             subtitle: 'Acoes registram eventos locais offline-first.',
           ),
           _AcaoButton(
@@ -147,7 +147,7 @@ class _ViagemDetalhePageState extends State<ViagemDetalhePage> {
           ),
           _AcaoButton(
             icon: Icons.report,
-            label: 'Registrar ocorrencia',
+            label: 'Registrar ocorrência',
             onPressed: () => _acao(EventoViagemTipo.ocorrenciaRegistrada),
           ),
           _AcaoButton(

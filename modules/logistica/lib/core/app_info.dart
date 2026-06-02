@@ -1,4 +1,4 @@
 class AppInfo {
-  static const nome = 'LogiSaúde';
-  static const versaoLocal = '1.1.0-logisaude';
+  static const nome = 'Logística';
+  static const versaoLocal = '1.1.0-logistica';
 }

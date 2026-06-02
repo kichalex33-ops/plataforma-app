@@ -111,7 +111,7 @@ class _Brand extends StatelessWidget {
         SizedBox(width: 10),
         Expanded(
           child: Text(
-            'LogiSaúde',
+            'Logística',
             style: TextStyle(
               color: Colors.white,
               fontSize: 22,

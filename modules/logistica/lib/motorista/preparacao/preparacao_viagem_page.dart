@@ -110,7 +110,7 @@ class _PreparacaoViagemPageState extends State<PreparacaoViagemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Preparacao da viagem')),
+      appBar: AppBar(title: const Text('Preparação da viagem')),
       body: FutureBuilder<void>(
         future: _carregamento,
         builder: (context, snapshot) {
@@ -134,7 +134,8 @@ class _PreparacaoViagemPageState extends State<PreparacaoViagemPage> {
               const SizedBox(height: AppSpacing.md),
               const SectionHeader(
                 title: 'Dados da saida',
-                subtitle: 'Preencha o KM inicial e conclua o checklist pre-uso.',
+                subtitle:
+                    'Preencha o KM inicial e conclua o checklist pre-uso.',
               ),
               Card(
                 child: Padding(
@@ -142,8 +143,14 @@ class _PreparacaoViagemPageState extends State<PreparacaoViagemPage> {
                   child: Column(
                     children: [
                       _InfoLine('Motorista', widget.motorista.nome),
-                      _InfoLine('Veiculo', widget.viagem.veiculoId ?? 'A definir'),
-                      _InfoLine('Horario automatico', DateTime.now().toString()),
+                      _InfoLine(
+                        'Veiculo',
+                        widget.viagem.veiculoId ?? 'A definir',
+                      ),
+                      _InfoLine(
+                        'Horario automatico',
+                        DateTime.now().toString(),
+                      ),
                       const SizedBox(height: AppSpacing.md),
                       TextField(
                         controller: _kmController,
@@ -249,7 +256,11 @@ class _ResumoViagemCard extends StatelessWidget {
               spacing: AppSpacing.sm,
               runSpacing: AppSpacing.sm,
               children: [
-                Chip(label: Text('Status: ${ViagemStatus.label(viagem.estadoOperacional)}')),
+                Chip(
+                  label: Text(
+                    'Status: ${ViagemStatus.label(viagem.estadoOperacional)}',
+                  ),
+                ),
                 Chip(label: Text('Prioridade: ${viagem.prioridade}')),
                 Chip(label: Text('$totalPacientes paciente(s)')),
                 Chip(label: Text('$totalAcompanhantes acompanhante(s)')),

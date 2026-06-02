@@ -19,7 +19,8 @@ class LogisticaViagensAtribuidasPage extends StatefulWidget {
 class _LogisticaViagensAtribuidasPageState
     extends State<LogisticaViagensAtribuidasPage> {
   final repository = LogisticaOperacionalRepository();
-  late Future<List<LogisticaTripSnapshot>> future = repository.listarViagensDoDia();
+  late Future<List<LogisticaTripSnapshot>> future = repository
+      .listarViagensDoDia();
 
   Future<void> _reload() async {
     setState(() => future = repository.listarViagensDoDia());
@@ -44,25 +45,50 @@ class _LogisticaViagensAtribuidasPageState
               children: [
                 const SectionHeader(
                   title: 'Viagens do dia',
-                  subtitle: 'Dados locais para demonstração offline.',
+                  subtitle:
+                      'Viagens atribuídas pela plataforma ou seed de homologação.',
                 ),
-                ...viagens.map((item) => _ViagemAtribuidaCard(
-                      snapshot: item,
-                      onTap: () async {
-                        await repository.iniciarPreparacao(item.viagemId);
-                        if (!context.mounted) return;
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => LogisticaPreparacaoPage(
-                              viagemId: item.viagemId,
-                              repository: repository,
+                if (viagens.isEmpty)
+                  const Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(AppSpacing.md),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nenhuma viagem atribuída',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
-                        );
-                        await _reload();
-                      },
-                    )),
+                          SizedBox(height: AppSpacing.xs),
+                          Text(
+                            'As viagens aparecerão aqui quando forem enviadas pelo painel.',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ...viagens.map(
+                  (item) => _ViagemAtribuidaCard(
+                    snapshot: item,
+                    onTap: () async {
+                      await repository.iniciarPreparacao(item.viagemId);
+                      if (!context.mounted) return;
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => LogisticaPreparacaoPage(
+                            viagemId: item.viagemId,
+                            repository: repository,
+                          ),
+                        ),
+                      );
+                      await _reload();
+                    },
+                  ),
+                ),
               ],
             ),
           );
@@ -93,7 +119,10 @@ class _ViagemAtribuidaCard extends StatelessWidget {
             children: [
               Text(
                 '${viagem['origem']} → ${viagem['destino_principal']}',
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
               const SizedBox(height: AppSpacing.sm),
               Wrap(
@@ -106,7 +135,9 @@ class _ViagemAtribuidaCard extends StatelessWidget {
                   if (acessibilidade)
                     Chip(
                       avatar: const Icon(Icons.accessible, size: 18),
-                      label: Text('${snapshot.totalAcessibilidade} acessibilidade'),
+                      label: Text(
+                        '${snapshot.totalAcessibilidade} acessibilidade',
+                      ),
                     ),
                 ],
               ),
@@ -152,7 +183,8 @@ class LogisticaPreparacaoPage extends StatelessWidget {
             'Motorista: ${snapshot.viagem['motorista_id_local']}',
             'Checklist pré-uso: pendente',
             'KM de saída: pendente',
-            if ((snapshot.viagem['observacoes_central']?.toString() ?? '').isNotEmpty)
+            if ((snapshot.viagem['observacoes_central']?.toString() ?? '')
+                .isNotEmpty)
               'Central: ${snapshot.viagem['observacoes_central']}',
           ],
         ),
@@ -188,7 +220,8 @@ class LogisticaCheckinSaidaPage extends StatefulWidget {
   });
 
   @override
-  State<LogisticaCheckinSaidaPage> createState() => _LogisticaCheckinSaidaPageState();
+  State<LogisticaCheckinSaidaPage> createState() =>
+      _LogisticaCheckinSaidaPageState();
 }
 
 class _LogisticaCheckinSaidaPageState extends State<LogisticaCheckinSaidaPage> {
@@ -220,9 +253,9 @@ class _LogisticaCheckinSaidaPageState extends State<LogisticaCheckinSaidaPage> {
       );
     } on LogisticaValidationException catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error.message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
     }
   }
 
@@ -271,12 +304,15 @@ class LogisticaRotaIdaPage extends StatelessWidget {
     required this.repository,
   });
 
-  Future<void> _acao(BuildContext context, Future<void> Function() action) async {
+  Future<void> _acao(
+    BuildContext context,
+    Future<void> Function() action,
+  ) async {
     await action();
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Registro salvo localmente.')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Registro salvo localmente.')));
     (context as Element).markNeedsBuild();
   }
 
@@ -290,58 +326,62 @@ class LogisticaRotaIdaPage extends StatelessWidget {
         _ResumoOperacional(snapshot: snapshot),
         OutlinedButton.icon(
           onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Navegação externa será aberta em etapa futura.')),
+            const SnackBar(
+              content: Text('Navegação externa será aberta em etapa futura.'),
+            ),
           ),
           icon: const Icon(Icons.navigation),
           label: const Text('Abrir no Waze/Google Maps'),
         ),
-        ...snapshot.passageiros.map((p) => Card(
-              child: ListTile(
-                title: Text(pacienteNome(snapshot, p)),
-                subtitle: Text('Status ida: ${p['status_ida']}'),
-                trailing: Wrap(
-                  spacing: 6,
-                  children: [
-                    IconButton(
-                      tooltip: 'Confirmar desembarque',
-                      onPressed: () => _acao(
-                        context,
-                        () => repository.marcarPaciente(
-                          viagemId: viagemId,
-                          passageiroId: p['id_local']!.toString(),
-                          status: StatusPacienteIda.desembarcado,
-                        ),
+        ...snapshot.passageiros.map(
+          (p) => Card(
+            child: ListTile(
+              title: Text(pacienteNome(snapshot, p)),
+              subtitle: Text('Status ida: ${p['status_ida']}'),
+              trailing: Wrap(
+                spacing: 6,
+                children: [
+                  IconButton(
+                    tooltip: 'Confirmar desembarque',
+                    onPressed: () => _acao(
+                      context,
+                      () => repository.marcarPaciente(
+                        viagemId: viagemId,
+                        passageiroId: p['id_local']!.toString(),
+                        status: StatusPacienteIda.desembarcado,
                       ),
-                      icon: const Icon(Icons.check_circle),
                     ),
-                    IconButton(
-                      tooltip: 'Ausente',
-                      onPressed: () => _acao(
-                        context,
-                        () => repository.marcarPaciente(
-                          viagemId: viagemId,
-                          passageiroId: p['id_local']!.toString(),
-                          status: StatusPacienteIda.ausente,
-                        ),
+                    icon: const Icon(Icons.check_circle),
+                  ),
+                  IconButton(
+                    tooltip: 'Ausente',
+                    onPressed: () => _acao(
+                      context,
+                      () => repository.marcarPaciente(
+                        viagemId: viagemId,
+                        passageiroId: p['id_local']!.toString(),
+                        status: StatusPacienteIda.ausente,
                       ),
-                      icon: const Icon(Icons.person_off),
                     ),
-                    IconButton(
-                      tooltip: 'Desistiu',
-                      onPressed: () => _acao(
-                        context,
-                        () => repository.marcarPaciente(
-                          viagemId: viagemId,
-                          passageiroId: p['id_local']!.toString(),
-                          status: StatusPacienteIda.desistiu,
-                        ),
+                    icon: const Icon(Icons.person_off),
+                  ),
+                  IconButton(
+                    tooltip: 'Desistiu',
+                    onPressed: () => _acao(
+                      context,
+                      () => repository.marcarPaciente(
+                        viagemId: viagemId,
+                        passageiroId: p['id_local']!.toString(),
+                        status: StatusPacienteIda.desistiu,
                       ),
-                      icon: const Icon(Icons.cancel),
                     ),
-                  ],
-                ),
+                    icon: const Icon(Icons.cancel),
+                  ),
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
         FilledButton.icon(
           style: FilledButton.styleFrom(backgroundColor: AppColors.atrasado),
           onPressed: () => repository.acionarPanico(viagemId),
@@ -374,7 +414,11 @@ class LogisticaEsperaPage extends StatelessWidget {
   final String viagemId;
   final LogisticaOperacionalRepository repository;
 
-  const LogisticaEsperaPage({super.key, required this.viagemId, required this.repository});
+  const LogisticaEsperaPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -384,11 +428,13 @@ class LogisticaEsperaPage extends StatelessWidget {
       repository: repository,
       builder: (context, snapshot) => [
         _ResumoOperacional(snapshot: snapshot),
-        _InfoCard(lines: [
-          'Status: Em Espera',
-          'Cronômetro: ${LogisticaCalculator.tempoEmEspera(DateTime.tryParse(snapshot.viagem['inicio_espera']?.toString() ?? ''), DateTime.now()).inMinutes} min',
-          'Consulta: ${snapshot.viagem['horario_consulta'] ?? '-'}',
-        ]),
+        _InfoCard(
+          lines: [
+            'Status: Em Espera',
+            'Cronômetro: ${LogisticaCalculator.tempoEmEspera(DateTime.tryParse(snapshot.viagem['inicio_espera']?.toString() ?? ''), DateTime.now()).inMinutes} min',
+            'Consulta: ${snapshot.viagem['horario_consulta'] ?? '-'}',
+          ],
+        ),
         OutlinedButton.icon(
           onPressed: () async {
             await repository.registrarDespesaMock(viagemId);
@@ -422,10 +468,15 @@ class LogisticaReembarquePage extends StatefulWidget {
   final String viagemId;
   final LogisticaOperacionalRepository repository;
 
-  const LogisticaReembarquePage({super.key, required this.viagemId, required this.repository});
+  const LogisticaReembarquePage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
 
   @override
-  State<LogisticaReembarquePage> createState() => _LogisticaReembarquePageState();
+  State<LogisticaReembarquePage> createState() =>
+      _LogisticaReembarquePageState();
 }
 
 class _LogisticaReembarquePageState extends State<LogisticaReembarquePage> {
@@ -444,7 +495,9 @@ class _LogisticaReembarquePageState extends State<LogisticaReembarquePage> {
       );
     } on LogisticaValidationException catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
     }
   }
 
@@ -455,47 +508,49 @@ class _LogisticaReembarquePageState extends State<LogisticaReembarquePage> {
       viagemId: widget.viagemId,
       repository: widget.repository,
       builder: (context, snapshot) => [
-        ...snapshot.passageiros.map((p) => Card(
-              child: ListTile(
-                title: Text(pacienteNome(snapshot, p)),
-                subtitle: Text('Retorno: ${p['status_volta']}'),
-                trailing: Wrap(
-                  spacing: 4,
-                  children: [
-                    IconButton(
-                      tooltip: 'Embarcado',
-                      onPressed: () async {
-                        await widget.repository.marcarRetorno(
-                          passageiroId: p['id_local']!.toString(),
-                          status: StatusPacienteVolta.embarcado,
-                        );
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.check_box),
+        ...snapshot.passageiros.map(
+          (p) => Card(
+            child: ListTile(
+              title: Text(pacienteNome(snapshot, p)),
+              subtitle: Text('Retorno: ${p['status_volta']}'),
+              trailing: Wrap(
+                spacing: 4,
+                children: [
+                  IconButton(
+                    tooltip: 'Embarcado',
+                    onPressed: () async {
+                      await widget.repository.marcarRetorno(
+                        passageiroId: p['id_local']!.toString(),
+                        status: StatusPacienteVolta.embarcado,
+                      );
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.check_box),
+                  ),
+                  IconButton(
+                    tooltip: 'Não retornou/justificado',
+                    onPressed: () async {
+                      await widget.repository.marcarRetorno(
+                        passageiroId: p['id_local']!.toString(),
+                        status: StatusPacienteVolta.justificado,
+                      );
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.rule),
+                  ),
+                  IconButton(
+                    tooltip: 'Capturar comprovante',
+                    onPressed: () => widget.repository.capturarComprovante(
+                      widget.viagemId,
+                      p['id_local']!.toString(),
                     ),
-                    IconButton(
-                      tooltip: 'Não retornou/justificado',
-                      onPressed: () async {
-                        await widget.repository.marcarRetorno(
-                          passageiroId: p['id_local']!.toString(),
-                          status: StatusPacienteVolta.justificado,
-                        );
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.rule),
-                    ),
-                    IconButton(
-                      tooltip: 'Capturar comprovante',
-                      onPressed: () => widget.repository.capturarComprovante(
-                        widget.viagemId,
-                        p['id_local']!.toString(),
-                      ),
-                      icon: const Icon(Icons.photo_camera),
-                    ),
-                  ],
-                ),
+                    icon: const Icon(Icons.photo_camera),
+                  ),
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
         FilledButton.icon(
           onPressed: _iniciarVolta,
           icon: const Icon(Icons.keyboard_return),
@@ -510,7 +565,11 @@ class LogisticaRotaVoltaPage extends StatelessWidget {
   final String viagemId;
   final LogisticaOperacionalRepository repository;
 
-  const LogisticaRotaVoltaPage({super.key, required this.viagemId, required this.repository});
+  const LogisticaRotaVoltaPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -524,19 +583,21 @@ class LogisticaRotaVoltaPage extends StatelessWidget {
           icon: const Icon(Icons.navigation),
           label: const Text('Navegação externa'),
         ),
-        ...snapshot.passageiros.map((p) => Card(
-              child: ListTile(
-                title: Text(pacienteNome(snapshot, p)),
-                subtitle: Text('Desembarque retorno: ${p['status_volta']}'),
-                trailing: IconButton(
-                  tooltip: 'Desembarque concluído',
-                  onPressed: () => repository.concluirDesembarqueVolta(
-                    passageiroId: p['id_local']!.toString(),
-                  ),
-                  icon: const Icon(Icons.flag),
+        ...snapshot.passageiros.map(
+          (p) => Card(
+            child: ListTile(
+              title: Text(pacienteNome(snapshot, p)),
+              subtitle: Text('Desembarque retorno: ${p['status_volta']}'),
+              trailing: IconButton(
+                tooltip: 'Desembarque concluído',
+                onPressed: () => repository.concluirDesembarqueVolta(
+                  passageiroId: p['id_local']!.toString(),
                 ),
+                icon: const Icon(Icons.flag),
               ),
-            )),
+            ),
+          ),
+        ),
         FilledButton.icon(
           style: FilledButton.styleFrom(backgroundColor: AppColors.atrasado),
           onPressed: () => repository.acionarPanico(viagemId),
@@ -565,10 +626,15 @@ class LogisticaEncerramentoPage extends StatefulWidget {
   final String viagemId;
   final LogisticaOperacionalRepository repository;
 
-  const LogisticaEncerramentoPage({super.key, required this.viagemId, required this.repository});
+  const LogisticaEncerramentoPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
 
   @override
-  State<LogisticaEncerramentoPage> createState() => _LogisticaEncerramentoPageState();
+  State<LogisticaEncerramentoPage> createState() =>
+      _LogisticaEncerramentoPageState();
 }
 
 class _LogisticaEncerramentoPageState extends State<LogisticaEncerramentoPage> {
@@ -594,7 +660,9 @@ class _LogisticaEncerramentoPageState extends State<LogisticaEncerramentoPage> {
       Navigator.popUntil(context, (route) => route.isFirst);
     } on LogisticaValidationException catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
     }
   }
 
@@ -606,13 +674,15 @@ class _LogisticaEncerramentoPageState extends State<LogisticaEncerramentoPage> {
       repository: widget.repository,
       builder: (context, snapshot) => [
         _ResumoOperacional(snapshot: snapshot),
-        _InfoCard(lines: [
-          'Horário automático: ${DateTime.now()}',
-          'KM inicial: ${snapshot.kmInicial ?? '-'}',
-          'Despesas: R\$ ${snapshot.totalDespesas.toStringAsFixed(2)}',
-          'Pacientes transportados: ${snapshot.transportados}',
-          'Ocorrências: ${snapshot.ocorrencias.length}',
-        ]),
+        _InfoCard(
+          lines: [
+            'Horário automático: ${DateTime.now()}',
+            'KM inicial: ${snapshot.kmInicial ?? '-'}',
+            'Despesas: R\$ ${snapshot.totalDespesas.toStringAsFixed(2)}',
+            'Pacientes transportados: ${snapshot.transportados}',
+            'Ocorrências: ${snapshot.ocorrencias.length}',
+          ],
+        ),
         TextField(
           controller: kmFinalController,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -651,7 +721,9 @@ class _SnapshotScaffold extends StatelessWidget {
       body: FutureBuilder<LogisticaTripSnapshot>(
         future: repository.carregarSnapshot(viagemId),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
           return ListView(
             padding: const EdgeInsets.all(AppSpacing.md),
             children: [
@@ -689,7 +761,11 @@ class _ResumoOperacional extends StatelessWidget {
                 Chip(label: Text('Status: ${snapshot.status}')),
                 Chip(label: Text('${snapshot.totalPacientes} pacientes')),
                 if (snapshot.totalAcessibilidade > 0)
-                  Chip(label: Text('${snapshot.totalAcessibilidade} acessibilidade')),
+                  Chip(
+                    label: Text(
+                      '${snapshot.totalAcessibilidade} acessibilidade',
+                    ),
+                  ),
               ],
             ),
           ],
@@ -711,10 +787,14 @@ class _InfoCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: lines.map((line) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Text(line),
-              )).toList(),
+          children: lines
+              .map(
+                (line) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(line),
+                ),
+              )
+              .toList(),
         ),
       ),
     );
@@ -734,7 +814,9 @@ class _PacienteTile extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           acessibilidade == 'nenhuma' ? Icons.person : Icons.accessible,
-          color: acessibilidade == 'nenhuma' ? AppColors.primary : Colors.orange.shade800,
+          color: acessibilidade == 'nenhuma'
+              ? AppColors.primary
+              : Colors.orange.shade800,
         ),
         title: Text(pacienteNome(snapshot, passageiro)),
         subtitle: Text(

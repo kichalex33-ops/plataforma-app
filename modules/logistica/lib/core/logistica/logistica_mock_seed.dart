@@ -39,8 +39,8 @@ class LogisticaMockSeed {
 
     final motoristas = [
       {
-        'id_local': 'mot-001',
-        'nome': 'Alex Kich',
+        'id_local': 'motorista-local',
+        'nome': 'Alex',
         'cpf': '00000000000',
         'telefone': '(00) 99999-0001',
         'cnh': 'AB',
@@ -55,12 +55,27 @@ class LogisticaMockSeed {
     ];
 
     final pacientes = [
-      ['pac-001', 'Maria Oliveira', 'Rua A, 100', TipoAcessibilidade.cadeirante],
+      [
+        'pac-001',
+        'Maria Oliveira',
+        'Rua A, 100',
+        TipoAcessibilidade.cadeirante,
+      ],
       ['pac-002', 'José Santos', 'Rua B, 45', TipoAcessibilidade.nenhuma],
       ['pac-003', 'Ana Costa', 'Rua C, 78', TipoAcessibilidade.muletas],
       ['pac-004', 'Paulo Lima', 'Rua D, 12', TipoAcessibilidade.nenhuma],
-      ['pac-005', 'Clara Souza', 'Rua E, 88', TipoAcessibilidade.mobilidadeReduzida],
-      ['pac-006', 'Pedro Alves', 'Rua F, 34', TipoAcessibilidade.acompanhanteObrigatorio],
+      [
+        'pac-005',
+        'Clara Souza',
+        'Rua E, 88',
+        TipoAcessibilidade.mobilidadeReduzida,
+      ],
+      [
+        'pac-006',
+        'Pedro Alves',
+        'Rua F, 34',
+        TipoAcessibilidade.acompanhanteObrigatorio,
+      ],
       ['pac-007', 'Helena Rocha', 'Rua G, 56', TipoAcessibilidade.nenhuma],
       ['pac-008', 'Rafael Dias', 'Rua H, 91', TipoAcessibilidade.maca],
     ];
@@ -73,7 +88,7 @@ class LogisticaMockSeed {
         'unidade_destino': 'Hospital Regional',
         'data_consulta': now.add(const Duration(hours: 2)).toIso8601String(),
         'horario_consulta': '10:30',
-        'motorista_id_local': 'mot-001',
+        'motorista_id_local': 'motorista-local',
         'veiculo_id_local': 'vei-001',
         'status': StatusViagem.aguardando.dbValue,
         'prioridade': 'alta',
@@ -101,7 +116,7 @@ class LogisticaMockSeed {
         'unidade_destino': 'Hospital Estadual',
         'data_consulta': now.add(const Duration(days: 1)).toIso8601String(),
         'horario_consulta': '08:00',
-        'motorista_id_local': 'mot-001',
+        'motorista_id_local': 'motorista-local',
         'veiculo_id_local': 'vei-001',
         'status': StatusViagem.aguardando.dbValue,
         'prioridade': 'transferencia',
@@ -187,7 +202,7 @@ class LogisticaMockSeed {
         {
           'id_local': 'oco-001',
           'viagem_id_local': 'via-001',
-          'motorista_id_local': 'mot-001',
+          'motorista_id_local': 'motorista-local',
           'paciente_id_local': 'pac-003',
           'tipo': TipoOcorrencia.pacienteAusente.dbValue,
           'descricao': 'Paciente não localizado no endereço de embarque.',

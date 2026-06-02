@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Transformar o módulo Logística da demo em um app profissional de transporte sanitário, mantendo a base atual reaproveitada do LogiSaúde e evoluindo por etapas para um fluxo sequencial de viagem, operação offline-first, controle de pacientes, frota, despesas, auditoria e sincronização futura com uma central.
+Transformar o módulo Logística da demo em um app profissional de transporte sanitário, mantendo a base atual reaproveitada da Logística e evoluindo por etapas para um fluxo sequencial de viagem, operação offline-first, controle de pacientes, frota, despesas, auditoria e sincronização futura com uma central.
 
 Nesta etapa, este documento define o planejamento técnico. Não há implementação de código neste ciclo.
 

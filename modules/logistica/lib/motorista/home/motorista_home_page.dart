@@ -39,7 +39,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
 
   void _mostrarIndisponivel(BuildContext context, String recurso) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$recurso sera conectado nas proximas etapas.')),
+      SnackBar(content: Text('$recurso será conectado nas próximas etapas.')),
     );
   }
 
@@ -48,7 +48,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
         const MotoristaModel(
           id: 'motorista-local',
           nome: 'Motorista local',
-          municipio: 'Municipio local',
+          municipio: 'Município local',
         );
   }
 
@@ -82,7 +82,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Simulacao de corrida iniciada por 5 minutos.'),
+        content: Text('Simulação de corrida iniciada por 5 minutos.'),
       ),
     );
   }
@@ -101,7 +101,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
         : 'Motorista local';
     final nomeMunicipio = motoristaAtual.municipio.trim().isNotEmpty
         ? motoristaAtual.municipio.trim()
-        : 'Municipio local';
+        : 'Município local';
 
     return Scaffold(
       appBar: AppBar(
@@ -129,7 +129,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'LogiSaude Driver App',
+                  'Logística',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -147,7 +147,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
           const SizedBox(height: AppSpacing.lg),
           const SectionHeader(
             title: 'Resumo operacional',
-            subtitle: 'Status atual do motorista e das viagens atribuidas.',
+            subtitle: 'Status atual do motorista e das viagens atribuídas.',
           ),
           DashboardCard(
             icon: Icons.badge,
@@ -165,8 +165,8 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
           const SizedBox(height: AppSpacing.sm),
           const DashboardCard(
             icon: Icons.event_available,
-            title: 'Proximas viagens',
-            value: 'Aguardando atribuicoes',
+            title: 'Próximas viagens',
+            value: 'Aguardando atribuições',
             subtitle: 'Viagens sao criadas pelo painel web.',
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -190,7 +190,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
           QuickActionCard(
             icon: Icons.route,
             title: 'Ver minhas viagens',
-            subtitle: 'Fluxo operacional completo da viagem sanitaria.',
+            subtitle: 'Fluxo operacional completo da viagem sanitária.',
             onTap: () {
               Navigator.push(
                 context,
@@ -204,7 +204,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
           QuickActionCard(
             icon: Icons.play_arrow,
             title: 'Continuar viagem',
-            subtitle: 'Retomar a execucao operacional em andamento.',
+            subtitle: 'Retomar a execução operacional em andamento.',
             onTap: () => _mostrarIndisponivel(context, 'Continuar viagem'),
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -245,7 +245,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Simulacao de corrida',
+                                  'Simulação de corrida',
                                   style: TextStyle(
                                     color: AppColors.textMuted,
                                     fontWeight: FontWeight.w700,
@@ -277,7 +277,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
                         OutlinedButton.icon(
                           onPressed: _simulacaoService.cancelar,
                           icon: const Icon(Icons.stop_circle),
-                          label: const Text('Cancelar simulacao'),
+                          label: const Text('Cancelar simulação'),
                         ),
                       ],
                     ],

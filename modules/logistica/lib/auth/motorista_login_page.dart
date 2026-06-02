@@ -69,7 +69,7 @@ class _MotoristaLoginPageState extends State<MotoristaLoginPage> {
 
     if (nome.isEmpty || municipio.isEmpty || senha.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Informe motorista, municipio e senha.')),
+        const SnackBar(content: Text('Informe motorista, município e senha.')),
       );
       return;
     }
@@ -174,7 +174,7 @@ class _MotoristaLoginPageState extends State<MotoristaLoginPage> {
                       controller: municipioController,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
-                        labelText: 'Municipio',
+                        labelText: 'Município',
                         prefixIcon: Icon(Icons.location_city),
                       ),
                     ),
