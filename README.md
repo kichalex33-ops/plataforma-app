@@ -85,4 +85,5 @@ C:\flutter\bin\flutter.bat build apk --debug
 - `docs/MAQUINA_ESTADOS_VIAGEM.md`
 - `docs/PLANO_DADOS_LOGISTICA.md`
 - `docs/HOMOLOGACAO_ETAPA_2.md`
+- `docs/logistica/`
 - `docs/v2/`
