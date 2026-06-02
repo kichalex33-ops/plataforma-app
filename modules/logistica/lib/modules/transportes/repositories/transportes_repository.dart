@@ -77,6 +77,12 @@ class TransportesRepository {
     String? finalidade,
     String status = ViagemStatus.agendada,
     String? observacoes,
+    String prioridade = 'normal',
+    String? observacoesCentral,
+    String? unidadeDestino,
+    String? dataConsulta,
+    String? horarioConsulta,
+    String? destinoPrincipal,
   }) async {
     final now = DateTime.now().toIso8601String();
     final viagem = ViagemModel(
@@ -89,6 +95,13 @@ class TransportesRepository {
       finalidade: finalidade,
       status: status,
       observacoes: observacoes,
+      prioridade: prioridade,
+      observacoesCentral: observacoesCentral,
+      unidadeDestino: unidadeDestino,
+      dataConsulta: dataConsulta,
+      horarioConsulta: horarioConsulta,
+      destinoPrincipal: destinoPrincipal,
+      statusOperacional: ViagemStatus.aguardando,
     );
     await _insertAndQueue(
       'transportes_viagens',
@@ -148,6 +161,14 @@ class TransportesRepository {
     String? necessidadeEspecial,
     String? embarque,
     String? desembarque,
+    bool acompanhante = false,
+    String? acessibilidade,
+    String? telefone,
+    String? enderecoEmbarque,
+    bool cadeirante = false,
+    bool mobilidadeReduzida = false,
+    bool acompanhanteObrigatorio = false,
+    String? observacoesEmbarque,
   }) async {
     final now = DateTime.now().toIso8601String();
     final passageiro = PassageiroModel(
@@ -158,6 +179,14 @@ class TransportesRepository {
       necessidadeEspecial: necessidadeEspecial,
       embarque: embarque,
       desembarque: desembarque,
+      acompanhante: acompanhante,
+      acessibilidade: acessibilidade,
+      telefone: telefone,
+      enderecoEmbarque: enderecoEmbarque,
+      cadeirante: cadeirante,
+      mobilidadeReduzida: mobilidadeReduzida,
+      acompanhanteObrigatorio: acompanhanteObrigatorio,
+      observacoesEmbarque: observacoesEmbarque,
     );
     await _insertAndQueue(
       'transportes_passageiros',

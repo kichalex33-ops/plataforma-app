@@ -124,6 +124,11 @@
   - `modules/logistica`
   - `lib/modules/logistica/logistica_module_page.dart`
   - futura documentação operacional em `docs/`
+- Documentos técnicos específicos:
+  - `docs/ESCOPO_LOGISTICA_MVP.md`
+  - `docs/ROADMAP_LOGISTICA_3_MESES.md`
+  - `docs/MAQUINA_ESTADOS_VIAGEM.md`
+  - `docs/PLANO_DADOS_LOGISTICA.md`
 - Ações:
   - Km inicial e final.
   - Abastecimentos.
@@ -131,6 +136,13 @@
   - Ocorrências.
   - Histórico.
   - Indicadores básicos.
+- Ações críticas planejadas para transporte sanitário:
+  - Fluxo sequencial da viagem: preparação, ida, espera, retorno e finalização.
+  - Controle de passageiros com acessibilidade e justificativas.
+  - Comprovantes por foto vinculados à viagem e ao paciente.
+  - Botão de pânico simples nas telas de rota.
+  - Card de sincronização pendente com estados visualmente claros.
+  - Perfil e histórico operacional do motorista.
 - Risco: médio a alto, dependendo do nível de alteração no app reaproveitado.
 - Esforço estimado: médio a alto.
 - Prioridade: alta.

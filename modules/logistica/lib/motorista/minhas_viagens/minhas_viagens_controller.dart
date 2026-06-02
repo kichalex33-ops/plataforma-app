@@ -18,6 +18,7 @@ class MinhasViagensController extends ChangeNotifier {
 
   bool carregando = false;
   List<ViagemModel> viagens = const [];
+  Map<String, ViagemAtribuidaResumo> resumos = const {};
   String? erro;
   bool servidorOnline = false;
 
@@ -28,6 +29,7 @@ class MinhasViagensController extends ChangeNotifier {
 
     try {
       viagens = await repository.listarPorMotorista(motoristaId);
+      resumos = await repository.carregarResumos(viagens);
       servidorOnline = await apiClient.testarConexao();
       notifyListeners();
 
@@ -42,11 +44,13 @@ class MinhasViagensController extends ChangeNotifier {
 
       if (doServidor.isNotEmpty) {
         viagens = doServidor;
+        resumos = await repository.carregarResumos(viagens);
         debugPrint('[SYNC] viagens do servidor=${doServidor.length}');
       }
     } catch (error) {
       erro = error.toString();
       viagens = const [];
+      resumos = const {};
       debugPrint('[SYNC] carregar viagens falhou: $error');
     } finally {
       carregando = false;
@@ -78,6 +82,14 @@ class MinhasViagensController extends ChangeNotifier {
       status: item['status']?.toString() ?? ViagemStatus.rascunho,
       finalidade: item['finalidade']?.toString(),
       observacoes: item['observacoes']?.toString(),
+      prioridade: item['prioridade']?.toString() ?? 'normal',
+      observacoesCentral: item['observacoes_central']?.toString(),
+      unidadeDestino: item['unidade_destino']?.toString(),
+      dataConsulta: item['data_consulta']?.toString(),
+      horarioConsulta: item['horario_consulta']?.toString(),
+      destinoPrincipal: item['destino_principal']?.toString(),
+      statusOperacional:
+          item['status_operacional']?.toString() ?? ViagemStatus.aguardando,
     );
   }
 }

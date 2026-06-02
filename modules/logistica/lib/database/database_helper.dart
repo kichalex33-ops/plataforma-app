@@ -15,6 +15,7 @@ class DatabaseHelper {
     if (_database != null) return _database!;
 
     _database = await _initDB('logisaude.db');
+    await ensureLogisticaMvpSchema(_database!);
     return _database!;
   }
 
@@ -331,6 +332,141 @@ class DatabaseHelper {
         sync_status TEXT NOT NULL DEFAULT 'pending'
       )
     ''');
+  }
+
+  Future<void> ensureLogisticaMvpSchema(Database db) async {
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'prioridade',
+      "TEXT NOT NULL DEFAULT 'normal'",
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'observacoes_central',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'unidade_destino',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'data_consulta',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'horario_consulta',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'destino_principal',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'status_operacional',
+      'TEXT',
+    );
+    await _addColumnIfMissing(db, 'transportes_viagens', 'km_saida', 'REAL');
+    await _addColumnIfMissing(
+      db,
+      'transportes_viagens',
+      'horario_saida_confirmada',
+      'TEXT',
+    );
+
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'acompanhante',
+      'INTEGER NOT NULL DEFAULT 0',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'acessibilidade',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'telefone',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'endereco_embarque',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'cadeirante',
+      'INTEGER NOT NULL DEFAULT 0',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'mobilidade_reduzida',
+      'INTEGER NOT NULL DEFAULT 0',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'acompanhante_obrigatorio',
+      'INTEGER NOT NULL DEFAULT 0',
+    );
+    await _addColumnIfMissing(
+      db,
+      'transportes_passageiros',
+      'observacoes_embarque',
+      'TEXT',
+    );
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS viagem_preparacoes (
+        id TEXT PRIMARY KEY,
+        municipio_id TEXT NOT NULL,
+        viagem_id TEXT NOT NULL,
+        motorista_id TEXT NOT NULL,
+        veiculo_id TEXT,
+        km_inicial REAL,
+        checklist_concluido INTEGER NOT NULL DEFAULT 0,
+        checklist_payload_json TEXT,
+        horario_preparacao TEXT NOT NULL,
+        horario_saida TEXT,
+        status TEXT NOT NULL DEFAULT 'preparacao',
+        sync_status TEXT NOT NULL DEFAULT 'pending',
+        FOREIGN KEY (viagem_id) REFERENCES transportes_viagens (id)
+      )
+    ''');
+
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_viagem_preparacoes_viagem ON viagem_preparacoes(viagem_id)',
+    );
+  }
+
+  Future<void> _addColumnIfMissing(
+    Database db,
+    String table,
+    String column,
+    String definition,
+  ) async {
+    final columns = await db.rawQuery('PRAGMA table_info($table)');
+    final exists = columns.any((item) => item['name'] == column);
+    if (exists) return;
+    await db.execute('ALTER TABLE $table ADD COLUMN $column $definition');
   }
 
   Future<void> salvarConfiguracao({

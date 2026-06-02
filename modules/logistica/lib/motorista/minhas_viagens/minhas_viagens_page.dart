@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import '../../auth/motorista_model.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../modules/transportes/models/viagem_model.dart';
 import '../../modules/transportes/models/viagem_status.dart';
 import '../../widgets/empty_state_card.dart';
 import '../../widgets/section_header.dart';
 import '../../widgets/status_badge.dart';
 import '../../widgets/sync_status_card.dart';
 import '../../widgets/sync_status_badge.dart';
+import '../preparacao/preparacao_viagem_page.dart';
 import '../sync/driver_sync_panel.dart';
 import '../viagem_atual/viagem_detalhe_page.dart';
 import 'minhas_viagens_controller.dart';
+import 'minhas_viagens_repository.dart';
 
 class MinhasViagensPage extends StatefulWidget {
   final bool embed;
@@ -78,6 +81,22 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
     );
   }
 
+  Future<void> _iniciarPreparacao(int index) async {
+    final atualizou = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PreparacaoViagemPage(
+          viagem: controller.viagens[index],
+          motorista: motoristaAtual,
+        ),
+      ),
+    );
+
+    if (atualizou == true) {
+      await controller.carregar(motoristaId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,6 +149,9 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
                               index,
                             ) {
                               final viagem = controller.viagens[index];
+                              final resumo =
+                                  controller.resumos[viagem.sync.id] ??
+                                  const ViagemAtribuidaResumo();
                               return Padding(
                                 padding: const EdgeInsets.only(
                                   bottom: AppSpacing.sm,
@@ -138,10 +160,18 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
                                   origem: viagem.origem,
                                   destino: viagem.destino,
                                   horario: _formatarData(viagem.dataHoraSaida),
-                                  status: viagem.status,
+                                  status: viagem.estadoOperacional,
                                   finalidade: viagem.finalidade,
                                   syncStatus: viagem.sync.syncStatus,
+                                  prioridade: viagem.prioridade,
+                                  pacientes: resumo.pacientes,
+                                  acompanhantes: resumo.acompanhantes,
+                                  possuiAcessibilidade:
+                                      resumo.possuiAcessibilidade,
+                                  tipoVisual: _tipoVisual(viagem),
                                   onTap: () => _abrirDetalhe(index),
+                                  onPreparacao: () =>
+                                      _iniciarPreparacao(index),
                                 ),
                               );
                             }),
@@ -155,6 +185,13 @@ class _MinhasViagensPageState extends State<MinhasViagensPage> {
       ),
     );
   }
+
+  String _tipoVisual(ViagemModel viagem) {
+    if (viagem.isTransferencia) return 'Transferencia';
+    if (viagem.isRetorno) return 'Retorno';
+    if (viagem.isPrioritaria) return 'Prioritaria';
+    return 'Comum';
+  }
 }
 
 class _ViagemCard extends StatelessWidget {
@@ -164,7 +201,13 @@ class _ViagemCard extends StatelessWidget {
   final String status;
   final String? finalidade;
   final String syncStatus;
+  final String prioridade;
+  final int pacientes;
+  final int acompanhantes;
+  final bool possuiAcessibilidade;
+  final String tipoVisual;
   final VoidCallback onTap;
+  final VoidCallback onPreparacao;
 
   const _ViagemCard({
     required this.origem,
@@ -173,12 +216,20 @@ class _ViagemCard extends StatelessWidget {
     required this.status,
     required this.finalidade,
     required this.syncStatus,
+    required this.prioridade,
+    required this.pacientes,
+    required this.acompanhantes,
+    required this.possuiAcessibilidade,
+    required this.tipoVisual,
     required this.onTap,
+    required this.onPreparacao,
   });
 
   @override
   Widget build(BuildContext context) {
+    final destaque = _corTipo(tipoVisual);
     return Card(
+      color: possuiAcessibilidade ? const Color(0xFFFFF8E1) : null,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -194,12 +245,12 @@ class _ViagemCard extends StatelessWidget {
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryLight,
+                      color: destaque.withValues(alpha: 0.14),
                       borderRadius: BorderRadius.circular(
                         AppSpacing.cardRadius,
                       ),
                     ),
-                    child: const Icon(Icons.route, color: AppColors.primary),
+                    child: Icon(Icons.route, color: destaque),
                   ),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
@@ -234,14 +285,41 @@ class _ViagemCard extends StatelessWidget {
                     status: status,
                   ),
                   SyncStatusBadge(status: syncStatus),
+                  Chip(label: Text(tipoVisual)),
+                  Chip(label: Text('Prioridade: $prioridade')),
+                  Chip(label: Text('$pacientes paciente(s)')),
+                  Chip(label: Text('$acompanhantes acompanhante(s)')),
+                  if (possuiAcessibilidade)
+                    const Chip(
+                      avatar: Icon(Icons.accessible, size: 18),
+                      label: Text('Acessibilidade'),
+                    ),
                   if (finalidade?.isNotEmpty == true)
                     Chip(label: Text(finalidade!)),
                 ],
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Align(
+                alignment: Alignment.centerRight,
+                child: FilledButton.icon(
+                  onPressed: onPreparacao,
+                  icon: const Icon(Icons.fact_check),
+                  label: const Text('Iniciar Preparacao'),
+                ),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Color _corTipo(String tipo) {
+    return switch (tipo) {
+      'Prioritaria' => const Color(0xFFC62828),
+      'Transferencia' => const Color(0xFF1565C0),
+      'Retorno' => const Color(0xFF6A1B9A),
+      _ => AppColors.primary,
+    };
   }
 }
