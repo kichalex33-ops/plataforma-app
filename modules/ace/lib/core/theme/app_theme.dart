@@ -5,12 +5,17 @@ import 'app_colors.dart';
 class AppTheme {
   static ThemeData get theme {
     return ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.vencendo,
+        primary: AppColors.vencendo,
+        secondary: AppColors.primary,
+      ),
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
         centerTitle: true,
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.primaryDark,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -30,8 +35,8 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.vencendo,
+        foregroundColor: AppColors.primaryDark,
       ),
     );
   }
@@ -43,6 +48,7 @@ class AppTheme {
     );
 
     return ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       primaryColor: AppColors.primary,

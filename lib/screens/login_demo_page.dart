@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../core/session/app_access_mode.dart';
+import '../core/theme/app_assets.dart';
+import '../core/theme/app_colors.dart';
+import '../core/theme/app_radius.dart';
+import '../core/theme/app_spacing.dart';
+import 'god_mode_intro_page.dart';
 import 'module_selector_page.dart';
 
 class LoginDemoPage extends StatefulWidget {
@@ -10,10 +16,6 @@ class LoginDemoPage extends StatefulWidget {
 }
 
 class _LoginDemoPageState extends State<LoginDemoPage> {
-  static const _navy = Color(0xFF2C3E50);
-  static const _navyDark = Color(0xFF1A252F);
-  static const _gold = Color(0xFFC9A96E);
-
   final _loginController = TextEditingController();
   final _senhaController = TextEditingController();
   bool _ocultarSenha = true;
@@ -32,7 +34,18 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
     if (login == 'Alex' && senha == '1234') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const ModuleSelectorPage()),
+        MaterialPageRoute(
+          builder: (_) =>
+              const ModuleSelectorPage(accessMode: AppAccessMode.normal),
+        ),
+      );
+      return;
+    }
+
+    if (login == 'Alexkich' && senha == '@l3xk1cH') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const GodModeIntroPage()),
       );
       return;
     }
@@ -50,72 +63,52 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [_navy, _navyDark],
+            colors: [AppColors.navy, AppColors.navyDark],
           ),
         ),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 430),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 92,
-                      height: 92,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: _gold, width: 2),
-                      ),
-                      child: const Icon(
-                        Icons.health_and_safety,
-                        color: _gold,
-                        size: 46,
-                      ),
+                    Image.asset(
+                      AppAssets.logoHorizontal,
+                      width: 290,
+                      fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 22),
-                    const Text(
-                      'Andrade',
-                      style: TextStyle(
-                        color: _gold,
-                        fontSize: 34,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Gestão em Saúde',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 34),
+                    const SizedBox(height: AppSpacing.xl),
                     Card(
-                      elevation: 8,
+                      elevation: 10,
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                        side: BorderSide(
+                          color: AppColors.gold.withValues(alpha: 0.38),
+                        ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const Text(
                               'Entrar na demo unificada',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                                color: _navy,
+                                fontSize: 19,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.navyDeep,
                               ),
                             ),
-                            const SizedBox(height: 18),
+                            const SizedBox(height: AppSpacing.xs),
+                            const Text(
+                              'Andrade Gestão em Saúde',
+                              style: TextStyle(color: AppColors.textMuted),
+                            ),
+                            const SizedBox(height: AppSpacing.lg),
                             TextField(
                               controller: _loginController,
                               textInputAction: TextInputAction.next,
@@ -144,16 +137,17 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            FilledButton(
+                            const SizedBox(height: AppSpacing.lg),
+                            FilledButton.icon(
                               onPressed: _entrar,
-                              child: const Text('Entrar'),
+                              icon: const Icon(Icons.login),
+                              label: const Text('Entrar'),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.md),
                     const Text(
                       'Demo local: Alex / 1234',
                       style: TextStyle(color: Colors.white70),

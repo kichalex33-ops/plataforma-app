@@ -117,7 +117,10 @@ class _AceDrawer extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.home_work, color: ace_colors.AppColors.primary),
+                    child: Icon(
+                      Icons.home_work,
+                      color: ace_colors.AppColors.primary,
+                    ),
                   ),
                   SizedBox(height: 12),
                   Text(
@@ -129,18 +132,21 @@ class _AceDrawer extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 4),
-                  Text('Módulo preservado', style: TextStyle(color: Colors.white70)),
+                  Text(
+                    'Módulo preservado',
+                    style: TextStyle(color: Colors.white70),
+                  ),
                 ],
               ),
             ),
-            _item(context, Icons.location_city, 'Pontos estrategicos', const PEPage()),
+            _item(context, Icons.location_city, 'Pontos estratégicos', const PEPage()),
             _item(context, Icons.home, 'Visitas domiciliares', const VisitasDomiciliaresPage()),
-            _item(context, Icons.grid_view, 'Quarteiroes', const QuarteiroesPage()),
+            _item(context, Icons.grid_view, 'Quarteirões', const QuarteiroesPage()),
             _item(context, Icons.map, 'Mapa territorial', const MapaRealPage()),
             _item(context, Icons.science, 'BTI', const BTIPage()),
             _item(context, Icons.pest_control, 'Ovitrampas', const OvitrampasPage()),
             _item(context, Icons.analytics, 'LIRA/LIA', const LiraLiaPage()),
-            _item(context, Icons.warning, 'Areas prioritarias', const AreasPrioritariasPage()),
+            _item(context, Icons.warning, 'Áreas prioritárias', const AreasPrioritariasPage()),
             _item(context, Icons.supervisor_account, 'Supervisor', const TerritorioSupervisorPage()),
             _item(context, Icons.bar_chart, 'Relatórios', const RelatoriosPage()),
             _item(context, Icons.cloud_sync, 'Central de sync', const SyncCenterPage()),

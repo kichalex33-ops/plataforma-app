@@ -13,7 +13,7 @@ void main() {
   testWidgets('abre tela de login da demo', (WidgetTester tester) async {
     await tester.pumpWidget(const AndradeDemoUnificadaApp());
 
-    expect(find.text('Andrade'), findsOneWidget);
+    expect(find.text('Andrade Gestão em Saúde'), findsOneWidget);
     expect(find.text('Entrar na demo unificada'), findsOneWidget);
   });
 }

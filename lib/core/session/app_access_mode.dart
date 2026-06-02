@@ -1,0 +1,4 @@
+enum AppAccessMode {
+  normal,
+  godMode,
+}

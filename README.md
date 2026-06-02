@@ -4,15 +4,22 @@ Demo mobile Flutter da Plataforma Municipal de Saúde, reunindo uma entrada úni
 
 ## Credenciais
 
+Demo normal:
+
 - Login: `Alex`
 - Senha: `1234`
+
+God Mode:
+
+- Login: `Alexkich`
+- Senha: `@l3xk1cH`
 
 ## Módulos
 
 - **Logística**: reaproveita a cópia local do app LogiSaúde em `modules/logistica`.
 - **ACE**: reaproveita a cópia local do app ACE em `modules/ace`.
 
-Os layouts internos dos módulos foram preservados. A identidade visual padrão foi aplicada por tokens de cor nas cópias locais dos módulos.
+Os fluxos internos foram preservados. A identidade Andrade foi aplicada na entrada, seleção de módulos, wrappers visíveis e tokens visuais dos módulos copiados.
 
 ## Como rodar após clonar o repositório
 
@@ -36,3 +43,8 @@ C:\flutter\bin\flutter.bat build apk --debug
 
 - `docs/RELATORIO_DEMO_UNIFICADA.md`
 - `docs/PLANO_MELHORIAS_DEMO.md`
+- `docs/IDENTIDADE_VISUAL_ANDRADE.md`
+- `docs/ESCOPO_LOGISTICA_MVP.md`
+- `docs/ROADMAP_LOGISTICA_3_MESES.md`
+- `docs/MAQUINA_ESTADOS_VIAGEM.md`
+- `docs/PLANO_DADOS_LOGISTICA.md`
