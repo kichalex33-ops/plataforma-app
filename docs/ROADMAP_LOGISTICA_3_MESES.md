@@ -1,8 +1,8 @@
 # Roadmap Logística - 3 Meses
 
-## Situação após a etapa 3
+## Situação após a etapa 5
 
-A base técnica offline-first foi criada:
+A base técnica offline-first e o controle operacional inicial foram criados:
 
 - Enums de estados, pacientes, ocorrências, acessibilidade e sync.
 - Modelos locais de domínio.
@@ -12,23 +12,39 @@ A base técnica offline-first foi criada:
 - Fila offline tipada.
 - Seed mockado realista.
 - Testes unitários da base.
+- Fluxo operacional de viagem.
+- Checklist pré-uso e pós-uso.
+- Abastecimentos e despesas gerais.
+- Ocorrências tipadas e botão de pânico.
+- Comprovantes SUS vinculados à viagem e ao paciente.
+- Histórico da viagem com checklists, despesas, ocorrências, comprovantes e sync.
 
 ## Próxima ordem recomendada
 
-### 1. Repositórios locais
+### 1. Refinar repositórios locais
 
 Criar repositórios específicos para:
 
 - Viagens.
 - Pacientes.
 - Passageiros.
-- Abastecimentos.
-- Ocorrências.
-- Comprovantes.
+- Abastecimentos e despesas.
+- Ocorrências e pânico.
+- Comprovantes SUS.
 - Avisos.
 - Fila offline.
 
-### 2. Tela de rota de ida
+### 2. Captura real de mídia e localização
+
+Evoluir os campos locais atuais para:
+
+- Câmera/galeria para comprovantes.
+- Foto do cupom.
+- Foto de ocorrência.
+- GPS real para pânico e ocorrências.
+- Permissão e tratamento quando localização estiver indisponível.
+
+### 3. Tela de rota de ida
 
 Usar os modelos novos para:
 
@@ -38,7 +54,7 @@ Usar os modelos novos para:
 - Ausência/desistência.
 - Eventos offline.
 
-### 3. Espera e reembarque
+### 4. Espera e reembarque
 
 Implementar:
 
@@ -47,7 +63,7 @@ Implementar:
 - Reembarque de retorno.
 - Validação de pacientes embarcados ou justificados.
 
-### 4. Encerramento
+### 5. Encerramento
 
 Implementar:
 
@@ -58,7 +74,7 @@ Implementar:
 - Pacientes transportados.
 - Ocorrências.
 
-### 5. Sincronização futura
+### 6. Sincronização futura
 
 Evoluir:
 
@@ -72,14 +88,12 @@ Evoluir:
 
 - Etapa 2: viagens atribuídas, preparação e check-in de saída.
 - Etapa 3: base técnica de modelos, estados e banco local.
+- Etapa 4: fluxo operacional da viagem.
+- Etapa 5: checklists, abastecimentos, despesas, ocorrências, pânico, comprovantes e histórico.
 
 ## Pendências do MVP
 
-- Telas de rota.
-- Telas de espera.
-- Telas de retorno.
-- Encerramento real.
-- Captura de comprovantes.
-- Registro visual de abastecimentos.
-- Registro visual de ocorrências.
+- Captura real de fotos.
+- Captura real de GPS.
+- Assinatura digital.
 - Painel de pendências de sync baseado em `logistica_sync_items`.

@@ -1,7 +1,20 @@
+import 'dart:convert';
+
+import '../../core/logistica/logistica_calculator.dart';
 import '../../core/logistica/logistica_enums.dart';
 import '../../core/logistica/logistica_offline_queue.dart';
 import '../../core/logistica/logistica_validators.dart';
 import '../../database/database_helper.dart';
+
+class LogisticaAbastecimentoResult {
+  final double valorPorLitro;
+  final double custoPorKm;
+
+  const LogisticaAbastecimentoResult({
+    required this.valorPorLitro,
+    required this.custoPorKm,
+  });
+}
 
 class LogisticaTripSnapshot {
   final Map<String, Object?> viagem;
@@ -48,6 +61,22 @@ class LogisticaTripSnapshot {
   double get totalDespesas => despesas.fold(
     0,
     (total, item) => total + ((item['valor'] as num?)?.toDouble() ?? 0),
+  );
+  double get kmRodado {
+    final kmFinal = (viagem['km_final'] as num?)?.toDouble();
+    final inicial = kmInicial;
+    if (inicial == null || kmFinal == null) return 0;
+    return LogisticaCalculator.kmRodado(kmInicial: inicial, kmFinal: kmFinal);
+  }
+
+  double get custoPorKm => LogisticaCalculator.custoPorKm(
+    totalDespesas: totalDespesas,
+    kmRodado: kmRodado,
+  );
+
+  double get custoPorPaciente => LogisticaCalculator.custoPorPaciente(
+    totalDespesas: totalDespesas,
+    pacientesTransportados: totalPacientes,
   );
 }
 
@@ -129,9 +158,11 @@ class LogisticaOperacionalRepository {
     required double? kmSaida,
     required bool checklistConcluido,
   }) async {
+    final possuiChecklistPreUso =
+        checklistConcluido || await _checklistConcluido(viagemId, 'pre_uso');
     LogisticaValidators.validarInicioViagem(
       kmSaida: kmSaida,
-      checklistPreUsoConcluido: checklistConcluido,
+      checklistPreUsoConcluido: possuiChecklistPreUso,
     );
     final now = DateTime.now().toIso8601String();
     await _updateViagem(viagemId, {
@@ -156,6 +187,14 @@ class LogisticaOperacionalRepository {
       'logistica_passageiros_viagem',
       {
         'status_ida': status.dbValue,
+        if (status == StatusPacienteIda.ausente ||
+            status == StatusPacienteIda.desistiu)
+          'status_volta': StatusPacienteVolta.naoRetornou.dbValue,
+        if (status == StatusPacienteIda.ausente ||
+            status == StatusPacienteIda.desistiu)
+          'justificativa_retorno': status == StatusPacienteIda.ausente
+              ? 'Paciente ausente na ida'
+              : 'Paciente desistiu na ida',
         'updated_at': DateTime.now().toIso8601String(),
         'status_sync': StatusSync.pendente.dbValue,
       },
@@ -196,26 +235,159 @@ class LogisticaOperacionalRepository {
   }
 
   Future<void> registrarDespesaMock(String viagemId) async {
-    final db = await databaseHelper.database;
+    await registrarDespesaGeral(
+      viagemId: viagemId,
+      tipo: 'despesa',
+      valor: 25,
+      descricao: 'Despesa local',
+    );
+  }
+
+  Future<void> registrarChecklist({
+    required String viagemId,
+    required String tipo,
+    required Map<String, Object?> itens,
+    String? observacao,
+    String? fotoPath,
+  }) async {
+    if (itens.isEmpty) {
+      throw const LogisticaValidationException(
+        'Checklist deve possuir ao menos um item.',
+      );
+    }
+    final snapshot = await carregarSnapshot(viagemId);
     final now = DateTime.now().toIso8601String();
-    await db.insert('logistica_abastecimentos', {
-      'id_local': 'desp-${DateTime.now().millisecondsSinceEpoch}',
+    final db = await databaseHelper.database;
+    await db.insert('logistica_checklists', {
+      'id_local': 'chk-${DateTime.now().microsecondsSinceEpoch}',
       'id_servidor': null,
       'viagem_id_local': viagemId,
-      'veiculo_id_local': 'vei-001',
-      'motorista_id_local': 'motorista-local',
-      'local': 'Despesa local',
-      'tipo': 'despesa',
-      'litros': 1.0,
-      'valor': 25.0,
+      'motorista_id_local':
+          snapshot.viagem['motorista_id_local']?.toString() ??
+          'motorista-local',
+      'tipo': tipo,
+      'payload_json': jsonEncode(itens),
+      'concluido': 1,
+      'observacao': observacao,
+      'foto_path': fotoPath,
+      'created_by': 'motorista-local',
+      'created_at': now,
+      'updated_at': now,
+      'status_sync': StatusSync.pendente.dbValue,
+    });
+    await _auditar(
+      entidade: 'logistica_checklists',
+      entidadeId: viagemId,
+      descricao: 'Checklist $tipo registrado.',
+    );
+  }
+
+  Future<LogisticaAbastecimentoResult> registrarAbastecimento({
+    required String viagemId,
+    required String posto,
+    required double litros,
+    required double valorTotal,
+    String? fotoCupomPath,
+    String? observacao,
+  }) async {
+    LogisticaValidators.validarAbastecimento(litros: litros, valor: valorTotal);
+    final snapshot = await carregarSnapshot(viagemId);
+    final now = DateTime.now().toIso8601String();
+    final db = await databaseHelper.database;
+    await db.insert('logistica_abastecimentos', {
+      'id_local': 'aba-${DateTime.now().microsecondsSinceEpoch}',
+      'id_servidor': null,
+      'viagem_id_local': viagemId,
+      'veiculo_id_local': snapshot.viagem['veiculo_id_local']?.toString() ?? '',
+      'motorista_id_local':
+          snapshot.viagem['motorista_id_local']?.toString() ??
+          'motorista-local',
+      'local': posto,
+      'tipo': 'abastecimento',
+      'litros': litros,
+      'valor': valorTotal,
+      'foto_cupom_path': fotoCupomPath,
+      'observacao': observacao,
+      'created_by': 'motorista-local',
       'created_at': now,
       'updated_at': now,
       'status_sync': StatusSync.pendente.dbValue,
     });
     await _enqueue(TipoEventoSync.abastecimentoRegistrado, {
       'viagem_id': viagemId,
-      'valor': 25.0,
+      'litros': litros,
+      'valor': valorTotal,
+      'valor_por_litro': LogisticaCalculator.valorPorLitro(
+        valor: valorTotal,
+        litros: litros,
+      ),
     });
+    await _auditar(
+      entidade: 'logistica_abastecimentos',
+      entidadeId: viagemId,
+      descricao: 'Abastecimento registrado.',
+    );
+    return LogisticaAbastecimentoResult(
+      valorPorLitro: LogisticaCalculator.valorPorLitro(
+        valor: valorTotal,
+        litros: litros,
+      ),
+      custoPorKm: LogisticaCalculator.custoPorKm(
+        totalDespesas: valorTotal,
+        kmRodado: snapshot.kmRodado,
+      ),
+    );
+  }
+
+  Future<void> registrarDespesaGeral({
+    required String viagemId,
+    required String tipo,
+    required double valor,
+    required String descricao,
+    String? comprovantePath,
+  }) async {
+    if (valor < 0) {
+      throw const LogisticaValidationException(
+        'Despesa nao pode ter valor negativo.',
+      );
+    }
+    if (descricao.trim().isEmpty) {
+      throw const LogisticaValidationException(
+        'Informe a descricao da despesa.',
+      );
+    }
+    final snapshot = await carregarSnapshot(viagemId);
+    final now = DateTime.now().toIso8601String();
+    final db = await databaseHelper.database;
+    await db.insert('logistica_abastecimentos', {
+      'id_local': 'desp-${DateTime.now().microsecondsSinceEpoch}',
+      'id_servidor': null,
+      'viagem_id_local': viagemId,
+      'veiculo_id_local': snapshot.viagem['veiculo_id_local']?.toString() ?? '',
+      'motorista_id_local':
+          snapshot.viagem['motorista_id_local']?.toString() ??
+          'motorista-local',
+      'local': descricao,
+      'tipo': tipo,
+      'litros': 0.0,
+      'valor': valor,
+      'foto_cupom_path': comprovantePath,
+      'observacao': descricao,
+      'created_by': 'motorista-local',
+      'created_at': now,
+      'updated_at': now,
+      'status_sync': StatusSync.pendente.dbValue,
+    });
+    await _enqueue(TipoEventoSync.abastecimentoRegistrado, {
+      'viagem_id': viagemId,
+      'tipo': tipo,
+      'valor': valor,
+    });
+    await _auditar(
+      entidade: 'logistica_abastecimentos',
+      entidadeId: viagemId,
+      descricao: 'Despesa $tipo registrada.',
+    );
   }
 
   Future<void> marcarRetorno({
@@ -274,6 +446,11 @@ class LogisticaOperacionalRepository {
   }) async {
     LogisticaValidators.validarConclusaoViagem(kmFinal: kmFinal);
     final snapshot = await carregarSnapshot(viagemId);
+    if (!await _checklistConcluido(viagemId, 'pos_uso')) {
+      throw const LogisticaValidationException(
+        'Conclua o checklist pos-uso para encerrar a viagem.',
+      );
+    }
     final kmInicial = snapshot.kmInicial ?? 0;
     final result = LogisticaValidators.validarKmFinal(
       kmInicial: kmInicial,
@@ -307,17 +484,31 @@ class LogisticaOperacionalRepository {
     });
   }
 
-  Future<void> capturarComprovante(String viagemId, String passageiroId) async {
+  Future<void> capturarComprovante(
+    String viagemId,
+    String passageiroId, {
+    String? fotoPath,
+  }) async {
     final db = await databaseHelper.database;
     final now = DateTime.now().toIso8601String();
+    final passageiro = await db.query(
+      'logistica_passageiros_viagem',
+      where: 'id_local = ?',
+      whereArgs: [passageiroId],
+      limit: 1,
+    );
+    final pacienteId = passageiro.isNotEmpty
+        ? passageiro.first['paciente_id_local']?.toString() ?? passageiroId
+        : passageiroId;
     await db.insert('logistica_comprovantes', {
       'id_local': 'cmp-${DateTime.now().millisecondsSinceEpoch}',
       'id_servidor': null,
       'viagem_id_local': viagemId,
       'passageiro_id_local': passageiroId,
-      'paciente_id_local': passageiroId,
+      'paciente_id_local': pacienteId,
       'tipo': 'presença',
-      'foto_path': 'mock/comprovante.jpg',
+      'foto_path': fotoPath ?? 'mock/comprovante.jpg',
+      'created_by': 'motorista-local',
       'created_at': now,
       'updated_at': now,
       'status_sync': StatusSync.pendente.dbValue,
@@ -325,7 +516,13 @@ class LogisticaOperacionalRepository {
     await _enqueue(TipoEventoSync.comprovanteCapturado, {
       'viagem_id': viagemId,
       'passageiro_id': passageiroId,
+      'paciente_id': pacienteId,
     });
+    await _auditar(
+      entidade: 'logistica_comprovantes',
+      entidadeId: viagemId,
+      descricao: 'Comprovante SUS capturado.',
+    );
   }
 
   Future<void> registrarOcorrencia({
@@ -333,6 +530,9 @@ class LogisticaOperacionalRepository {
     required TipoOcorrencia tipo,
     required String descricao,
     String? pacienteId,
+    double? latitude,
+    double? longitude,
+    String? fotoPath,
   }) async {
     LogisticaValidators.validarOcorrencia(tipo: tipo, dataHora: DateTime.now());
     final db = await databaseHelper.database;
@@ -346,15 +546,64 @@ class LogisticaOperacionalRepository {
       'tipo': tipo.dbValue,
       'descricao': descricao,
       'data_hora': now,
+      'latitude': latitude,
+      'longitude': longitude,
+      'foto_path': fotoPath,
+      'created_by': 'motorista-local',
       'created_at': now,
       'updated_at': now,
       'status_sync': StatusSync.pendente.dbValue,
     });
-    await _enqueue(TipoEventoSync.ocorrenciaRegistrada, {
+    final payload = <String, Object?>{
       'viagem_id': viagemId,
       'tipo': tipo.dbValue,
       'descricao': descricao,
-    });
+    };
+    if (latitude != null) payload['latitude'] = latitude;
+    if (longitude != null) payload['longitude'] = longitude;
+    await _enqueue(TipoEventoSync.ocorrenciaRegistrada, payload);
+    await _auditar(
+      entidade: 'logistica_ocorrencias',
+      entidadeId: viagemId,
+      descricao: 'Ocorrencia ${tipo.dbValue} registrada.',
+    );
+  }
+
+  Future<List<Map<String, Object?>>> listarHistorico(String viagemId) async {
+    final db = await databaseHelper.database;
+    final itens = <Map<String, Object?>>[];
+    for (final entry in {
+      'checklist': 'logistica_checklists',
+      'despesa': 'logistica_abastecimentos',
+      'ocorrencia': 'logistica_ocorrencias',
+      'comprovante': 'logistica_comprovantes',
+      'sync': 'logistica_sync_items',
+    }.entries) {
+      final where = entry.key == 'sync'
+          ? 'payload_json LIKE ?'
+          : 'viagem_id_local = ?';
+      final whereArgs = entry.key == 'sync' ? ['%$viagemId%'] : [viagemId];
+      final rows = await db.query(
+        entry.value,
+        where: where,
+        whereArgs: whereArgs,
+      );
+      for (final row in rows) {
+        itens.add({'categoria': entry.key, ...row});
+      }
+    }
+    return itens;
+  }
+
+  Future<bool> _checklistConcluido(String viagemId, String tipo) async {
+    final db = await databaseHelper.database;
+    final result = await db.query(
+      'logistica_checklists',
+      where: 'viagem_id_local = ? AND tipo = ? AND concluido = 1',
+      whereArgs: [viagemId, tipo],
+      limit: 1,
+    );
+    return result.isNotEmpty;
   }
 
   Future<void> _updateViagem(String viagemId, Map<String, Object?> data) async {
@@ -378,6 +627,28 @@ class LogisticaOperacionalRepository {
     final db = await databaseHelper.database;
     final item = queue.criarItem(tipoEvento: tipo, payload: payload);
     await db.insert('logistica_sync_items', item.toMap());
+  }
+
+  Future<void> _auditar({
+    required String entidade,
+    required String entidadeId,
+    required String descricao,
+  }) async {
+    final db = await databaseHelper.database;
+    final now = DateTime.now().toIso8601String();
+    await db.insert('auditoria_eventos', {
+      'id': 'aud-${DateTime.now().microsecondsSinceEpoch}',
+      'entity_type': entidade,
+      'entity_id': entidadeId,
+      'action': 'create',
+      'actor_id': 'motorista-local',
+      'descricao': descricao,
+      'device_id': 'mobile-local',
+      'version': 1,
+      'created_at': now,
+      'updated_at': now,
+      'sync_status': 'pending',
+    });
   }
 }
 

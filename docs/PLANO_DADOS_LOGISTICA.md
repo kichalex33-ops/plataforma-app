@@ -66,6 +66,17 @@ As tabelas são criadas com `CREATE TABLE IF NOT EXISTS`, mantendo compatibilida
 - `logistica_avisos_central`
 - `logistica_sync_items`
 
+## Ajustes da etapa 5
+
+Foram adicionados campos opcionais por migração leve para suportar auditoria e operação real sem quebrar bancos existentes:
+
+- `logistica_checklists`: `observacao`, `foto_path`, `created_by`, `deleted_at`.
+- `logistica_abastecimentos`: `created_by`, `deleted_at`.
+- `logistica_ocorrencias`: `latitude`, `longitude`, `created_by`, `deleted_at`.
+- `logistica_comprovantes`: `created_by`, `deleted_at`.
+
+As despesas gerais usam `logistica_abastecimentos` como tabela operacional de despesas da viagem, diferenciadas pelo campo `tipo`.
+
 Índices criados:
 
 - `idx_logistica_viagens_status`
@@ -97,6 +108,11 @@ Arquivo: `logistica_validators.dart`
 - Não concluir viagem sem KM final.
 - Abastecimento não pode ter litros zero ou valor negativo.
 - Ocorrência deve ter tipo e data/hora.
+- Checklist pré-uso é obrigatório para confirmar saída.
+- Checklist pós-uso é obrigatório para concluir viagem.
+- Checklist deve ter ao menos um item.
+- Despesa geral não pode ter valor negativo.
+- Despesa geral deve ter descrição.
 
 ## Cálculos criados
 
@@ -111,6 +127,9 @@ Arquivo: `logistica_calculator.dart`
 - Duração total da viagem.
 - Quantidade de pacientes transportados.
 - Quantidade de ausentes/desistentes.
+- Valor por litro no registro de abastecimento.
+- Custo por km para despesas da viagem.
+- Custo por paciente no snapshot operacional da viagem.
 
 ## Fila offline
 
@@ -173,5 +192,6 @@ Com `DEMO_SEED_ENABLED=false`, o app não cria dados falsos e a tela de viagens 
 - Criar repositórios específicos para cada tabela nova.
 - Migrar gradualmente as telas atuais para consumir `logistica_*`.
 - Criar sincronização real dos itens `logistica_sync_items`.
-- Adicionar controle de fotos para comprovantes e cupons.
-- Criar telas de rota, espera, retorno e encerramento usando esta base.
+- Trocar campos de caminho de foto pela captura real de câmera/galeria.
+- Capturar GPS real para ocorrências e pânico.
+- Implementar assinatura digital do comprovante SUS.

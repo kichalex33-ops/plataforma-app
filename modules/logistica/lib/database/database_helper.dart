@@ -442,6 +442,52 @@ class DatabaseHelper {
       'TEXT',
     );
 
+    await _addColumnIfMissing(db, 'logistica_checklists', 'observacao', 'TEXT');
+    await _addColumnIfMissing(db, 'logistica_checklists', 'foto_path', 'TEXT');
+    await _addColumnIfMissing(db, 'logistica_checklists', 'created_by', 'TEXT');
+    await _addColumnIfMissing(db, 'logistica_checklists', 'deleted_at', 'TEXT');
+
+    await _addColumnIfMissing(
+      db,
+      'logistica_abastecimentos',
+      'created_by',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'logistica_abastecimentos',
+      'deleted_at',
+      'TEXT',
+    );
+
+    await _addColumnIfMissing(db, 'logistica_ocorrencias', 'latitude', 'REAL');
+    await _addColumnIfMissing(db, 'logistica_ocorrencias', 'longitude', 'REAL');
+    await _addColumnIfMissing(
+      db,
+      'logistica_ocorrencias',
+      'created_by',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'logistica_ocorrencias',
+      'deleted_at',
+      'TEXT',
+    );
+
+    await _addColumnIfMissing(
+      db,
+      'logistica_comprovantes',
+      'created_by',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'logistica_comprovantes',
+      'deleted_at',
+      'TEXT',
+    );
+
     await db.execute('''
       CREATE TABLE IF NOT EXISTS viagem_preparacoes (
         id TEXT PRIMARY KEY,

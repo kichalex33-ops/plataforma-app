@@ -277,6 +277,24 @@ class _LogisticaCheckinSaidaPageState extends State<LogisticaCheckinSaidaPage> {
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
+        OutlinedButton.icon(
+          onPressed: () async {
+            final ok = await Navigator.push<bool>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => LogisticaChecklistPage(
+                  viagemId: widget.viagemId,
+                  repository: widget.repository,
+                  tipo: 'pre_uso',
+                  titulo: 'Checklist Pré-Uso',
+                ),
+              ),
+            );
+            if (ok == true) setState(() => checklist = true);
+          },
+          icon: const Icon(Icons.fact_check),
+          label: const Text('Preencher Checklist Pré-Uso'),
+        ),
         Card(
           child: CheckboxListTile(
             value: checklist,
@@ -384,9 +402,30 @@ class LogisticaRotaIdaPage extends StatelessWidget {
         ),
         FilledButton.icon(
           style: FilledButton.styleFrom(backgroundColor: AppColors.atrasado),
-          onPressed: () => repository.acionarPanico(viagemId),
+          onPressed: () async {
+            await repository.acionarPanico(viagemId);
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Central será notificada quando houver conexão.'),
+              ),
+            );
+          },
           icon: const Icon(Icons.warning),
           label: const Text('Pânico'),
+        ),
+        OutlinedButton.icon(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LogisticaOcorrenciaPage(
+                viagemId: viagemId,
+                repository: repository,
+              ),
+            ),
+          ),
+          icon: const Icon(Icons.report_problem),
+          label: const Text('Registrar Ocorrência'),
         ),
         FilledButton.icon(
           onPressed: () async {
@@ -436,13 +475,15 @@ class LogisticaEsperaPage extends StatelessWidget {
           ],
         ),
         OutlinedButton.icon(
-          onPressed: () async {
-            await repository.registrarDespesaMock(viagemId);
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Despesa mockada registrada.')),
-            );
-          },
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LogisticaDespesaPage(
+                viagemId: viagemId,
+                repository: repository,
+              ),
+            ),
+          ),
           icon: const Icon(Icons.local_gas_station),
           label: const Text('Registrar Abastecimento/Despesa'),
         ),
@@ -600,7 +641,15 @@ class LogisticaRotaVoltaPage extends StatelessWidget {
         ),
         FilledButton.icon(
           style: FilledButton.styleFrom(backgroundColor: AppColors.atrasado),
-          onPressed: () => repository.acionarPanico(viagemId),
+          onPressed: () async {
+            await repository.acionarPanico(viagemId);
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Central será notificada quando houver conexão.'),
+              ),
+            );
+          },
           icon: const Icon(Icons.warning),
           label: const Text('Pânico'),
         ),
@@ -691,12 +740,493 @@ class _LogisticaEncerramentoPageState extends State<LogisticaEncerramentoPage> {
             prefixIcon: Icon(Icons.speed),
           ),
         ),
+        OutlinedButton.icon(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LogisticaChecklistPage(
+                viagemId: widget.viagemId,
+                repository: widget.repository,
+                tipo: 'pos_uso',
+                titulo: 'Checklist Pós-Uso',
+              ),
+            ),
+          ),
+          icon: const Icon(Icons.fact_check),
+          label: const Text('Preencher Checklist Pós-Uso'),
+        ),
+        OutlinedButton.icon(
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LogisticaHistoricoPage(
+                viagemId: widget.viagemId,
+                repository: widget.repository,
+              ),
+            ),
+          ),
+          icon: const Icon(Icons.history),
+          label: const Text('Histórico da Viagem'),
+        ),
         FilledButton.icon(
           onPressed: _concluir,
           icon: const Icon(Icons.done_all),
           label: const Text('Concluir Viagem'),
         ),
       ],
+    );
+  }
+}
+
+class LogisticaChecklistPage extends StatefulWidget {
+  final String viagemId;
+  final LogisticaOperacionalRepository repository;
+  final String tipo;
+  final String titulo;
+
+  const LogisticaChecklistPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+    required this.tipo,
+    required this.titulo,
+  });
+
+  @override
+  State<LogisticaChecklistPage> createState() => _LogisticaChecklistPageState();
+}
+
+class _LogisticaChecklistPageState extends State<LogisticaChecklistPage> {
+  late final Map<String, bool> itens = {for (final item in _itens) item: true};
+  final observacaoController = TextEditingController();
+  final fotoController = TextEditingController();
+
+  List<String> get _itens => widget.tipo == 'pre_uso'
+      ? const [
+          'Pneus',
+          'Faróis',
+          'Setas',
+          'Freios',
+          'Óleo',
+          'Combustível',
+          'Limpeza',
+          'CRLV',
+          'CNH',
+          'Documentação obrigatória',
+          'Macaco',
+          'Triângulo',
+          'Extintor',
+          'Estepe',
+          'Cadeira de rodas',
+          'Maca',
+        ]
+      : const [
+          'Limpeza',
+          'Danos observados',
+          'Combustível remanescente',
+          'Observações finais',
+        ];
+
+  @override
+  void dispose() {
+    observacaoController.dispose();
+    fotoController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _salvar() async {
+    await widget.repository.registrarChecklist(
+      viagemId: widget.viagemId,
+      tipo: widget.tipo,
+      itens: itens,
+      observacao: observacaoController.text.trim(),
+      fotoPath: fotoController.text.trim().isEmpty
+          ? null
+          : fotoController.text.trim(),
+    );
+    if (!mounted) return;
+    Navigator.pop(context, true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.titulo)),
+      body: ListView(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        children: [
+          const SectionHeader(
+            title: 'Itens de inspeção',
+            subtitle:
+                'Marque não ok quando houver pendência e registre observação.',
+          ),
+          ...itens.keys.map(
+            (item) => Card(
+              child: SwitchListTile(
+                value: itens[item] ?? true,
+                onChanged: (value) => setState(() => itens[item] = value),
+                title: Text(item),
+                subtitle: Text((itens[item] ?? true) ? 'Ok' : 'Não ok'),
+              ),
+            ),
+          ),
+          TextField(
+            controller: observacaoController,
+            maxLines: 3,
+            decoration: const InputDecoration(
+              labelText: 'Observação',
+              prefixIcon: Icon(Icons.notes),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          TextField(
+            controller: fotoController,
+            decoration: const InputDecoration(
+              labelText: 'Foto opcional',
+              prefixIcon: Icon(Icons.photo_camera),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          FilledButton.icon(
+            onPressed: _salvar,
+            icon: const Icon(Icons.save),
+            label: const Text('Salvar Checklist'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LogisticaDespesaPage extends StatefulWidget {
+  final String viagemId;
+  final LogisticaOperacionalRepository repository;
+
+  const LogisticaDespesaPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
+
+  @override
+  State<LogisticaDespesaPage> createState() => _LogisticaDespesaPageState();
+}
+
+class _LogisticaDespesaPageState extends State<LogisticaDespesaPage> {
+  bool abastecimento = true;
+  String tipoDespesa = 'pedágio';
+  final postoController = TextEditingController();
+  final litrosController = TextEditingController();
+  final valorController = TextEditingController();
+  final descricaoController = TextEditingController();
+  final fotoController = TextEditingController();
+
+  @override
+  void dispose() {
+    postoController.dispose();
+    litrosController.dispose();
+    valorController.dispose();
+    descricaoController.dispose();
+    fotoController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _salvar() async {
+    try {
+      final valor =
+          double.tryParse(valorController.text.replaceAll(',', '.')) ?? 0;
+      if (abastecimento) {
+        final litros =
+            double.tryParse(litrosController.text.replaceAll(',', '.')) ?? 0;
+        final result = await widget.repository.registrarAbastecimento(
+          viagemId: widget.viagemId,
+          posto: postoController.text.trim(),
+          litros: litros,
+          valorTotal: valor,
+          fotoCupomPath: fotoController.text.trim().isEmpty
+              ? null
+              : fotoController.text.trim(),
+          observacao: descricaoController.text.trim(),
+        );
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Valor por litro: R\$ ${result.valorPorLitro.toStringAsFixed(2)}',
+            ),
+          ),
+        );
+      } else {
+        await widget.repository.registrarDespesaGeral(
+          viagemId: widget.viagemId,
+          tipo: tipoDespesa,
+          valor: valor,
+          descricao: descricaoController.text.trim(),
+          comprovantePath: fotoController.text.trim().isEmpty
+              ? null
+              : fotoController.text.trim(),
+        );
+      }
+      if (!mounted) return;
+      Navigator.pop(context);
+    } on LogisticaValidationException catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error.message)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Abastecimento e Despesas')),
+      body: ListView(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        children: [
+          Card(
+            child: SwitchListTile(
+              value: abastecimento,
+              onChanged: (value) => setState(() => abastecimento = value),
+              title: Text(abastecimento ? 'Abastecimento' : 'Despesa geral'),
+            ),
+          ),
+          if (!abastecimento)
+            DropdownButtonFormField<String>(
+              initialValue: tipoDespesa,
+              decoration: const InputDecoration(labelText: 'Tipo de despesa'),
+              items:
+                  const [
+                        'pedágio',
+                        'estacionamento',
+                        'alimentação autorizada',
+                        'manutenção emergencial',
+                        'outro',
+                      ]
+                      .map(
+                        (item) =>
+                            DropdownMenuItem(value: item, child: Text(item)),
+                      )
+                      .toList(),
+              onChanged: (value) =>
+                  setState(() => tipoDespesa = value ?? tipoDespesa),
+            ),
+          if (abastecimento)
+            TextField(
+              controller: postoController,
+              decoration: const InputDecoration(labelText: 'Posto'),
+            ),
+          if (abastecimento)
+            TextField(
+              controller: litrosController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: const InputDecoration(labelText: 'Litros'),
+            ),
+          TextField(
+            controller: valorController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(labelText: 'Valor total'),
+          ),
+          TextField(
+            controller: descricaoController,
+            maxLines: 2,
+            decoration: const InputDecoration(
+              labelText: 'Observação/descrição',
+            ),
+          ),
+          TextField(
+            controller: fotoController,
+            decoration: const InputDecoration(
+              labelText: 'Foto do cupom/comprovante',
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          FilledButton.icon(
+            onPressed: _salvar,
+            icon: const Icon(Icons.save),
+            label: const Text('Salvar Registro'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LogisticaOcorrenciaPage extends StatefulWidget {
+  final String viagemId;
+  final LogisticaOperacionalRepository repository;
+
+  const LogisticaOcorrenciaPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
+
+  @override
+  State<LogisticaOcorrenciaPage> createState() =>
+      _LogisticaOcorrenciaPageState();
+}
+
+class _LogisticaOcorrenciaPageState extends State<LogisticaOcorrenciaPage> {
+  TipoOcorrencia tipo = TipoOcorrencia.atraso;
+  final descricaoController = TextEditingController();
+  final localizacaoController = TextEditingController();
+  final fotoController = TextEditingController();
+
+  @override
+  void dispose() {
+    descricaoController.dispose();
+    localizacaoController.dispose();
+    fotoController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _salvar() async {
+    await widget.repository.registrarOcorrencia(
+      viagemId: widget.viagemId,
+      tipo: tipo,
+      descricao: descricaoController.text.trim(),
+      fotoPath: fotoController.text.trim().isEmpty
+          ? null
+          : fotoController.text.trim(),
+    );
+    if (!mounted) return;
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Registrar Ocorrência')),
+      body: ListView(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        children: [
+          DropdownButtonFormField<TipoOcorrencia>(
+            initialValue: tipo,
+            decoration: const InputDecoration(labelText: 'Tipo'),
+            items: TipoOcorrencia.values
+                .map(
+                  (item) =>
+                      DropdownMenuItem(value: item, child: Text(item.dbValue)),
+                )
+                .toList(),
+            onChanged: (value) => setState(() => tipo = value ?? tipo),
+          ),
+          TextField(
+            controller: descricaoController,
+            maxLines: 3,
+            decoration: const InputDecoration(labelText: 'Descrição'),
+          ),
+          TextField(
+            controller: localizacaoController,
+            decoration: const InputDecoration(
+              labelText: 'Localização disponível',
+            ),
+          ),
+          TextField(
+            controller: fotoController,
+            decoration: const InputDecoration(labelText: 'Foto opcional'),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          FilledButton.icon(
+            onPressed: _salvar,
+            icon: const Icon(Icons.save),
+            label: const Text('Salvar Ocorrência'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LogisticaHistoricoPage extends StatelessWidget {
+  final String viagemId;
+  final LogisticaOperacionalRepository repository;
+
+  const LogisticaHistoricoPage({
+    super.key,
+    required this.viagemId,
+    required this.repository,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Histórico da Viagem'),
+          bottom: const TabBar(
+            isScrollable: true,
+            tabs: [
+              Tab(text: 'Checklists'),
+              Tab(text: 'Despesas'),
+              Tab(text: 'Ocorrências'),
+              Tab(text: 'Comprovantes'),
+              Tab(text: 'Sync'),
+            ],
+          ),
+        ),
+        body: FutureBuilder<List<Map<String, Object?>>>(
+          future: repository.listarHistorico(viagemId),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final itens = snapshot.data!;
+            return TabBarView(
+              children: [
+                _HistoricoLista(itens: itens, categoria: 'checklist'),
+                _HistoricoLista(itens: itens, categoria: 'despesa'),
+                _HistoricoLista(itens: itens, categoria: 'ocorrencia'),
+                _HistoricoLista(itens: itens, categoria: 'comprovante'),
+                _HistoricoLista(itens: itens, categoria: 'sync'),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _HistoricoLista extends StatelessWidget {
+  final List<Map<String, Object?>> itens;
+  final String categoria;
+
+  const _HistoricoLista({required this.itens, required this.categoria});
+
+  @override
+  Widget build(BuildContext context) {
+    final filtrados = itens
+        .where((item) => item['categoria'] == categoria)
+        .toList();
+    if (filtrados.isEmpty) {
+      return const Center(child: Text('Nenhum registro encontrado.'));
+    }
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      children: filtrados
+          .map(
+            (item) => Card(
+              child: ListTile(
+                title: Text(
+                  item['tipo']?.toString() ??
+                      item['tipo_evento']?.toString() ??
+                      categoria,
+                ),
+                subtitle: Text(
+                  item['descricao']?.toString() ??
+                      item['observacao']?.toString() ??
+                      item['created_at']?.toString() ??
+                      '',
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }

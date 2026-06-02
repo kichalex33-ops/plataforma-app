@@ -95,6 +95,13 @@ void main() {
     );
   });
 
+  test('concluir sem checklist pos-uso deve falhar', () {
+    expect(
+      () => repository.concluirViagem(viagemId: 'via-test', kmFinal: 130),
+      throwsA(isA<LogisticaValidationException>()),
+    );
+  });
+
   test('iniciar retorno sem pacientes marcados deve falhar', () {
     expect(
       () => repository.iniciarRetorno('via-test'),
@@ -136,6 +143,85 @@ void main() {
           .contains(TipoEventoSync.panicoAcionado.dbValue),
       isTrue,
     );
+  });
+
+  test('checklist pos-uso permite encerrar viagem valida', () async {
+    await repository.registrarChecklist(
+      viagemId: 'via-test',
+      tipo: 'pos_uso',
+      itens: {'limpeza': true, 'danos_observados': false},
+      observacao: 'Sem avarias.',
+    );
+
+    await repository.concluirViagem(viagemId: 'via-test', kmFinal: 130);
+
+    final db = await DatabaseHelper.instance.database;
+    final viagem = await db.query(
+      'logistica_viagens',
+      where: 'id_local = ?',
+      whereArgs: ['via-test'],
+      limit: 1,
+    );
+    expect(viagem.first['status'], StatusViagem.concluida.dbValue);
+  });
+
+  test('abastecimento calcula valor por litro e gera fila', () async {
+    final result = await repository.registrarAbastecimento(
+      viagemId: 'via-test',
+      posto: 'Posto Central',
+      litros: 40,
+      valorTotal: 240,
+      fotoCupomPath: 'cupom.jpg',
+      observacao: 'Tanque completo.',
+    );
+
+    final db = await DatabaseHelper.instance.database;
+    final abastecimentos = await db.query('logistica_abastecimentos');
+    final fila = await db.query('logistica_sync_items');
+
+    expect(result.valorPorLitro, 6);
+    expect(abastecimentos, hasLength(1));
+    expect(abastecimentos.first['tipo'], 'abastecimento');
+    expect(
+      fila
+          .map((item) => item['tipo_evento'])
+          .contains(TipoEventoSync.abastecimentoRegistrado.dbValue),
+      isTrue,
+    );
+  });
+
+  test(
+    'despesa geral fica vinculada a viagem e entra no custo por paciente',
+    () async {
+      await repository.registrarDespesaGeral(
+        viagemId: 'via-test',
+        tipo: 'pedágio',
+        valor: 30,
+        descricao: 'Pedágio autorizado.',
+        comprovantePath: 'pedagio.jpg',
+      );
+
+      final snapshot = await repository.carregarSnapshot('via-test');
+      expect(snapshot.totalDespesas, 30);
+      expect(snapshot.custoPorPaciente, 30);
+    },
+  );
+
+  test('comprovante SUS permite multiplas fotos por paciente', () async {
+    await repository.capturarComprovante(
+      'via-test',
+      'pas-test',
+      fotoPath: 'sus-1.jpg',
+    );
+    await repository.capturarComprovante(
+      'via-test',
+      'pas-test',
+      fotoPath: 'sus-2.jpg',
+    );
+
+    final db = await DatabaseHelper.instance.database;
+    final comprovantes = await db.query('logistica_comprovantes');
+    expect(comprovantes, hasLength(2));
   });
 
   test(

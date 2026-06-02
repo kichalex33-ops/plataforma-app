@@ -45,6 +45,20 @@ O módulo Logística copiado para `modules/logistica` já possui uma fundação 
 - Geração de eventos offline para `preparacao_iniciada`, `saida_confirmada` e `rota_ida_iniciada`.
 - Testes unitários para carregamento lógico da viagem, preparação, validações de saída e transição de estado.
 
+### Etapa 5 implementada
+
+- Checklist pré-uso configurável no fluxo de check-in, com itens de veículo, documentação, equipamentos e saúde.
+- Checklist pós-uso obrigatório antes do encerramento da viagem.
+- Tela de abastecimento com posto, litros, valor total, foto do cupom, observação e cálculo de valor por litro.
+- Registro de despesas gerais para pedágio, estacionamento, alimentação autorizada, manutenção emergencial e outro.
+- Tela de ocorrências tipadas, com descrição, horário automático, localização descritiva e foto opcional.
+- Botão de pânico criando ocorrência local, horário e item de fila offline com mensagem para a central.
+- Captura local de comprovante SUS por passageiro/paciente, permitindo múltiplas fotos.
+- Paciente ausente ou desistente passa a ser retirado do retorno por status `nao_retornou` e gera ocorrência automática.
+- Histórico da viagem com abas para checklists, despesas, ocorrências, comprovantes e eventos de sincronização.
+- Auditoria local para criação de checklists, despesas, ocorrências e comprovantes.
+- Testes cobrindo checklist obrigatório, abastecimento, custo por km, custo por paciente, paciente ausente, ocorrência, pânico e comprovantes.
+
 ### Login e sessão do motorista
 
 - Existe fluxo de login no módulo original.
@@ -155,12 +169,12 @@ Hoje existe o campo genérico `necessidade_especial`. O MVP deve separar:
 
 ### Comprovante de presença
 
-Faltam:
+Implementado na etapa 5:
 
-- Foto do comprovante ou canhoto.
+- Registro local de foto/caminho do comprovante ou canhoto.
 - Vinculação do comprovante ao paciente.
 - Vinculação do comprovante à viagem.
-- Preparação futura para assinatura na tela.
+- Estrutura preparada para assinatura digital futura.
 
 ### Status de espera
 
@@ -205,7 +219,7 @@ Faltam:
 
 ### Abastecimentos e despesas
 
-Faltam dados e telas para:
+Implementado na etapa 5:
 
 - Viagem.
 - Veículo.
@@ -222,7 +236,7 @@ Faltam dados e telas para:
 
 ### Ocorrências
 
-Hoje existe evento genérico de ocorrência. O MVP deve estruturar tipos:
+Implementado na etapa 5 com tipos:
 
 - Paciente ausente.
 - Desistência.
@@ -234,11 +248,11 @@ Hoje existe evento genérico de ocorrência. O MVP deve estruturar tipos:
 - Pânico.
 - Outro.
 
-Cada ocorrência deve ter horário, descrição, foto opcional e status de sincronização.
+Cada ocorrência registra horário, descrição, foto opcional, localização quando disponível e status de sincronização.
 
 ### Botão de pânico simples
 
-Falta:
+Implementado na etapa 5:
 
 - Botão vermelho acessível nas telas de rota.
 - Evento `PANICO`.
