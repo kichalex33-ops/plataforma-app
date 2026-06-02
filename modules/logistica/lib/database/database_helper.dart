@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../core/logistica/logistica_mock_seed.dart';
 import '../models/exclusao_log_model.dart';
 
 class DatabaseHelper {
@@ -16,6 +17,7 @@ class DatabaseHelper {
 
     _database = await _initDB('logisaude.db');
     await ensureLogisticaMvpSchema(_database!);
+    await LogisticaMockSeed(_database!).seedIfEmpty();
     return _database!;
   }
 
@@ -42,6 +44,7 @@ class DatabaseHelper {
     await _createRastreamentoViagemTable(db);
     await _createMensagensTable(db);
     await _createChecklistsTable(db);
+    await _createLogisticaOfflineFirstTables(db);
   }
 
   Future<void> _createConfigTable(Database db) async {
@@ -335,6 +338,8 @@ class DatabaseHelper {
   }
 
   Future<void> ensureLogisticaMvpSchema(Database db) async {
+    await _createLogisticaOfflineFirstTables(db);
+
     await _addColumnIfMissing(
       db,
       'transportes_viagens',
@@ -454,6 +459,203 @@ class DatabaseHelper {
 
     await db.execute(
       'CREATE INDEX IF NOT EXISTS idx_viagem_preparacoes_viagem ON viagem_preparacoes(viagem_id)',
+    );
+  }
+
+  Future<void> _createLogisticaOfflineFirstTables(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_viagens (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        origem TEXT NOT NULL,
+        destino_principal TEXT NOT NULL,
+        unidade_destino TEXT,
+        data_consulta TEXT NOT NULL,
+        horario_consulta TEXT,
+        motorista_id_local TEXT NOT NULL,
+        veiculo_id_local TEXT NOT NULL,
+        status TEXT NOT NULL,
+        prioridade TEXT NOT NULL DEFAULT 'normal',
+        observacoes_central TEXT,
+        km_inicial REAL,
+        km_final REAL,
+        inicio_espera TEXT,
+        fim_espera TEXT,
+        saida_em TEXT,
+        finalizada_em TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_pacientes (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        nome TEXT NOT NULL,
+        cns TEXT,
+        cpf TEXT,
+        telefone TEXT,
+        endereco_embarque TEXT NOT NULL,
+        acessibilidade TEXT NOT NULL DEFAULT 'nenhuma',
+        observacoes TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_passageiros_viagem (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        viagem_id_local TEXT NOT NULL,
+        paciente_id_local TEXT NOT NULL,
+        acompanhante INTEGER NOT NULL DEFAULT 0,
+        status_ida TEXT NOT NULL DEFAULT 'aguardando',
+        status_volta TEXT NOT NULL DEFAULT 'aguardando',
+        justificativa_retorno TEXT,
+        observacoes_embarque TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_veiculos (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        placa TEXT NOT NULL,
+        modelo TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        capacidade INTEGER NOT NULL DEFAULT 0,
+        km_atual REAL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_motoristas (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        nome TEXT NOT NULL,
+        cpf TEXT,
+        telefone TEXT,
+        cnh TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_checklists (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        viagem_id_local TEXT NOT NULL,
+        motorista_id_local TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        payload_json TEXT NOT NULL,
+        concluido INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_abastecimentos (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        viagem_id_local TEXT NOT NULL,
+        veiculo_id_local TEXT NOT NULL,
+        motorista_id_local TEXT NOT NULL,
+        local TEXT NOT NULL,
+        tipo TEXT NOT NULL DEFAULT 'abastecimento',
+        litros REAL NOT NULL,
+        valor REAL NOT NULL,
+        foto_cupom_path TEXT,
+        observacao TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_ocorrencias (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        viagem_id_local TEXT NOT NULL,
+        motorista_id_local TEXT NOT NULL,
+        paciente_id_local TEXT,
+        tipo TEXT NOT NULL,
+        descricao TEXT NOT NULL,
+        data_hora TEXT NOT NULL,
+        foto_path TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_comprovantes (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        viagem_id_local TEXT NOT NULL,
+        passageiro_id_local TEXT NOT NULL,
+        paciente_id_local TEXT NOT NULL,
+        tipo TEXT NOT NULL,
+        foto_path TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_avisos_central (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        titulo TEXT NOT NULL,
+        mensagem TEXT NOT NULL,
+        prioridade TEXT NOT NULL DEFAULT 'normal',
+        data_hora TEXT NOT NULL,
+        lido INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'local'
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS logistica_sync_items (
+        id_local TEXT PRIMARY KEY,
+        id_servidor TEXT,
+        tipo_evento TEXT NOT NULL,
+        payload_json TEXT NOT NULL,
+        tentativas INTEGER NOT NULL DEFAULT 0,
+        ultima_tentativa TEXT,
+        erro TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        status_sync TEXT NOT NULL DEFAULT 'pendente'
+      )
+    ''');
+
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_logistica_viagens_status ON logistica_viagens(status)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_logistica_passageiros_viagem ON logistica_passageiros_viagem(viagem_id_local)',
+    );
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_logistica_sync_status ON logistica_sync_items(status_sync)',
     );
   }
 
