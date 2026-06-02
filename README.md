@@ -4,15 +4,16 @@ Demo mobile Flutter da Plataforma Municipal de Saúde, reunindo uma entrada úni
 
 ## Credenciais
 
-Demo normal:
+Plataforma Logística:
 
-- Login: `Alex`
+- Login: `Alexk`, `Barbara` ou `Gilyan`
 - Senha: `1234`
 
-God Mode:
+GOD MODE:
 
-- Login: `Alexkich`
-- Senha: `@l3xk1cH`
+- Login: `GODMODE`
+- Senha: `app2026`
+- Biometria: opcional, quando o aparelho permitir.
 
 ## Módulos
 
@@ -21,7 +22,16 @@ God Mode:
 
 Os fluxos internos foram preservados. A identidade Andrade foi aplicada na entrada, seleção de módulos, wrappers visíveis e tokens visuais dos módulos copiados.
 
-## Minhas viagens
+## Animações
+
+Os vídeos MP4 usados na abertura e no GOD MODE ficam em:
+
+- `assets/animations/app_intro.mp4`
+- `assets/animations/god_mode_activation.mp4`
+
+O app exibe a animação inicial antes do login. No GOD MODE, a animação só é aberta após validar login, senha e, se marcada, biometria.
+
+## Minhas Viagens
 
 A tela **Minhas viagens** mostra apenas viagens atribuídas ao motorista pela plataforma. Quando não houver viagem recebida do painel, o comportamento esperado é exibir:
 
@@ -45,7 +55,7 @@ C:\flutter\bin\flutter.bat run --dart-define=DEMO_SEED_ENABLED=true
 
 O seed cria motorista `Alex` com id `motorista-local`, 2 veículos, 3 viagens, passageiros, acompanhantes e casos de acessibilidade. Para produção, não use esse `dart-define`.
 
-## Como rodar após clonar o repositório
+## Como Rodar Após Clonar
 
 ```powershell
 git clone https://github.com/kichalex33-ops/plataforma-app.git
@@ -54,7 +64,7 @@ C:\flutter\bin\flutter.bat pub get
 C:\flutter\bin\flutter.bat run
 ```
 
-## Comandos de validação
+## Comandos de Validação
 
 ```powershell
 C:\flutter\bin\flutter.bat pub get
@@ -68,8 +78,11 @@ C:\flutter\bin\flutter.bat build apk --debug
 - `docs/RELATORIO_DEMO_UNIFICADA.md`
 - `docs/PLANO_MELHORIAS_DEMO.md`
 - `docs/IDENTIDADE_VISUAL_ANDRADE.md`
+- `docs/ANIMATIONS.md`
+- `docs/GOD_MODE.md`
 - `docs/ESCOPO_LOGISTICA_MVP.md`
 - `docs/ROADMAP_LOGISTICA_3_MESES.md`
 - `docs/MAQUINA_ESTADOS_VIAGEM.md`
 - `docs/PLANO_DADOS_LOGISTICA.md`
 - `docs/HOMOLOGACAO_ETAPA_2.md`
+- `docs/v2/`

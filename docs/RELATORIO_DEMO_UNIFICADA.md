@@ -31,7 +31,7 @@ Foram excluídos da cópia apenas artefatos gerados como `.dart_tool`, `build` e
 ## Adaptações mínimas
 
 - Criada tela inicial institucional com identidade Andrade Gestão em Saúde.
-- Criado login local da demo com `Alex / 1234`.
+- Criado login local da demo com usuários `Alexk`, `Barbara` e `Gilyan`, todos com senha padrão `1234`.
 - Criada tela simples de seleção com os módulos `Logística` e `ACE`.
 - Criado wrapper `LogisticaModulePage` para inicializar banco/tema da Logística e abrir o app original sem o login interno.
 - Criado wrapper `AceModulePage` para inicializar banco do ACE e abrir telas originais em uma casca mínima de navegação.

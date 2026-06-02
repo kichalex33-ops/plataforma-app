@@ -5,8 +5,10 @@ import '../core/theme/app_assets.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_radius.dart';
 import '../core/theme/app_spacing.dart';
+import '../main.dart';
 import '../modules/ace/ace_module_page.dart';
 import '../modules/logistica/logistica_module_page.dart';
+import 'appearance_settings_page.dart';
 
 class ModuleSelectorPage extends StatelessWidget {
   final AppAccessMode accessMode;
@@ -25,6 +27,22 @@ class ModuleSelectorPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Andrade Gestão em Saúde'),
         actions: [
+          IconButton(
+            tooltip: 'Aparência',
+            onPressed: () {
+              final scope = AppThemeScope.of(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AppearanceSettingsPage(
+                    themeMode: scope.themeMode,
+                    onChanged: scope.onThemeModeChanged,
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.contrast),
+          ),
           if (isGodMode)
             Padding(
               padding: const EdgeInsets.only(right: AppSpacing.md),

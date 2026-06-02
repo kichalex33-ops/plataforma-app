@@ -12,7 +12,7 @@ Nesta etapa, este documento define o planejamento técnico. Não há implementa�
 - Não alterar ACE, ACS, IA ou backend.
 - Não reescrever o módulo interno.
 - Não trocar a arquitetura da demo.
-- Preservar o login `Alex / 1234` e a tela de seleção de módulos.
+- Preservar o login de usuários autorizados da Logística e a tela de seleção de módulos.
 - Documentar o MVP, as lacunas e a ordem de implementação.
 
 ## Base atual identificada
@@ -62,7 +62,7 @@ O módulo Logística copiado para `modules/logistica` já possui uma fundação 
 ### Login e sessão do motorista
 
 - Existe fluxo de login no módulo original.
-- A demo principal já autentica com `Alex / 1234` antes de abrir os módulos.
+- A demo principal autentica usuários locais autorizados antes de abrir os módulos. Nesta versão, `Alexk`, `Barbara` e `Gilyan` usam senha padrão `1234`.
 - O módulo Logística possui modelo de motorista e sessão local.
 
 ### Viagens atribuídas

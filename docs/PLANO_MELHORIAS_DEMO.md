@@ -3,8 +3,8 @@
 ## Estado Atual
 
 - A demo abre com identidade Andrade Gestão em Saúde.
-- Login normal `Alex / 1234` libera a seleção de módulos.
-- God Mode `Alexkich / @l3xk1cH` abre animação especial antes da seleção.
+- Login normal da Logística libera a seleção de módulos para `Alexk`, `Barbara` e `Gilyan` com senha padrão `1234`.
+- GOD MODE `GODMODE / app2026` abre animação especial antes da seleção.
 - A seleção exibe os módulos Logística e ACE.
 - Os fluxos internos dos módulos foram preservados.
 - A Logística já possui documentação de MVP, roadmap, dados e máquina de estados.

@@ -57,8 +57,8 @@ Demo normal:
 
 God Mode:
 
-- Login: `Alexkich`
-- Senha: `@l3xk1cH`
+- Login: `GODMODE`
+- Senha: `app2026`
 
 ## God Mode
 

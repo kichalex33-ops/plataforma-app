@@ -91,4 +91,36 @@ class AppTheme {
       ),
     );
   }
+
+  static ThemeData get dark {
+    final scheme = ColorScheme.fromSeed(
+      seedColor: AppColors.gold,
+      brightness: Brightness.dark,
+      primary: AppColors.gold,
+      secondary: AppColors.navy,
+      surface: const Color(0xFF111827),
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.dark,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: const Color(0xFF0B1220),
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        backgroundColor: Color(0xFF050915),
+        foregroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
+      cardTheme: CardThemeData(
+        color: const Color(0xFF111827),
+        elevation: 2,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+      ),
+    );
+  }
 }
