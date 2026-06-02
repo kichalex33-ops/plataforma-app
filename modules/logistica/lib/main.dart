@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
 import 'auth/motorista_login_page.dart';
+import 'auth/motorista_model.dart';
 import 'core/app_info.dart';
 import 'core/theme/app_theme.dart';
 import 'database/database_platform.dart';
@@ -21,11 +22,15 @@ Future<void> main() async {
 class LogiSaudeDriverApp extends StatelessWidget {
   final ThemeModeService? themeModeService;
   final bool mostrarLogin;
+  final MotoristaModel? motorista;
+  final VoidCallback? onSair;
 
   const LogiSaudeDriverApp({
     super.key,
     this.themeModeService,
     this.mostrarLogin = true,
+    this.motorista,
+    this.onSair,
   });
 
   @override
@@ -53,12 +58,17 @@ class LogiSaudeDriverApp extends StatelessWidget {
                         builder: (_) => MotoristaHomePage(
                           motorista: motorista,
                           themeModeService: service,
+                          onSair: onSair,
                         ),
                       ),
                     );
                   },
                 )
-              : MotoristaHomePage(themeModeService: service),
+              : MotoristaHomePage(
+                  motorista: motorista,
+                  themeModeService: service,
+                  onSair: onSair,
+                ),
         );
       },
     );

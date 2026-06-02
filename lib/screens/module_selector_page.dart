@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/auth/app_auth_models.dart';
 import '../core/session/app_access_mode.dart';
 import '../core/theme/app_assets.dart';
 import '../core/theme/app_colors.dart';
@@ -7,21 +8,32 @@ import '../core/theme/app_radius.dart';
 import '../core/theme/app_spacing.dart';
 import '../main.dart';
 import '../modules/ace/ace_module_page.dart';
+import '../modules/acs/acs_module_page.dart';
 import '../modules/logistica/logistica_module_page.dart';
+import '../modules/logistica/operador_logistica_page.dart';
 import 'appearance_settings_page.dart';
 
 class ModuleSelectorPage extends StatelessWidget {
   final AppAccessMode accessMode;
+  final AppUser? user;
 
   const ModuleSelectorPage({
     super.key,
     this.accessMode = AppAccessMode.normal,
+    this.user,
   });
 
   bool get isGodMode => accessMode == AppAccessMode.godMode;
 
+  List<AppModule> get _visibleModules {
+    if (isGodMode) return AppModule.values;
+    return user?.modulosPermitidos ?? const [];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final modules = _visibleModules;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -79,48 +91,118 @@ class ModuleSelectorPage extends StatelessWidget {
             fit: BoxFit.contain,
           ),
           const SizedBox(height: AppSpacing.lg),
-          const Text(
-            'Selecione o módulo',
-            style: TextStyle(
+          Text(
+            isGodMode ? 'Acesso total' : 'Selecione o módulo',
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w900,
               color: AppColors.navyDeep,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
-          const Text(
-            'Acesse as áreas operacionais da plataforma municipal.',
-            style: TextStyle(color: AppColors.textMuted),
+          Text(
+            isGodMode
+                ? 'Todos os módulos e ferramentas avançadas liberados.'
+                : 'Apenas módulos autorizados pelo painel web aparecem aqui.',
+            style: const TextStyle(color: AppColors.textMuted),
           ),
           const SizedBox(height: AppSpacing.lg),
-          _ModuleCard(
-            title: 'Logística',
-            subtitle: 'Transporte sanitário, viagens, frota e check-in.',
-            status: 'Demonstração operacional',
-            icon: Icons.local_shipping,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const LogisticaModulePage()),
-              );
-            },
-          ),
-          const SizedBox(height: AppSpacing.md),
-          _ModuleCard(
-            title: 'ACE',
-            subtitle: 'Rotinas territoriais preservadas para demonstração.',
-            status: 'Demonstração territorial',
-            icon: Icons.home_work,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AceModulePage()),
-              );
-            },
-          ),
+          for (final module in modules) ...[
+            _ModuleCard(
+              title: _title(module),
+              subtitle: _subtitle(module),
+              status: isGodMode ? 'Acesso total' : 'Autorizado pelo painel',
+              icon: _icon(module),
+              onTap: () => _openModule(context, module),
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
+          if (modules.isEmpty)
+            const Card(
+              child: Padding(
+                padding: EdgeInsets.all(AppSpacing.lg),
+                child: Text(
+                  'Usuário sem permissão ativa. Procure o operador responsável.',
+                ),
+              ),
+            ),
         ],
       ),
     );
+  }
+
+  String _title(AppModule module) {
+    return switch (module) {
+      AppModule.logistica => 'Logística',
+      AppModule.ace => 'ACE',
+      AppModule.acs => 'ACS',
+    };
+  }
+
+  String _subtitle(AppModule module) {
+    return switch (module) {
+      AppModule.logistica =>
+        'Transporte sanitário, viagens, frota e check-in.',
+      AppModule.ace => 'Rotinas territoriais preservadas para demonstração.',
+      AppModule.acs => 'Atenção comunitária e visitas domiciliares.',
+    };
+  }
+
+  IconData _icon(AppModule module) {
+    return switch (module) {
+      AppModule.logistica => Icons.local_shipping,
+      AppModule.ace => Icons.home_work,
+      AppModule.acs => Icons.health_and_safety,
+    };
+  }
+
+  void _openModule(BuildContext context, AppModule module) {
+    final currentUser = user;
+    switch (module) {
+      case AppModule.logistica:
+        if (!isGodMode && currentUser?.perfil == AppProfile.operadorLogistica) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OperadorLogisticaPage(user: currentUser!),
+            ),
+          );
+          return;
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => LogisticaModulePage(user: currentUser),
+          ),
+        );
+      case AppModule.ace:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AceModulePage()),
+        );
+      case AppModule.acs:
+        if (currentUser == null && !isGodMode) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AcsModulePage(
+              user: currentUser ??
+                  AppUser(
+                    id: 'god-mode-acs',
+                    nomeCompleto: 'GOD MODE',
+                    login: 'GODMODE',
+                    municipio: 'Todos',
+                    funcao: 'Acesso total',
+                    perfil: AppProfile.administrador,
+                    permissoes: const {'all': true},
+                    modulosPermitidos: AppModule.values,
+                    ativo: true,
+                    primeiroAcesso: false,
+                  ),
+            ),
+          ),
+        );
+    }
   }
 }
 

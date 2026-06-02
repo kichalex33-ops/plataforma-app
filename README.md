@@ -1,13 +1,15 @@
 # Andrade Demo Unificada
 
-Demo mobile Flutter da Plataforma Municipal de Saúde, reunindo uma entrada única com identidade Andrade Gestão em Saúde e acesso aos módulos preservados de Logística e ACE.
+Demo mobile Flutter da Plataforma Municipal de Saúde, reunindo uma entrada única com identidade Andrade Gestão em Saúde e acesso por perfil aos módulos permitidos.
 
 ## Credenciais
 
-Plataforma Logística:
+Usuários simulados do painel:
 
 - Login: `Alexk`, `Barbara` ou `Gilyan`
 - Senha: `1234`
+- Perfil: `MOTORISTA`
+- Módulo: `Logística`
 
 GOD MODE:
 
@@ -20,7 +22,13 @@ GOD MODE:
 - **Logística**: reaproveita a cópia local do módulo Logística em `modules/logistica`.
 - **ACE**: reaproveita a cópia local do app ACE em `modules/ace`.
 
-Os fluxos internos foram preservados. A identidade Andrade foi aplicada na entrada, seleção de módulos, wrappers visíveis e tokens visuais dos módulos copiados.
+Os fluxos internos foram preservados. A identidade Andrade foi aplicada na entrada, nos wrappers visíveis e nos tokens visuais dos módulos copiados.
+
+## Autenticação por Perfil
+
+O app não pede mais Motorista, Município e Senha dentro do módulo Logística. O usuário entra pela tela institucional única, e os dados de nome, município, perfil e permissões são carregados do cadastro do painel web.
+
+Motoristas entram direto na área Logística do motorista. A seleção de módulos só aparece para usuários com mais de um módulo autorizado.
 
 ## Animações
 
@@ -78,6 +86,7 @@ C:\flutter\bin\flutter.bat build apk --debug
 - `docs/RELATORIO_DEMO_UNIFICADA.md`
 - `docs/PLANO_MELHORIAS_DEMO.md`
 - `docs/IDENTIDADE_VISUAL_ANDRADE.md`
+- `docs/AUTENTICACAO_E_PERFIS.md`
 - `docs/ANIMATIONS.md`
 - `docs/GOD_MODE.md`
 - `docs/ESCOPO_LOGISTICA_MVP.md`

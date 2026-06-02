@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:logisaude_driver/auth/motorista_model.dart' as log_auth;
 import 'package:logisaude_driver/database/database_platform.dart' as log_db;
 import 'package:logisaude_driver/main.dart' as log_app;
 import 'package:logisaude_driver/services/theme_mode_service.dart' as log_theme;
 
+import '../../core/auth/app_auth_models.dart';
+
 class LogisticaModulePage extends StatefulWidget {
-  const LogisticaModulePage({super.key});
+  final AppUser? user;
+  final VoidCallback? onSair;
+
+  const LogisticaModulePage({
+    super.key,
+    this.user,
+    this.onSair,
+  });
 
   @override
   State<LogisticaModulePage> createState() => _LogisticaModulePageState();
@@ -16,6 +26,15 @@ class _LogisticaModulePageState extends State<LogisticaModulePage> {
   Future<log_theme.ThemeModeService> _inicializar() async {
     await log_db.configurarBancoPorPlataforma();
     return log_theme.ThemeModeService.carregar();
+  }
+
+  log_auth.MotoristaModel? _motoristaFromUser(AppUser? user) {
+    if (user == null) return null;
+    return log_auth.MotoristaModel(
+      id: user.id,
+      nome: user.nomeCompleto,
+      municipio: user.municipio,
+    );
   }
 
   @override
@@ -44,6 +63,8 @@ class _LogisticaModulePageState extends State<LogisticaModulePage> {
         return log_app.LogiSaudeDriverApp(
           themeModeService: snapshot.data,
           mostrarLogin: false,
+          motorista: _motoristaFromUser(widget.user),
+          onSair: widget.onSair,
         );
       },
     );

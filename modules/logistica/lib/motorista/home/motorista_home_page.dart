@@ -22,11 +22,13 @@ class MotoristaHomePage extends StatefulWidget {
   final MotoristaModel? motorista;
   final ThemeModeService? themeModeService;
   final MotoristaSession session;
+  final VoidCallback? onSair;
 
   MotoristaHomePage({
     super.key,
     this.motorista,
     this.themeModeService,
+    this.onSair,
     MotoristaSession? session,
   }) : session = session ?? MotoristaSession();
 
@@ -56,6 +58,10 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
   Future<void> _sair(BuildContext context) async {
     await widget.session.limpar();
     if (!context.mounted) return;
+    if (widget.onSair != null) {
+      widget.onSair!();
+      return;
+    }
 
     Navigator.pushReplacement(
       context,
