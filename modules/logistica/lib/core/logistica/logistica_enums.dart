@@ -38,6 +38,7 @@ enum TipoOcorrencia {
   pneuFurado,
   acidente,
   pacientePassouMal,
+  emergencia,
   atraso,
   abastecimento,
   despesa,
@@ -53,13 +54,7 @@ enum TipoAcessibilidade {
   acompanhanteObrigatorio,
 }
 
-enum StatusSync {
-  local,
-  pendente,
-  enviando,
-  sincronizado,
-  erro,
-}
+enum StatusSync { local, pendente, enviando, sincronizado, erro }
 
 enum TipoEventoSync {
   viagemIniciada,

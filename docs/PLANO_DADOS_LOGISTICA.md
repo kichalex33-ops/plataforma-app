@@ -73,7 +73,7 @@ Foram adicionados campos opcionais por migração leve para suportar auditoria e
 - `logistica_checklists`: `observacao`, `foto_path`, `created_by`, `deleted_at`.
 - `logistica_abastecimentos`: `created_by`, `deleted_at`.
 - `logistica_ocorrencias`: `latitude`, `longitude`, `created_by`, `deleted_at`.
-- `logistica_comprovantes`: `created_by`, `deleted_at`.
+- `logistica_comprovantes`: `created_by`, `assinatura_payload_json`, `deleted_at`.
 
 As despesas gerais usam `logistica_abastecimentos` como tabela operacional de despesas da viagem, diferenciadas pelo campo `tipo`.
 
@@ -108,6 +108,7 @@ Arquivo: `logistica_validators.dart`
 - Não concluir viagem sem KM final.
 - Abastecimento não pode ter litros zero ou valor negativo.
 - Ocorrência deve ter tipo e data/hora.
+- Ocorrências incluem paciente ausente, desistência, pane mecânica, pneu furado, acidente, paciente passou mal, emergência e outro.
 - Checklist pré-uso é obrigatório para confirmar saída.
 - Checklist pós-uso é obrigatório para concluir viagem.
 - Checklist deve ter ao menos um item.

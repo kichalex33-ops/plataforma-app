@@ -472,22 +472,32 @@ class LogisticaOperacionalRepository {
     });
   }
 
-  Future<void> acionarPanico(String viagemId) async {
+  Future<void> acionarPanico(
+    String viagemId, {
+    double? latitude,
+    double? longitude,
+  }) async {
     await registrarOcorrencia(
       viagemId: viagemId,
       tipo: TipoOcorrencia.panico,
       descricao: 'Pânico acionado pelo motorista.',
+      latitude: latitude,
+      longitude: longitude,
     );
-    await _enqueue(TipoEventoSync.panicoAcionado, {
+    final payload = <String, Object?>{
       'viagem_id': viagemId,
       'mensagem': 'Central será notificada quando houver conexão',
-    });
+    };
+    if (latitude != null) payload['latitude'] = latitude;
+    if (longitude != null) payload['longitude'] = longitude;
+    await _enqueue(TipoEventoSync.panicoAcionado, payload);
   }
 
   Future<void> capturarComprovante(
     String viagemId,
     String passageiroId, {
     String? fotoPath,
+    String? assinaturaPayloadJson,
   }) async {
     final db = await databaseHelper.database;
     final now = DateTime.now().toIso8601String();
@@ -508,6 +518,7 @@ class LogisticaOperacionalRepository {
       'paciente_id_local': pacienteId,
       'tipo': 'presença',
       'foto_path': fotoPath ?? 'mock/comprovante.jpg',
+      'assinatura_payload_json': assinaturaPayloadJson,
       'created_by': 'motorista-local',
       'created_at': now,
       'updated_at': now,

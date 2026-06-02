@@ -484,6 +484,12 @@ class DatabaseHelper {
     await _addColumnIfMissing(
       db,
       'logistica_comprovantes',
+      'assinatura_payload_json',
+      'TEXT',
+    );
+    await _addColumnIfMissing(
+      db,
+      'logistica_comprovantes',
       'deleted_at',
       'TEXT',
     );
@@ -661,6 +667,7 @@ class DatabaseHelper {
         paciente_id_local TEXT NOT NULL,
         tipo TEXT NOT NULL,
         foto_path TEXT NOT NULL,
+        assinatura_payload_json TEXT,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL,
         status_sync TEXT NOT NULL DEFAULT 'local'

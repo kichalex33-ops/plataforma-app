@@ -52,8 +52,8 @@ O módulo Logística copiado para `modules/logistica` já possui uma fundação 
 - Tela de abastecimento com posto, litros, valor total, foto do cupom, observação e cálculo de valor por litro.
 - Registro de despesas gerais para pedágio, estacionamento, alimentação autorizada, manutenção emergencial e outro.
 - Tela de ocorrências tipadas, com descrição, horário automático, localização descritiva e foto opcional.
-- Botão de pânico criando ocorrência local, horário e item de fila offline com mensagem para a central.
-- Captura local de comprovante SUS por passageiro/paciente, permitindo múltiplas fotos.
+- Botão de pânico criando ocorrência local, horário, localização quando disponível e item de fila offline com mensagem para a central.
+- Captura local de comprovante SUS por passageiro/paciente, permitindo múltiplas fotos e campo preparado para assinatura digital futura.
 - Paciente ausente ou desistente passa a ser retirado do retorno por status `nao_retornou` e gera ocorrência automática.
 - Histórico da viagem com abas para checklists, despesas, ocorrências, comprovantes e eventos de sincronização.
 - Auditoria local para criação de checklists, despesas, ocorrências e comprovantes.
@@ -244,6 +244,7 @@ Implementado na etapa 5 com tipos:
 - Pneu furado.
 - Acidente.
 - Paciente passou mal.
+- Emergência.
 - Atraso.
 - Pânico.
 - Outro.

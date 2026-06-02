@@ -129,14 +129,20 @@ void main() {
     );
   });
 
-  test('panico gera ocorrencia e fila', () async {
-    await repository.acionarPanico('via-test');
+  test('panico gera ocorrencia com localizacao e fila', () async {
+    await repository.acionarPanico(
+      'via-test',
+      latitude: -29.62,
+      longitude: -51.36,
+    );
 
     final db = await DatabaseHelper.instance.database;
     final ocorrencias = await db.query('logistica_ocorrencias');
     final fila = await db.query('logistica_sync_items');
 
     expect(ocorrencias.first['tipo'], TipoOcorrencia.panico.dbValue);
+    expect(ocorrencias.first['latitude'], -29.62);
+    expect(ocorrencias.first['longitude'], -51.36);
     expect(
       fila
           .map((item) => item['tipo_evento'])
@@ -165,6 +171,22 @@ void main() {
     expect(viagem.first['status'], StatusViagem.concluida.dbValue);
   });
 
+  test('checklist salva itens e foto opcional localmente', () async {
+    await repository.registrarChecklist(
+      viagemId: 'via-test',
+      tipo: 'pre_uso',
+      itens: {'pneus': true, 'faróis': false},
+      observacao: 'Farol esquerdo com alerta.',
+      fotoPath: 'checklist.jpg',
+    );
+
+    final db = await DatabaseHelper.instance.database;
+    final checklists = await db.query('logistica_checklists');
+    expect(checklists, hasLength(1));
+    expect(checklists.first['payload_json']?.toString(), contains('pneus'));
+    expect(checklists.first['foto_path'], 'checklist.jpg');
+  });
+
   test('abastecimento calcula valor por litro e gera fila', () async {
     final result = await repository.registrarAbastecimento(
       viagemId: 'via-test',
@@ -182,6 +204,13 @@ void main() {
     expect(result.valorPorLitro, 6);
     expect(abastecimentos, hasLength(1));
     expect(abastecimentos.first['tipo'], 'abastecimento');
+    expect(abastecimentos.first['local'], 'Posto Central');
+    expect(abastecimentos.first['litros'], 40);
+    expect(abastecimentos.first['valor'], 240);
+    expect(abastecimentos.first['viagem_id_local'], 'via-test');
+    expect(abastecimentos.first['veiculo_id_local'], 'vei-test');
+    expect(abastecimentos.first['motorista_id_local'], 'mot-test');
+    expect(abastecimentos.first['foto_cupom_path'], 'cupom.jpg');
     expect(
       fila
           .map((item) => item['tipo_evento'])
@@ -202,16 +231,34 @@ void main() {
       );
 
       final snapshot = await repository.carregarSnapshot('via-test');
+      final db = await DatabaseHelper.instance.database;
+      final despesas = await db.query('logistica_abastecimentos');
       expect(snapshot.totalDespesas, 30);
       expect(snapshot.custoPorPaciente, 30);
+      expect(despesas.first['tipo'], 'pedágio');
+      expect(despesas.first['valor'], 30);
+      expect(despesas.first['observacao'], 'Pedágio autorizado.');
+      expect(despesas.first['foto_cupom_path'], 'pedagio.jpg');
     },
   );
+
+  test('todos os tipos operacionais de ocorrencia estao disponiveis', () {
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.pacienteAusente));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.desistencia));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.paneMecanica));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.pneuFurado));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.acidente));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.pacientePassouMal));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.emergencia));
+    expect(TipoOcorrencia.values, contains(TipoOcorrencia.outro));
+  });
 
   test('comprovante SUS permite multiplas fotos por paciente', () async {
     await repository.capturarComprovante(
       'via-test',
       'pas-test',
       fotoPath: 'sus-1.jpg',
+      assinaturaPayloadJson: '{"assinatura":"futura"}',
     );
     await repository.capturarComprovante(
       'via-test',
@@ -222,6 +269,13 @@ void main() {
     final db = await DatabaseHelper.instance.database;
     final comprovantes = await db.query('logistica_comprovantes');
     expect(comprovantes, hasLength(2));
+    expect(comprovantes.first['foto_path'], 'sus-1.jpg');
+    expect(comprovantes.first['paciente_id_local'], 'pac-test');
+    expect(comprovantes.first['viagem_id_local'], 'via-test');
+    expect(
+      comprovantes.first['assinatura_payload_json'],
+      '{"assinatura":"futura"}',
+    );
   });
 
   test(
