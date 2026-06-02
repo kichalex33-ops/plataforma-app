@@ -7,7 +7,7 @@ import '../../core/app_info.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../motorista/eventos/eventos_pendentes_page.dart';
-import '../../motorista/minhas_viagens/minhas_viagens_page.dart';
+import '../../motorista/operacional/logistica_fluxo_viagem_pages.dart';
 import '../../motorista/simulacao/corrida_simulada_service.dart';
 import '../../motorista/sync/driver_sync_panel.dart';
 import '../../motorista/sync/driver_sync_service.dart';
@@ -190,12 +190,12 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
           QuickActionCard(
             icon: Icons.route,
             title: 'Ver minhas viagens',
-            subtitle: 'Origem, destino, horario e detalhe da execucao.',
+            subtitle: 'Fluxo operacional completo da viagem sanitaria.',
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => MinhasViagensPage(motorista: motoristaAtual),
+                  builder: (_) => const LogisticaViagensAtribuidasPage(),
                 ),
               );
             },
