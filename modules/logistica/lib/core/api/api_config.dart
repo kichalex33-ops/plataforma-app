@@ -6,6 +6,8 @@ class ApiConfig {
 
   static const String status = '/api/status';
   static const String driverTrips = '/api/driver/trips';
+  static const String driverLogin = '/api/driver/login';
+  static const String driverNotices = '/api/driver/notices';
   static const String driverEvents = '/api/driver/events';
   static const String driverLocations = '/api/driver/locations';
   static const String driverTripStatus = '/api/driver/trips/status';

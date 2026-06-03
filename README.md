@@ -72,12 +72,37 @@ C:\flutter\bin\flutter.bat pub get
 C:\flutter\bin\flutter.bat run
 ```
 
+## Integracao com a Plataforma Node
+
+A Fase 7 prepara o app para conversar com a plataforma em `C:\dev\plataforma\app\server`.
+
+Cliente principal:
+
+```text
+modules/logistica/lib/core/api/driver_api_client.dart
+```
+
+Contratos adicionados:
+
+- `POST /api/driver/login`
+- `GET /api/driver/trips?motorista_id=...`
+- `GET /api/driver/notices`
+- `POST /api/driver/trips/:id/checklist`
+- `POST /api/driver/trips/:id/km-inicial`
+- `POST /api/driver/trips/:id/flow`
+- `POST /api/driver/trips/:id/finalizar`
+- `POST /api/driver/panic`
+- `POST /api/driver/proofs`
+
+As telas que ainda nao consumirem esses metodos diretamente serao incrementadas em etapas futuras.
+
 ## Comandos de Validação
 
 ```powershell
 C:\flutter\bin\flutter.bat pub get
 C:\flutter\bin\dart.bat analyze --no-fatal-warnings
 C:\flutter\bin\flutter.bat test
+C:\flutter\bin\flutter.bat test .\modules\logistica\test\driver_api_client_fase7_test.dart
 C:\flutter\bin\flutter.bat build apk --debug
 ```
 

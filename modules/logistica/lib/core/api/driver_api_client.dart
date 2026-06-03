@@ -29,6 +29,31 @@ class DriverApiClient {
     return _getLista(ApiConfig.driverTrips);
   }
 
+  Future<Map<String, dynamic>?> loginMotorista({
+    required String identificador,
+    required String senha,
+    bool lembrar = false,
+  }) async {
+    debugPrint('[API] POST ${ApiConfig.driverLogin}');
+    return _postData(ApiConfig.driverLogin, {
+      'identificador': identificador,
+      'senha': senha,
+      'lembrar': lembrar,
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> buscarViagensDoMotorista(
+    String motoristaId,
+  ) async {
+    debugPrint('[API] GET ${ApiConfig.driverTrips} motorista=$motoristaId');
+    return _getLista('${ApiConfig.driverTrips}?motorista_id=$motoristaId');
+  }
+
+  Future<List<Map<String, dynamic>>> buscarAvisosCentral() async {
+    debugPrint('[API] GET ${ApiConfig.driverNotices}');
+    return _getLista(ApiConfig.driverNotices, listKeys: const ['avisos']);
+  }
+
   Future<List<Map<String, dynamic>>> buscarLogisaudeViagens() async {
     debugPrint('[API] GET ${ApiConfig.logisaudeViagens}');
     return _getLista(ApiConfig.logisaudeViagens);
@@ -69,7 +94,10 @@ class DriverApiClient {
     return _getLista(ApiConfig.driverTripStatus);
   }
 
-  Future<List<Map<String, dynamic>>> _getLista(String path) async {
+  Future<List<Map<String, dynamic>>> _getLista(
+    String path, {
+    List<String> listKeys = const ['items', 'viagens', 'trips', 'dados'],
+  }) async {
     try {
       final response = await client
           .get(ApiConfig.uri(path))
@@ -78,7 +106,7 @@ class DriverApiClient {
       if (response.statusCode < 200 || response.statusCode >= 300) {
         return const [];
       }
-      return _extrairLista(response.body);
+      return _extrairLista(response.body, listKeys: listKeys);
     } catch (error) {
       debugPrint('[API] GET $path falhou: $error');
       return const [];
@@ -100,6 +128,114 @@ class DriverApiClient {
     return _postJson(ApiConfig.driverTripStatus, payload);
   }
 
+  Future<bool> enviarChecklistPreViagem({
+    required String viagemId,
+    required String motoristaId,
+    required Map<String, bool> itens,
+    String observacoes = '',
+  }) {
+    return _postJson('/api/driver/trips/$viagemId/checklist', {
+      'motorista_id': motoristaId,
+      ...itens,
+      'observacoes': observacoes,
+    });
+  }
+
+  Future<bool> registrarKmInicial({
+    required String viagemId,
+    required String motoristaId,
+    required num kmSaida,
+    double? latitude,
+    double? longitude,
+  }) {
+    return _postJson('/api/driver/trips/$viagemId/km-inicial', {
+      'motorista_id': motoristaId,
+      'km_saida': kmSaida,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+    });
+  }
+
+  Future<bool> enviarFluxoViagem({
+    required String viagemId,
+    required String action,
+    required String motoristaId,
+  }) {
+    return _postJson('/api/driver/trips/$viagemId/flow', {
+      'action': action,
+      'motorista_id': motoristaId,
+    });
+  }
+
+  Future<bool> finalizarViagem({
+    required String viagemId,
+    required String motoristaId,
+    required num kmFinal,
+    String resumo = '',
+  }) {
+    return _postJson('/api/driver/trips/$viagemId/finalizar', {
+      'motorista_id': motoristaId,
+      'km_final': kmFinal,
+      'resumo': resumo,
+    });
+  }
+
+  Future<bool> acionarPanico({
+    required String viagemId,
+    required String motoristaId,
+    double? latitude,
+    double? longitude,
+  }) {
+    return _postJson('/api/driver/panic', {
+      'viagem_id': viagemId,
+      'motorista_id': motoristaId,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+    });
+  }
+
+  Future<bool> enviarComprovanteConsulta({
+    required String viagemId,
+    required String passageiroId,
+    required String arquivoNome,
+    String tipo = 'foto',
+  }) {
+    return _postJson('/api/driver/proofs', {
+      'viagem_id': viagemId,
+      'passageiro_id': passageiroId,
+      'arquivo_nome': arquivoNome,
+      'tipo': tipo,
+    });
+  }
+
+  Future<Map<String, dynamic>?> _postData(
+    String path,
+    Map<String, dynamic> payload,
+  ) async {
+    try {
+      final response = await client
+          .post(
+            ApiConfig.uri(path),
+            headers: {'Content-Type': 'application/json; charset=utf-8'},
+            body: jsonEncode(payload),
+          )
+          .timeout(ApiConfig.httpTimeout);
+      debugPrint('[API] POST $path -> ${response.statusCode}');
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        return null;
+      }
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        final data = decoded['data'];
+        if (data is Map<String, dynamic>) return data;
+        return decoded;
+      }
+    } catch (error) {
+      debugPrint('[API] POST $path falhou: $error');
+    }
+    return null;
+  }
+
   Future<bool> _postJson(String path, Map<String, dynamic> payload) async {
     try {
       final response = await client
@@ -117,13 +253,28 @@ class DriverApiClient {
     }
   }
 
-  List<Map<String, dynamic>> _extrairLista(String body) {
+  List<Map<String, dynamic>> _extrairLista(
+    String body, {
+    List<String> listKeys = const ['items', 'viagens', 'trips', 'dados'],
+  }) {
     final decoded = jsonDecode(body);
     if (decoded is List) {
       return decoded.whereType<Map>().map(Map<String, dynamic>.from).toList();
     }
     if (decoded is Map<String, dynamic>) {
-      for (final chave in ['items', 'viagens', 'trips', 'dados']) {
+      final data = decoded['data'];
+      if (data is Map<String, dynamic>) {
+        for (final chave in listKeys) {
+          final valor = data[chave];
+          if (valor is List) {
+            return valor
+                .whereType<Map>()
+                .map(Map<String, dynamic>.from)
+                .toList();
+          }
+        }
+      }
+      for (final chave in listKeys) {
         final valor = decoded[chave];
         if (valor is List) {
           return valor.whereType<Map>().map(Map<String, dynamic>.from).toList();
