@@ -37,20 +37,16 @@ class ViagemPreparacaoRepository implements ViagemPreparacaoStore {
     );
 
     if (preparacao.checklist.isNotEmpty) {
-      await db.insert(
-        'checklists',
-        {
-          'id': '${preparacao.id}-pre-uso',
-          'municipio_id': preparacao.municipioId,
-          'viagem_id': preparacao.viagemId,
-          'motorista_id': preparacao.motoristaId,
-          'tipo': 'pre_uso',
-          'payload_json': preparacao.toMap()['checklist_payload_json'],
-          'created_at': preparacao.horarioSaida ?? preparacao.horarioPreparacao,
-          'sync_status': 'pending',
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      await db.insert('checklists', {
+        'id': '${preparacao.id}-pre-uso',
+        'municipio_id': preparacao.municipioId,
+        'viagem_id': preparacao.viagemId,
+        'motorista_id': preparacao.motoristaId,
+        'tipo': 'pre_uso',
+        'payload_json': preparacao.toMap()['checklist_payload_json'],
+        'created_at': preparacao.horarioSaida ?? preparacao.horarioPreparacao,
+        'sync_status': 'pending',
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
     }
   }
 
@@ -85,10 +81,7 @@ class ViagemPreparacaoRepository implements ViagemPreparacaoStore {
       entityType: 'transportes_viagens',
       entityId: viagem.sync.id,
       operation: 'update',
-      payload: {
-        'id': viagem.sync.id,
-        ...payload,
-      },
+      payload: {'id': viagem.sync.id, ...payload},
     );
   }
 

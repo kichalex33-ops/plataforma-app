@@ -9,7 +9,7 @@ Nesta etapa, este documento define o planejamento técnico. Não há implementa�
 ## Escopo desta etapa
 
 - Trabalhar apenas o módulo Logística.
-- Não alterar ACE, ACS, IA ou backend.
+- Não alterar servidor ou outros projetos externos.
 - Não reescrever o módulo interno.
 - Não trocar a arquitetura da demo.
 - Preservar o login de usuários autorizados da Logística e a tela de seleção de módulos.
@@ -325,7 +325,7 @@ Deve ficar para a versão 2.0:
 - Chat completo base/motorista.
 - Painel web real integrado.
 - Sincronização completa com resolução de conflitos no backend.
-- Integração com ACS, ACE e IA operacional.
+- Integrações futuras devem ser avaliadas apenas quando houver novo escopo aprovado.
 
 ## Riscos técnicos
 

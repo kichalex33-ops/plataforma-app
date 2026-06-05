@@ -1,16 +1,6 @@
-enum AppProfile {
-  motorista,
-  operadorLogistica,
-  ace,
-  acs,
-  administrador,
-}
+enum AppProfile { motorista, operadorLogistica, administrador }
 
-enum AppModule {
-  logistica,
-  ace,
-  acs,
-}
+enum AppModule { logistica }
 
 class AppUser {
   final String id;
@@ -37,7 +27,8 @@ class AppUser {
     required this.primeiroAcesso,
   });
 
-  bool get temPermissaoAtiva => ativo && modulosPermitidos.isNotEmpty;
+  bool get temPermissaoAtiva =>
+      ativo && modulosPermitidos.contains(AppModule.logistica);
 
   AppUser copyWith({bool? primeiroAcesso}) {
     return AppUser(
@@ -60,13 +51,9 @@ class AuthResult {
   final AppUser? user;
   final String? message;
 
-  const AuthResult.allowed(this.user)
-      : allowed = true,
-        message = null;
+  const AuthResult.allowed(this.user) : allowed = true, message = null;
 
-  const AuthResult.denied(this.message)
-      : allowed = false,
-        user = null;
+  const AuthResult.denied(this.message) : allowed = false, user = null;
 }
 
 class AuthValidationException implements Exception {

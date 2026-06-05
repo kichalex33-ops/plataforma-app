@@ -40,8 +40,7 @@ Após login válido:
 
 - `MOTORISTA`: abre diretamente a área Logística do motorista.
 - `OPERADOR_LOGISTICA`: abre a área operacional permitida.
-- `ACE`: abre diretamente o módulo ACE.
-- `ACS`: abre diretamente o módulo ACS preparado.
+- Perfis futuros devem ser liberados apenas quando seus módulos forem incluidos no app.
 - Usuário sem permissão ativa: exibe `Usuário sem permissão ativa. Procure o operador responsável.`
 
 A tela de seleção de módulos só aparece quando o usuário tem mais de um módulo autorizado.
@@ -77,11 +76,11 @@ A biometria não cria usuário e não substitui o cadastro do painel. Ela apenas
 
 O GOD MODE permanece separado. Ele passa obrigatoriamente por `validateGodModeAccess()`, executa a animação e abre o painel GOD MODE.
 
-O GOD MODE ignora limitações normais de perfil e libera acesso total a módulos, ferramentas avançadas e auditoria interna preparada.
+O GOD MODE ignora limitações normais de perfil e libera acesso total ao módulo ativo, ferramentas avançadas e auditoria interna preparada.
 
 ## Limitações Atuais
 
 - O backend real ainda não está conectado.
 - `PanelAuthService` é um contrato/mock local para demonstrar o fluxo.
 - Alteração de senha é simulada no serviço local.
-- ACS está preparado como entrada de roteamento, não como módulo operacional completo.
+- A base permanece modular para novas entradas futuras, mas o app atual mantém somente Logística ativa.

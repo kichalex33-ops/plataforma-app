@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logisaude_driver/core/logistica/integracoes/logistica_external_integration.dart';
-import 'package:logisaude_driver/core/logistica/integracoes/logistica_sus_compatibility.dart';
-import 'package:logisaude_driver/core/logistica/manutencao/logistica_manutencao_frota.dart';
+import 'package:plataforma_logistica_driver/core/logistica/integracoes/logistica_external_integration.dart';
+import 'package:plataforma_logistica_driver/core/logistica/integracoes/logistica_sus_compatibility.dart';
+import 'package:plataforma_logistica_driver/core/logistica/manutencao/logistica_manutencao_frota.dart';
 
 void main() {
   group('webhook seguradora e assistencia', () {

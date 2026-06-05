@@ -387,7 +387,7 @@ class _OperacaoAoVivoCard extends StatelessWidget {
               title: 'Central de controle',
               text:
                   'Acompanha ETA, status do deslocamento, passageiros embarcados e pontos pendentes de envio ao servidor.',
-              destaque: 'Servidor preparado: http://10.0.0.3:3000',
+              destaque: 'Servidor preparado: http://10.0.0.4:3000',
             ),
           ],
         ),

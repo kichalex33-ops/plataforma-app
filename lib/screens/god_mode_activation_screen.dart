@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../core/animations/animation_type.dart';
 import '../core/animations/universal_animation_screen.dart';
 import '../core/session/app_access_mode.dart';
-import '../core/theme/app_assets.dart';
 import 'god_mode_dashboard.dart';
 
 class GodModeActivationScreen extends StatelessWidget {
@@ -40,7 +39,7 @@ class _GodModeFallback extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(AppAssets.logo, width: 160),
+          const Icon(Icons.local_shipping, color: Colors.white, size: 86),
           const SizedBox(height: 24),
           const Text(
             'GOD MODE',

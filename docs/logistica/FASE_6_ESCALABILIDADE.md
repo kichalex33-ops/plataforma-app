@@ -7,7 +7,7 @@ Preparar o módulo Logística para uma operação profissional, com integraçõe
 ## Escopo Aplicado
 
 - Apenas módulo Logística.
-- Nenhuma alteração em ACE, ACS ou painel web.
+- Nenhuma alteração em servidor ou painel web.
 - Nenhuma API real de seguradora, WhatsApp ou SUS foi chamada.
 - As integrações foram preparadas como simulação/log interno.
 

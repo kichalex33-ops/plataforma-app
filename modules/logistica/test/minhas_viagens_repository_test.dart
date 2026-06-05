@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'package:logisaude_driver/database/database_helper.dart';
-import 'package:logisaude_driver/motorista/minhas_viagens/minhas_viagens_repository.dart';
+import 'package:plataforma_logistica_driver/database/database_helper.dart';
+import 'package:plataforma_logistica_driver/motorista/minhas_viagens/minhas_viagens_repository.dart';
 
 void main() {
   test('lista somente viagens atribuidas ao motorista informado', () async {

@@ -80,9 +80,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
         ),
         side: BorderSide.none,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(999),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: AppColors.navyDeep,

@@ -1,6 +1,6 @@
 {
-    "name": "andrade_demo_unificada",
-    "short_name": "andrade_demo_unificada",
+    "name": "Plataforma Logistica",
+    "short_name": "Logistica",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
@@ -33,3 +33,5 @@
         }
     ]
 }
+
+

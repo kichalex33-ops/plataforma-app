@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'package:logisaude_driver/core/app_info.dart';
-import 'package:logisaude_driver/main.dart';
+import 'package:plataforma_logistica_driver/core/app_info.dart';
+import 'package:plataforma_logistica_driver/main.dart';
 
 void main() {
   testWidgets('mostra home do motorista sem gestao administrativa', (
@@ -12,7 +12,9 @@ void main() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
 
-    await tester.pumpWidget(const LogiSaudeDriverApp(mostrarLogin: false));
+    await tester.pumpWidget(
+      const PlataformaLogisticaDriverApp(mostrarLogin: false),
+    );
 
     expect(find.text(AppInfo.nome), findsWidgets);
     expect(find.text('Motorista logado'), findsOneWidget);

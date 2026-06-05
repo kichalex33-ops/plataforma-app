@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/session/app_access_mode.dart';
-import '../core/theme/app_assets.dart';
 import '../core/theme/app_colors.dart';
 import 'module_selector_page.dart';
 
@@ -28,9 +27,10 @@ class _GodModeIntroPageState extends State<GodModeIntroPage>
       duration: const Duration(milliseconds: 4200),
     )..forward();
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-    _scale = Tween<double>(begin: 0.86, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _scale = Tween<double>(
+      begin: 0.86,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     Timer(const Duration(milliseconds: 4600), () {
       if (!mounted) return;
@@ -93,11 +93,10 @@ class _GodModeIntroPageState extends State<GodModeIntroPage>
                                 ),
                               ],
                             ),
-                            child: Image.asset(
-                              AppAssets.logo,
-                              width: 190,
-                              height: 190,
-                              fit: BoxFit.contain,
+                            child: const Icon(
+                              Icons.local_shipping,
+                              color: AppColors.gold,
+                              size: 126,
                             ),
                           ),
                         ),

@@ -15,8 +15,5 @@ class AppTypography {
     height: 1.35,
   );
 
-  static const button = TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w800,
-  );
+  static const button = TextStyle(fontSize: 15, fontWeight: FontWeight.w800);
 }

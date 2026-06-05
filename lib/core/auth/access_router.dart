@@ -3,8 +3,6 @@ import 'app_auth_models.dart';
 enum AccessDestination {
   logisticaMotorista,
   operadorLogistica,
-  ace,
-  acs,
   moduleSelector,
   denied,
 }
@@ -19,8 +17,6 @@ class AccessRouter {
     return switch (user.perfil) {
       AppProfile.motorista => AccessDestination.logisticaMotorista,
       AppProfile.operadorLogistica => AccessDestination.operadorLogistica,
-      AppProfile.ace => AccessDestination.ace,
-      AppProfile.acs => AccessDestination.acs,
       AppProfile.administrador => AccessDestination.moduleSelector,
     };
   }

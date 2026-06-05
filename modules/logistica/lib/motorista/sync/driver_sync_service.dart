@@ -9,6 +9,7 @@ class DriverSyncStatus {
   final bool online;
   final int enviados;
   final int falhas;
+  final int pendentes;
   final String? ultimoSync;
   final String? mensagem;
 
@@ -16,6 +17,7 @@ class DriverSyncStatus {
     required this.online,
     this.enviados = 0,
     this.falhas = 0,
+    this.pendentes = 0,
     this.ultimoSync,
     this.mensagem,
   });
@@ -26,6 +28,7 @@ class DriverSyncStatus {
     final partes = <String>[
       rotuloConexao,
       'Enviados: $enviados',
+      'Pendentes: $pendentes',
       'Falhas: $falhas',
     ];
     if (ultimoSync != null && ultimoSync!.isNotEmpty) {
@@ -78,6 +81,7 @@ class DriverSyncService {
           await database.carregarValorConfiguracao(chaveFalhas) ?? '0',
         ) ??
         0;
+    final pendentes = await database.contarPendentesSincronizacao();
     final ultimoSync = await database.carregarValorConfiguracao(
       chaveUltimoSync,
     );
@@ -86,6 +90,7 @@ class DriverSyncService {
       online: online,
       enviados: enviados,
       falhas: falhas,
+      pendentes: pendentes,
       ultimoSync: _formatarUltimoSync(ultimoSync),
     );
   }
@@ -102,6 +107,7 @@ class DriverSyncService {
             await database.carregarValorConfiguracao(chaveEnviados) ?? '0',
           ) ??
           0,
+      pendentes: await database.contarPendentesSincronizacao(),
       falhas:
           int.tryParse(
             await database.carregarValorConfiguracao(chaveFalhas) ?? '0',
@@ -130,6 +136,7 @@ class DriverSyncService {
               await database.carregarValorConfiguracao(chaveEnviados) ?? '0',
             ) ??
             0,
+        pendentes: await database.contarPendentesSincronizacao(),
         falhas:
             int.tryParse(
               await database.carregarValorConfiguracao(chaveFalhas) ?? '0',
@@ -153,6 +160,7 @@ class DriverSyncService {
     final status = DriverSyncStatus(
       online: true,
       enviados: resultado.enviados,
+      pendentes: await database.contarPendentesSincronizacao(),
       falhas: resultado.falhas,
       ultimoSync: _formatarUltimoSync(agora),
       mensagem: resultado.erro,

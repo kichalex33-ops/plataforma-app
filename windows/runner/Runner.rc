@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "andrade_demo_unificada" "\0"
+            VALUE "FileDescription", "Plataforma Logistica" "\\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "andrade_demo_unificada" "\0"
+            VALUE "InternalName", "Plataforma Logistica" "\\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "andrade_demo_unificada.exe" "\0"
-            VALUE "ProductName", "andrade_demo_unificada" "\0"
+            VALUE "OriginalFilename", "plataforma_logistica.exe" "\0"
+            VALUE "ProductName", "Plataforma Logistica" "\\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
@@ -119,3 +119,5 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+
+

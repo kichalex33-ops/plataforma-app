@@ -1,6 +1,6 @@
 {
-    "name": "LogiSaude Driver",
-    "short_name": "LogiSaude",
+    "name": "Plataforma Logistica",
+    "short_name": "Plataforma Logistica",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

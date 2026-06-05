@@ -1,20 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logisaude_driver/core/logistica/logistica_calculator.dart';
-import 'package:logisaude_driver/core/logistica/logistica_enums.dart';
-import 'package:logisaude_driver/core/logistica/logistica_models.dart';
-import 'package:logisaude_driver/core/logistica/logistica_offline_queue.dart';
-import 'package:logisaude_driver/core/logistica/logistica_validators.dart';
+import 'package:plataforma_logistica_driver/core/logistica/logistica_calculator.dart';
+import 'package:plataforma_logistica_driver/core/logistica/logistica_enums.dart';
+import 'package:plataforma_logistica_driver/core/logistica/logistica_models.dart';
+import 'package:plataforma_logistica_driver/core/logistica/logistica_offline_queue.dart';
+import 'package:plataforma_logistica_driver/core/logistica/logistica_validators.dart';
 
 void main() {
   group('validacoes de KM', () {
     test('KM final menor que inicial deve falhar', () {
       expect(
-        () => LogisticaValidators.validarKmFinal(
-          kmInicial: 200,
-          kmFinal: 150,
-        ),
+        () => LogisticaValidators.validarKmFinal(kmInicial: 200, kmFinal: 150),
         throwsA(isA<LogisticaValidationException>()),
       );
     });
@@ -33,17 +30,11 @@ void main() {
 
   group('calculadora logistica', () {
     test('calcula km rodado', () {
-      expect(
-        LogisticaCalculator.kmRodado(kmInicial: 1000, kmFinal: 1125),
-        125,
-      );
+      expect(LogisticaCalculator.kmRodado(kmInicial: 1000, kmFinal: 1125), 125);
     });
 
     test('calcula valor por litro', () {
-      expect(
-        LogisticaCalculator.valorPorLitro(valor: 250, litros: 50),
-        5,
-      );
+      expect(LogisticaCalculator.valorPorLitro(valor: 250, litros: 50), 5);
     });
 
     test('calcula custo por paciente', () {
@@ -76,9 +67,7 @@ void main() {
 
     test('inicio de retorno falha com paciente pendente', () {
       final now = DateTime(2026, 6, 2);
-      final passageiros = [
-        _passageiro('1', StatusPacienteIda.embarcado, now),
-      ];
+      final passageiros = [_passageiro('1', StatusPacienteIda.embarcado, now)];
 
       expect(
         () => LogisticaValidators.validarInicioRetorno(passageiros),

@@ -7,10 +7,7 @@ class LogisticaCalculator {
     return kmFinal - kmInicial;
   }
 
-  static double valorPorLitro({
-    required double valor,
-    required double litros,
-  }) {
+  static double valorPorLitro({required double valor, required double litros}) {
     if (litros <= 0) return 0;
     return valor / litros;
   }

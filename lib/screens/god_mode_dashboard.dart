@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../core/session/app_access_mode.dart';
+import '../features/audit/pages/audit_history_page.dart';
+import '../features/indicators/pages/local_indicators_page.dart';
+import '../features/reports/pages/local_reports_page.dart';
 import 'module_selector_page.dart';
 
 class GodModeDashboard extends StatefulWidget {
@@ -39,10 +42,7 @@ class _GodModeDashboardState extends State<GodModeDashboard>
       return const Scaffold(
         backgroundColor: Colors.black,
         body: Center(
-          child: Text(
-            'Acesso negado',
-            style: TextStyle(color: Colors.white),
-          ),
+          child: Text('Acesso negado', style: TextStyle(color: Colors.white)),
         ),
       );
     }
@@ -79,7 +79,7 @@ class _GodModeDashboardState extends State<GodModeDashboard>
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Todas as entradas deste modo passam por validação antes da animação.',
+                    'Todas as entradas deste modo passam por validacao antes da animacao.',
                     style: TextStyle(color: Colors.white70),
                   ),
                 ],
@@ -100,7 +100,46 @@ class _GodModeDashboardState extends State<GodModeDashboard>
                 ),
               ),
               icon: const Icon(Icons.dashboard),
-              label: const Text('Abrir módulos'),
+              label: const Text('Abrir modulos'),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: const BorderSide(color: Color(0xFFFF0000)),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LocalIndicatorsPage()),
+              ),
+              icon: const Icon(Icons.insights),
+              label: const Text('Indicadores locais'),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: const BorderSide(color: Color(0xFFFF0000)),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LocalReportsPage()),
+              ),
+              icon: const Icon(Icons.description),
+              label: const Text('Relatorios locais'),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: const BorderSide(color: Color(0xFFFF0000)),
+              ),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AuditHistoryPage()),
+              ),
+              icon: const Icon(Icons.history),
+              label: const Text('Auditoria local'),
             ),
           ],
         ),

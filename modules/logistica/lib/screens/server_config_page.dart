@@ -219,13 +219,13 @@ class _ServerConfigPageState extends State<ServerConfigPage> {
                           ),
                           onPressed: usarServidorPadrao,
                           icon: const Icon(Icons.settings_backup_restore),
-                          label: const Text('Usar 10.0.0.3:3000'),
+                          label: const Text('Usar 10.0.0.4:3000'),
                         ),
                         const SizedBox(height: AppSpacing.md),
                         const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Use o IP do notebook na mesma rede do celular. Para este teste: http://10.0.0.3:3000',
+                            'Use o IP do notebook na mesma rede do celular. Para este teste: http://10.0.0.4:3000',
                             style: TextStyle(
                               color: AppColors.textMuted,
                               fontSize: 13,

@@ -4,9 +4,7 @@ class GodModeValidationResult {
   final bool allowed;
   final String? message;
 
-  const GodModeValidationResult.allowed()
-      : allowed = true,
-        message = null;
+  const GodModeValidationResult.allowed() : allowed = true, message = null;
 
   const GodModeValidationResult.denied(this.message) : allowed = false;
 }
@@ -18,7 +16,7 @@ class GodModeAuthService {
   final LocalAuthentication localAuth;
 
   GodModeAuthService({LocalAuthentication? localAuth})
-      : localAuth = localAuth ?? LocalAuthentication();
+    : localAuth = localAuth ?? LocalAuthentication();
 
   Future<GodModeValidationResult> validateGodModeAccess({
     required String login,
@@ -34,7 +32,8 @@ class GodModeAuthService {
     }
 
     if (requireBiometrics) {
-      final canCheck = await localAuth.canCheckBiometrics ||
+      final canCheck =
+          await localAuth.canCheckBiometrics ||
           await localAuth.isDeviceSupported();
       if (!canCheck) {
         return const GodModeValidationResult.denied(

@@ -137,20 +137,20 @@ class _UniversalAnimationScreenState extends State<UniversalAnimationScreen> {
     return switch (widget.animationType) {
       AnimationType.video => _buildVideo(),
       AnimationType.lottie => Lottie.asset(
-          widget.animationPath,
-          fit: BoxFit.cover,
-          repeat: false,
-          onLoaded: (composition) {
-            Timer(composition.duration, _finish);
-          },
-        ),
+        widget.animationPath,
+        fit: BoxFit.cover,
+        repeat: false,
+        onLoaded: (composition) {
+          Timer(composition.duration, _finish);
+        },
+      ),
       AnimationType.rive => RiveAnimation.asset(
-          widget.animationPath,
-          fit: BoxFit.cover,
-          onInit: (_) {
-            Timer(const Duration(seconds: 4), _finish);
-          },
-        ),
+        widget.animationPath,
+        fit: BoxFit.cover,
+        onInit: (_) {
+          Timer(const Duration(seconds: 4), _finish);
+        },
+      ),
     };
   }
 

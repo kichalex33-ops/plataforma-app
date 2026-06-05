@@ -182,6 +182,7 @@ class _MotoristaHomePageState extends State<MotoristaHomePage> {
             title: 'Sincronizacao',
             description: _statusSync.resumoSync,
             lastSync: _statusSync.ultimoSync,
+            pending: _statusSync.pendentes,
             child: DriverSyncPanel(
               onStatusChanged: (status) {
                 if (!mounted) return;

@@ -28,8 +28,8 @@ class SyncService {
   static const chaveServidorUrl = 'servidor_url';
   static const chaveUltimaSincronizacao = 'ultima_sincronizacao';
   static const servidorPadrao = String.fromEnvironment(
-    'LOGISAUDE_SERVER_URL',
-    defaultValue: 'http://10.0.0.3:3000',
+    'Logistica_SERVER_URL',
+    defaultValue: 'http://10.0.0.4:3000',
   );
 
   final DatabaseHelper database;

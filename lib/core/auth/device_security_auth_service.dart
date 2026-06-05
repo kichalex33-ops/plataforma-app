@@ -7,7 +7,7 @@ class DeviceSecurityAuthService {
   final LocalAuthentication localAuth;
 
   DeviceSecurityAuthService({LocalAuthentication? localAuth})
-      : localAuth = localAuth ?? LocalAuthentication();
+    : localAuth = localAuth ?? LocalAuthentication();
 
   Future<String?> linkedLogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -42,7 +42,8 @@ class DeviceSecurityAuthService {
   }
 
   Future<bool> _authenticate(String reason) async {
-    final supported = await localAuth.canCheckBiometrics ||
+    final supported =
+        await localAuth.canCheckBiometrics ||
         await localAuth.isDeviceSupported();
     if (!supported) return false;
     return localAuth.authenticate(

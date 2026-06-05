@@ -35,10 +35,8 @@ class ViagemPreparacaoService {
   final ViagemPreparacaoStore store;
   final Uuid uuid;
 
-  ViagemPreparacaoService({
-    required this.store,
-    Uuid? uuid,
-  }) : uuid = uuid ?? const Uuid();
+  ViagemPreparacaoService({required this.store, Uuid? uuid})
+    : uuid = uuid ?? const Uuid();
 
   Future<ViagemPreparacaoModel> iniciarPreparacao({
     required ViagemModel viagem,

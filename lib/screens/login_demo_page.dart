@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+
 import '../core/auth/access_router.dart';
 import '../core/auth/app_auth_models.dart';
 import '../core/auth/device_security_auth_service.dart';
 import '../core/auth/panel_auth_service.dart';
+import '../core/audit/models/audit_event_type.dart';
+import '../core/sync/providers/sync_providers.dart';
 import '../core/god_mode/god_mode_auth_service.dart';
 import '../core/session/app_access_mode.dart';
-import '../core/theme/app_assets.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_radius.dart';
 import '../core/theme/app_spacing.dart';
 import '../main.dart';
-import '../modules/ace/ace_module_page.dart';
-import '../modules/acs/acs_module_page.dart';
 import '../modules/logistica/logistica_module_page.dart';
 import '../modules/logistica/operador_logistica_page.dart';
 import 'alterar_senha_screen.dart';
@@ -36,6 +37,18 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
   bool _ocultarSenha = true;
   bool _usarBiometria = false;
   bool _entrando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(
+      auditAgentProvider.record(
+        type: AuditEventType.appOpened,
+        description: 'App aberto na tela de login.',
+        origin: 'app',
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -80,6 +93,14 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
       user = await _oferecerAlteracaoSenha(user) ?? user;
       await _oferecerBiometria(user);
       if (!mounted) return;
+      await auditAgentProvider.record(
+        type: AuditEventType.login,
+        description: 'Login autorizado para ${user.login}.',
+        origin: 'login',
+        entityType: 'usuario',
+        entityId: user.id,
+        metadata: {'login': user.login, 'perfil': user.perfil.name},
+      );
       _rotearUsuario(user);
     } finally {
       if (mounted) setState(() => _entrando = false);
@@ -97,6 +118,13 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
       _mostrarMensagem(result.message ?? 'Acesso GOD MODE negado.');
       return;
     }
+    await auditAgentProvider.record(
+      type: AuditEventType.login,
+      description: 'GOD MODE autorizado.',
+      origin: 'god_mode',
+      metadata: {'login': login},
+    );
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const GodModeActivationScreen()),
@@ -120,6 +148,14 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
         _mostrarMensagem(PanelAuthService.permissionDeniedMessage);
         return;
       }
+      await auditAgentProvider.record(
+        type: AuditEventType.login,
+        description: 'Login por biometria autorizado para ${user.login}.',
+        origin: 'biometria',
+        entityType: 'usuario',
+        entityId: user.id,
+        metadata: {'login': user.login, 'perfil': user.perfil.name},
+      );
       _rotearUsuario(user);
     } finally {
       if (mounted) setState(() => _entrando = false);
@@ -152,10 +188,8 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
     final changed = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => AlterarSenhaScreen(
-          user: user,
-          authService: _panelAuthService,
-        ),
+        builder: (_) =>
+            AlterarSenhaScreen(user: user, authService: _panelAuthService),
       ),
     );
     if (changed == true) {
@@ -206,26 +240,14 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => LogisticaModulePage(
-              user: user,
-              onSair: _voltarAoLogin,
-            ),
+            builder: (_) =>
+                LogisticaModulePage(user: user, onSair: _voltarAoLogin),
           ),
         );
       case AccessDestination.operadorLogistica:
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => OperadorLogisticaPage(user: user)),
-        );
-      case AccessDestination.ace:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const AceModulePage()),
-        );
-      case AccessDestination.acs:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => AcsModulePage(user: user)),
         );
       case AccessDestination.moduleSelector:
         Navigator.pushReplacement(
@@ -243,6 +265,13 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
   }
 
   void _voltarAoLogin() {
+    unawaited(
+      auditAgentProvider.record(
+        type: AuditEventType.logout,
+        description: 'Usuario retornou para a tela de login.',
+        origin: 'app',
+      ),
+    );
     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginDemoPage()),
       (_) => false,
@@ -250,9 +279,9 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
   }
 
   void _mostrarMensagem(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -298,10 +327,31 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          AppAssets.logoHorizontal,
-                          width: 290,
-                          fit: BoxFit.contain,
+                        Container(
+                          width: 104,
+                          height: 104,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(26),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.22),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.local_shipping,
+                            color: Colors.white,
+                            size: 54,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        const Text(
+                          'Plataforma Logistica',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         const SizedBox(height: AppSpacing.xl),
                         Card(
@@ -328,7 +378,7 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
                                 ),
                                 const SizedBox(height: AppSpacing.xs),
                                 const Text(
-                                  'Andrade Gestão em Saúde',
+                                  'Operacao logistica municipal',
                                   style: TextStyle(color: AppColors.textMuted),
                                 ),
                                 const SizedBox(height: AppSpacing.lg),
@@ -367,9 +417,7 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
                                   onChanged: (value) => setState(
                                     () => _usarBiometria = value ?? false,
                                   ),
-                                  title: const Text(
-                                    'Entrar usando biometria',
-                                  ),
+                                  title: const Text('Entrar usando biometria'),
                                   subtitle: const Text(
                                     'Disponível após o primeiro login válido.',
                                   ),

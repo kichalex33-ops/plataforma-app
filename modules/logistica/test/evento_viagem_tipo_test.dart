@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:logisaude_driver/motorista/viagem_atual/models/evento_viagem_tipo.dart';
+import 'package:plataforma_logistica_driver/motorista/viagem_atual/models/evento_viagem_tipo.dart';
 
 void main() {
   test('expoe os tipos iniciais de evento operacional da viagem', () {

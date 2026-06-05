@@ -54,29 +54,32 @@ class DriverApiClient {
     return _getLista(ApiConfig.driverNotices, listKeys: const ['avisos']);
   }
 
-  Future<List<Map<String, dynamic>>> buscarLogisaudeViagens() async {
-    debugPrint('[API] GET ${ApiConfig.logisaudeViagens}');
-    return _getLista(ApiConfig.logisaudeViagens);
+  Future<List<Map<String, dynamic>>> buscarLogisticaViagens() async {
+    debugPrint('[API] GET ${ApiConfig.logisticaViagens}');
+    return _getLista(ApiConfig.logisticaViagens);
   }
 
-  Future<List<Map<String, dynamic>>> buscarLogisaudeMotoristas() async {
-    debugPrint('[API] GET ${ApiConfig.logisaudeMotoristas}');
-    return _getLista(ApiConfig.logisaudeMotoristas);
+  Future<List<Map<String, dynamic>>> buscarLogisticaMotoristas() async {
+    debugPrint('[API] GET ${ApiConfig.logisticaMotoristas}');
+    return _getLista(ApiConfig.logisticaMotoristas);
   }
 
-  Future<List<Map<String, dynamic>>> buscarLogisaudeVeiculos() async {
-    debugPrint('[API] GET ${ApiConfig.logisaudeVeiculos}');
-    return _getLista(ApiConfig.logisaudeVeiculos);
+  Future<List<Map<String, dynamic>>> buscarLogisticaVeiculos() async {
+    debugPrint('[API] GET ${ApiConfig.logisticaVeiculos}');
+    return _getLista(ApiConfig.logisticaVeiculos);
   }
 
-  Future<List<Map<String, dynamic>>> buscarLogisaudePacientes() async {
-    debugPrint('[API] GET ${ApiConfig.logisaudePacientes}');
-    return _getLista(ApiConfig.logisaudePacientes);
+  Future<List<Map<String, dynamic>>> buscarLogisticaPacientes() async {
+    debugPrint('[API] GET ${ApiConfig.logisticaPacientes}');
+    return _getLista(ApiConfig.logisticaPacientes);
   }
 
-  Future<List<Map<String, dynamic>>> buscarLogisaudePassageiros() async {
-    debugPrint('[API] GET ${ApiConfig.logisaudePassageiros}');
-    return _getLista(ApiConfig.logisaudePassageiros);
+  Future<List<Map<String, dynamic>>> buscarLogisticaPassageiros(
+    String viagemId,
+  ) async {
+    final path = ApiConfig.logisticaPassageiros(viagemId);
+    debugPrint('[API] GET $path');
+    return _getLista(path, listKeys: const ['passageiros', 'items', 'dados']);
   }
 
   Future<List<Map<String, dynamic>>> buscarEventosRecebidos() async {
@@ -263,6 +266,9 @@ class DriverApiClient {
     }
     if (decoded is Map<String, dynamic>) {
       final data = decoded['data'];
+      if (data is List) {
+        return data.whereType<Map>().map(Map<String, dynamic>.from).toList();
+      }
       if (data is Map<String, dynamic>) {
         for (final chave in listKeys) {
           final valor = data[chave];

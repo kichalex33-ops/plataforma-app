@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:andrade_demo_unificada/core/god_mode/god_mode_auth_service.dart';
+import 'package:plataforma_logistica/core/god_mode/god_mode_auth_service.dart';
 
 void main() {
   group('GodModeAuthService', () {

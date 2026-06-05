@@ -1,69 +1,52 @@
-# Andrade Demo Unificada
+# Plataforma Logistica
 
-Demo mobile Flutter da Plataforma Municipal de Saúde, reunindo uma entrada única com identidade Andrade Gestão em Saúde e acesso por perfil aos módulos permitidos.
+Aplicativo mobile Flutter para operacao logistica municipal, com foco em transporte sanitario, viagens, motoristas, veiculos, passageiros, checklists, ocorrencias, comprovantes e sincronizacao offline-first.
 
-## Credenciais
+## Escopo Atual
 
-Usuários simulados do painel:
+- App mobile Flutter.
+- Modulo ativo: Logistica.
+- Login unico por usuario cadastrado no painel.
+- Roteamento por perfil para a area logistica permitida.
+- Base preparada para inclusao futura de novos modulos, sem dependencias ativas de outros dominios.
+
+## Credenciais de Teste
+
+Usuarios simulados do painel:
 
 - Login: `Alexk`, `Barbara` ou `Gilyan`
 - Senha: `1234`
 - Perfil: `MOTORISTA`
-- Módulo: `Logística`
+- Modulo: `Logistica`
 
 GOD MODE:
 
 - Login: `GODMODE`
 - Senha: `app2026`
-- Biometria: opcional, quando o aparelho permitir.
-
-## Módulos
-
-- **Logística**: reaproveita a cópia local do módulo Logística em `modules/logistica`.
-- **ACE**: reaproveita a cópia local do app ACE em `modules/ace`.
-
-Os fluxos internos foram preservados. A identidade Andrade foi aplicada na entrada, nos wrappers visíveis e nos tokens visuais dos módulos copiados.
-
-## Autenticação por Perfil
-
-O app não pede mais Motorista, Município e Senha dentro do módulo Logística. O usuário entra pela tela institucional única, e os dados de nome, município, perfil e permissões são carregados do cadastro do painel web.
-
-Motoristas entram direto na área Logística do motorista. A seleção de módulos só aparece para usuários com mais de um módulo autorizado.
-
-## Animações
-
-Os vídeos MP4 usados na abertura e no GOD MODE ficam em:
-
-- `assets/animations/app_intro.mp4`
-- `assets/animations/god_mode_activation.mp4`
-
-O app exibe a animação inicial antes do login. No GOD MODE, a animação só é aberta após validar login, senha e, se marcada, biometria.
 
 ## Minhas Viagens
 
-A tela **Minhas viagens** mostra apenas viagens atribuídas ao motorista pela plataforma. Quando não houver viagem recebida do painel, o comportamento esperado é exibir:
+A tela **Minhas viagens** mostra apenas viagens atribuidas ao motorista pela plataforma. Quando nao houver viagem recebida do painel, o comportamento esperado e exibir:
 
-`Nenhuma viagem atribuída`
+`Nenhuma viagem atribuida`
 
-O app não cria viagens falsas automaticamente em produção.
+O app nao cria viagens falsas automaticamente em producao.
 
-## Homologação da Etapa 2
+## Homologacao
 
-Para testar o fluxo operacional antes da plataforma enviar viagens reais, existe um seed opcional de homologação. Ele fica desligado por padrão:
+Para testar o fluxo operacional antes da plataforma enviar viagens reais, existe um seed opcional de homologacao. Ele fica desligado por padrao:
 
 ```dart
 DEMO_SEED_ENABLED = false
 ```
 
-Para ativar os dados locais de teste, execute o app com:
+Para ativar os dados locais de teste:
 
 ```powershell
 C:\flutter\bin\flutter.bat run --dart-define=DEMO_SEED_ENABLED=true
 ```
 
-O seed cria motorista `Alex` com id `motorista-local`, 2 veículos, 3 viagens, passageiros, acompanhantes e casos de acessibilidade. Para produção, não use esse `dart-define`.
-
-## Como Rodar Após Clonar
+## Como Rodar
 
 ```powershell
 git clone https://github.com/kichalex33-ops/plataforma-app.git
@@ -72,18 +55,17 @@ C:\flutter\bin\flutter.bat pub get
 C:\flutter\bin\flutter.bat run
 ```
 
-## Integracao com a Plataforma Node
+## Integracao com Servidor
 
-A Fase 7 prepara o app para conversar com a plataforma em `C:\dev\plataforma\app\server`.
-
-Cliente principal:
+O app deve permanecer alinhado ao servidor localizado em:
 
 ```text
-modules/logistica/lib/core/api/driver_api_client.dart
+C:\dev\plataforma\app\server
 ```
 
-Contratos adicionados:
+Rotas principais usadas pelo app:
 
+- `GET /api/status`
 - `POST /api/driver/login`
 - `GET /api/driver/trips?motorista_id=...`
 - `GET /api/driver/notices`
@@ -93,31 +75,16 @@ Contratos adicionados:
 - `POST /api/driver/trips/:id/finalizar`
 - `POST /api/driver/panic`
 - `POST /api/driver/proofs`
+- `GET /api/viagens`
+- `GET /api/motoristas`
+- `GET /api/veiculos`
+- `GET /api/pacientes`
+- `GET /api/viagens/:id/passageiros`
 
-As telas que ainda nao consumirem esses metodos diretamente serao incrementadas em etapas futuras.
-
-## Comandos de Validação
+## Validacao
 
 ```powershell
 C:\flutter\bin\flutter.bat pub get
 C:\flutter\bin\dart.bat analyze --no-fatal-warnings
 C:\flutter\bin\flutter.bat test
-C:\flutter\bin\flutter.bat test .\modules\logistica\test\driver_api_client_fase7_test.dart
-C:\flutter\bin\flutter.bat build apk --debug
 ```
-
-## Documentação
-
-- `docs/RELATORIO_DEMO_UNIFICADA.md`
-- `docs/PLANO_MELHORIAS_DEMO.md`
-- `docs/IDENTIDADE_VISUAL_ANDRADE.md`
-- `docs/AUTENTICACAO_E_PERFIS.md`
-- `docs/ANIMATIONS.md`
-- `docs/GOD_MODE.md`
-- `docs/ESCOPO_LOGISTICA_MVP.md`
-- `docs/ROADMAP_LOGISTICA_3_MESES.md`
-- `docs/MAQUINA_ESTADOS_VIAGEM.md`
-- `docs/PLANO_DADOS_LOGISTICA.md`
-- `docs/HOMOLOGACAO_ETAPA_2.md`
-- `docs/logistica/`
-- `docs/v2/`

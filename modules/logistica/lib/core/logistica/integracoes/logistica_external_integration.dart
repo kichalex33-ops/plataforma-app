@@ -112,9 +112,7 @@ class LogisticaWebhookSimulationResult {
   final bool sent;
   final String? error;
 
-  const LogisticaWebhookSimulationResult.success()
-      : sent = true,
-        error = null;
+  const LogisticaWebhookSimulationResult.success() : sent = true, error = null;
 
   const LogisticaWebhookSimulationResult.failure(this.error) : sent = false;
 }

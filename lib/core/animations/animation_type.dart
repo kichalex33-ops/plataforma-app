@@ -1,5 +1,1 @@
-enum AnimationType {
-  video,
-  lottie,
-  rive,
-}
+enum AnimationType { video, lottie, rive }

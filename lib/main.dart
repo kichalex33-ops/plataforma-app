@@ -6,20 +6,19 @@ import 'screens/login_demo_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const AndradeDemoUnificadaApp());
+  runApp(const PlataformaLogisticaApp());
 }
 
-class AndradeDemoUnificadaApp extends StatefulWidget {
+class PlataformaLogisticaApp extends StatefulWidget {
   final bool showIntro;
 
-  const AndradeDemoUnificadaApp({super.key, this.showIntro = true});
+  const PlataformaLogisticaApp({super.key, this.showIntro = false});
 
   @override
-  State<AndradeDemoUnificadaApp> createState() =>
-      _AndradeDemoUnificadaAppState();
+  State<PlataformaLogisticaApp> createState() => _PlataformaLogisticaAppState();
 }
 
-class _AndradeDemoUnificadaAppState extends State<AndradeDemoUnificadaApp> {
+class _PlataformaLogisticaAppState extends State<PlataformaLogisticaApp> {
   ThemeMode _themeMode = ThemeMode.system;
 
   @override
@@ -28,7 +27,7 @@ class _AndradeDemoUnificadaAppState extends State<AndradeDemoUnificadaApp> {
       themeMode: _themeMode,
       onThemeModeChanged: (mode) => setState(() => _themeMode = mode),
       child: MaterialApp(
-        title: 'Andrade Gestão em Saúde',
+        title: 'Plataforma Logistica',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,

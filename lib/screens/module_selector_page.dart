@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../core/auth/app_auth_models.dart';
 import '../core/session/app_access_mode.dart';
-import '../core/theme/app_assets.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_radius.dart';
 import '../core/theme/app_spacing.dart';
 import '../main.dart';
-import '../modules/ace/ace_module_page.dart';
-import '../modules/acs/acs_module_page.dart';
 import '../modules/logistica/logistica_module_page.dart';
 import '../modules/logistica/operador_logistica_page.dart';
 import 'appearance_settings_page.dart';
@@ -26,8 +23,11 @@ class ModuleSelectorPage extends StatelessWidget {
   bool get isGodMode => accessMode == AppAccessMode.godMode;
 
   List<AppModule> get _visibleModules {
-    if (isGodMode) return AppModule.values;
-    return user?.modulosPermitidos ?? const [];
+    if (isGodMode) return const [AppModule.logistica];
+    return user?.modulosPermitidos
+            .where((module) => module == AppModule.logistica)
+            .toList(growable: false) ??
+        const [];
   }
 
   @override
@@ -37,10 +37,10 @@ class ModuleSelectorPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Andrade Gestão em Saúde'),
+        title: const Text('Plataforma Logistica'),
         actions: [
           IconButton(
-            tooltip: 'Aparência',
+            tooltip: 'Aparencia',
             onPressed: () {
               final scope = AppThemeScope.of(context);
               Navigator.push(
@@ -85,14 +85,10 @@ class ModuleSelectorPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
-          Image.asset(
-            AppAssets.logoHorizontal,
-            height: 94,
-            fit: BoxFit.contain,
-          ),
+          const _Header(),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            isGodMode ? 'Acesso total' : 'Selecione o módulo',
+            isGodMode ? 'Acesso total' : 'Modulo disponivel',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w900,
@@ -100,11 +96,9 @@ class ModuleSelectorPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
-          Text(
-            isGodMode
-                ? 'Todos os módulos e ferramentas avançadas liberados.'
-                : 'Apenas módulos autorizados pelo painel web aparecem aqui.',
-            style: const TextStyle(color: AppColors.textMuted),
+          const Text(
+            'Esta estrutura permanece preparada para liberar outros modulos autorizados pelo painel quando forem incluidos no app.',
+            style: TextStyle(color: AppColors.textMuted),
           ),
           const SizedBox(height: AppSpacing.lg),
           for (final module in modules) ...[
@@ -122,7 +116,7 @@ class ModuleSelectorPage extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(AppSpacing.lg),
                 child: Text(
-                  'Usuário sem permissão ativa. Procure o operador responsável.',
+                  'Usuario sem permissao ativa. Procure o operador responsavel.',
                 ),
               ),
             ),
@@ -133,26 +127,19 @@ class ModuleSelectorPage extends StatelessWidget {
 
   String _title(AppModule module) {
     return switch (module) {
-      AppModule.logistica => 'Logística',
-      AppModule.ace => 'ACE',
-      AppModule.acs => 'ACS',
+      AppModule.logistica => 'Logistica',
     };
   }
 
   String _subtitle(AppModule module) {
     return switch (module) {
-      AppModule.logistica =>
-        'Transporte sanitário, viagens, frota e check-in.',
-      AppModule.ace => 'Rotinas territoriais preservadas para demonstração.',
-      AppModule.acs => 'Atenção comunitária e visitas domiciliares.',
+      AppModule.logistica => 'Transporte sanitario, viagens, frota e check-in.',
     };
   }
 
   IconData _icon(AppModule module) {
     return switch (module) {
       AppModule.logistica => Icons.local_shipping,
-      AppModule.ace => Icons.home_work,
-      AppModule.acs => Icons.health_and_safety,
     };
   }
 
@@ -175,34 +162,38 @@ class ModuleSelectorPage extends StatelessWidget {
             builder: (_) => LogisticaModulePage(user: currentUser),
           ),
         );
-      case AppModule.ace:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const AceModulePage()),
-        );
-      case AppModule.acs:
-        if (currentUser == null && !isGodMode) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AcsModulePage(
-              user: currentUser ??
-                  AppUser(
-                    id: 'god-mode-acs',
-                    nomeCompleto: 'GOD MODE',
-                    login: 'GODMODE',
-                    municipio: 'Todos',
-                    funcao: 'Acesso total',
-                    perfil: AppProfile.administrador,
-                    permissoes: const {'all': true},
-                    modulosPermitidos: AppModule.values,
-                    ativo: true,
-                    primeiroAcesso: false,
-                  ),
+    }
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.navyDeep,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.local_shipping, color: Colors.white, size: 38),
+          SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Text(
+              'Plataforma Logistica',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
-        );
-    }
+        ],
+      ),
+    );
   }
 }
 

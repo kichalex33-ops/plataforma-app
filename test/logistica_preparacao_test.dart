@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logisaude_driver/auth/motorista_model.dart';
-import 'package:logisaude_driver/motorista/preparacao/models/viagem_preparacao_model.dart';
-import 'package:logisaude_driver/motorista/preparacao/viagem_preparacao_service.dart';
-import 'package:logisaude_driver/modules/sync/models/sync_metadata.dart';
-import 'package:logisaude_driver/modules/transportes/models/viagem_model.dart';
-import 'package:logisaude_driver/modules/transportes/models/viagem_status.dart';
+import 'package:plataforma_logistica_driver/auth/motorista_model.dart';
+import 'package:plataforma_logistica_driver/motorista/preparacao/models/viagem_preparacao_model.dart';
+import 'package:plataforma_logistica_driver/motorista/preparacao/viagem_preparacao_service.dart';
+import 'package:plataforma_logistica_driver/modules/sync/models/sync_metadata.dart';
+import 'package:plataforma_logistica_driver/modules/transportes/models/viagem_model.dart';
+import 'package:plataforma_logistica_driver/modules/transportes/models/viagem_status.dart';
 
 void main() {
   late _FakePreparacaoStore store;

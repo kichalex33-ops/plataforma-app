@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:andrade_demo_unificada/core/auth/access_router.dart';
-import 'package:andrade_demo_unificada/core/auth/app_auth_models.dart';
-import 'package:andrade_demo_unificada/core/auth/panel_auth_service.dart';
+import 'package:plataforma_logistica/core/auth/access_router.dart';
+import 'package:plataforma_logistica/core/auth/app_auth_models.dart';
+import 'package:plataforma_logistica/core/auth/panel_auth_service.dart';
 
 void main() {
   group('PanelAuthService', () {
@@ -12,7 +12,7 @@ void main() {
 
       expect(result.allowed, isTrue);
       expect(result.user?.nomeCompleto, 'Alex Kich');
-      expect(result.user?.municipio, 'Município Demo');
+      expect(result.user?.municipio, 'Municipio Demo');
       expect(result.user?.perfil, AppProfile.motorista);
       expect(result.user?.modulosPermitidos, [AppModule.logistica]);
     });
@@ -28,11 +28,11 @@ void main() {
       expect(result.allowed, isFalse);
       expect(
         result.message,
-        'Usuário sem permissão ativa. Procure o operador responsável.',
+        'Usuario sem permissao ativa. Procure o operador responsavel.',
       );
     });
 
-    test('altera senha validando senha atual e força minima', () async {
+    test('altera senha validando senha atual e forca minima', () async {
       final service = PanelAuthService();
 
       expect(
@@ -82,7 +82,7 @@ void main() {
         id: '1',
         nomeCompleto: 'Motorista',
         login: 'motorista',
-        municipio: 'Município',
+        municipio: 'Municipio',
         funcao: 'Motorista',
         perfil: AppProfile.motorista,
         permissoes: const {'viagens': true},
@@ -94,21 +94,22 @@ void main() {
       expect(AccessRouter.resolve(user), AccessDestination.logisticaMotorista);
     });
 
-    test('usuario com mais de um modulo ve seleção filtrada', () {
+    test('somente o modulo logistica fica disponivel no app atual', () {
       final user = AppUser(
         id: '2',
-        nomeCompleto: 'Supervisor',
-        login: 'supervisor',
-        municipio: 'Município',
-        funcao: 'Supervisor',
+        nomeCompleto: 'Operador',
+        login: 'operador',
+        municipio: 'Municipio',
+        funcao: 'Operador',
         perfil: AppProfile.operadorLogistica,
-        permissoes: const {'viagens': true, 'ace': true},
-        modulosPermitidos: const [AppModule.logistica, AppModule.ace],
+        permissoes: const {'viagens': true},
+        modulosPermitidos: const [AppModule.logistica],
         ativo: true,
         primeiroAcesso: false,
       );
 
-      expect(AccessRouter.resolve(user), AccessDestination.moduleSelector);
+      expect(AppModule.values, const [AppModule.logistica]);
+      expect(AccessRouter.resolve(user), AccessDestination.operadorLogistica);
     });
   });
 }

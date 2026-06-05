@@ -13,14 +13,15 @@ class Fase6StatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final queue = LogisticaExternalDispatchQueue(
-      gateway: LogisticaWebhookSimulationGateway(),
-    )..enqueue(
-        destino: LogisticaExternalDestination.seguradora,
-        tipoEvento: 'ocorrencia_preparada',
-        payload: {'modo': 'simulado', 'origem': 'fase_6'},
-        createdAt: DateTime(2026, 6, 2, 8),
-      );
+    final queue =
+        LogisticaExternalDispatchQueue(
+          gateway: LogisticaWebhookSimulationGateway(),
+        )..enqueue(
+          destino: LogisticaExternalDestination.seguradora,
+          tipoEvento: 'ocorrencia_preparada',
+          payload: {'modo': 'simulado', 'origem': 'fase_6'},
+          createdAt: DateTime(2026, 6, 2, 8),
+        );
 
     final whatsapp = LogisticaWhatsappSimulationService()
       ..registrarMensagem(
@@ -132,7 +133,9 @@ class Fase6StatusPage extends StatelessWidget {
           const _RuleTile('Sem API real de seguradora nesta fase.'),
           const _RuleTile('Sem envio real de WhatsApp nesta fase.'),
           const _RuleTile('Sem integracao oficial SUS nesta fase.'),
-          const _RuleTile('WebSocket depende de VPS ou infraestrutura adequada.'),
+          const _RuleTile(
+            'WebSocket depende de VPS ou infraestrutura adequada.',
+          ),
         ],
       ),
     );

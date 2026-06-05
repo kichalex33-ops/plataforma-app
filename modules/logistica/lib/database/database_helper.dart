@@ -16,7 +16,7 @@ class DatabaseHelper {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('logisaude.db');
+    _database = await _initDB('Logistica.db');
     await ensureLogisticaMvpSchema(_database!);
     if (LogisticaDemoConfig.demoSeedEnabled) {
       await LogisticaMockSeed(_database!).seedIfEmpty();
@@ -127,7 +127,7 @@ class DatabaseHelper {
         motorista TEXT,
         municipio TEXT,
         data_hora TEXT NOT NULL,
-        origem TEXT NOT NULL DEFAULT 'logisaude_driver',
+        origem TEXT NOT NULL DEFAULT 'plataforma_logistica_driver',
         sincronizado INTEGER NOT NULL DEFAULT 0,
         sincronizado_em TEXT,
         erro_sincronizacao TEXT
