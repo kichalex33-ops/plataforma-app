@@ -4,16 +4,17 @@ import '../../agents/connectivity_agent.dart';
 import '../../agents/sync_agent.dart';
 import '../../audit/providers/audit_providers.dart';
 import '../../connectivity/providers/connectivity_providers.dart';
-import '../repositories/sync_queue_repository.dart';
+import '../repositories/sqlite_sync_queue_repository.dart';
+import '../services/api_sync_dispatcher.dart';
 import '../services/sync_queue_service.dart';
 
-final syncQueueRepositoryProvider = SharedPreferencesSyncQueueRepository();
+final syncQueueRepositoryProvider = SQLiteSyncQueueRepository();
 
 final auditAgentProvider = AuditAgent(logService: auditLogServiceProvider);
 
 final syncQueueServiceProvider = SyncQueueService(
   repository: syncQueueRepositoryProvider,
-  dispatcher: (_) async {},
+  dispatcher: ApiSyncDispatcher().call,
 );
 
 final syncAgentProvider = SyncAgent(

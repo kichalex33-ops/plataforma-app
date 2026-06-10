@@ -32,7 +32,7 @@ Cada evento entra na fila como `SyncQueueItem` com:
 - data de sincronizacao;
 - erro mais recente.
 
-O reposititorio padrao do app usa `SharedPreferencesSyncQueueRepository`, preservando os itens localmente entre execucoes do app. Para testes unitarios, existe `InMemorySyncQueueRepository`.
+O repositorio padrao do app usa `SQLiteSyncQueueRepository`, preservando os itens localmente entre execucoes do app na tabela `core_sync_queue_items`. Para testes unitarios, existe `InMemorySyncQueueRepository`.
 
 ## Status
 
@@ -53,7 +53,7 @@ O servidor existente em `C:\dev\plataforma\app\server` ja expoe contratos compat
 - `GET /api/sync/status`
 - `POST /api/sync/forcar`
 
-Nesta fase, o envio real fica preparado por meio de um `dispatcher` injetavel. As chamadas reais podem ser conectadas ao `DriverApiClient` sem alterar a regra da fila.
+O envio real e feito por um `dispatcher` injetavel. No app padrao, `ApiSyncDispatcher` envia eventos com token Bearer da sessao segura para `/api/driver/locations`, `/api/driver/events` ou `/api/driver/sync`, conforme o tipo do item.
 
 ## Como o SyncAgent Conversa com o ConnectivityAgent
 
@@ -72,11 +72,10 @@ O `SyncAgent` aciona o `AuditAgent` para registrar:
 
 ## Limitacoes Atuais
 
-- O envio real para API ainda nao foi ligado ao dispatcher padrao.
-- Ainda nao ha reconciliacao de conflitos com dados vindos do servidor.
+- A reconciliacao de conflitos ainda e basica: HTTP 409 marca o item como falha com erro `CONFLITO`, preservando o payload local para revisao.
 - Ainda nao ha backoff exponencial.
-- A fila central em `lib/core/sync` usa `SharedPreferences`; o modulo Logistica tambem possui fila SQLite propria que continua preservada.
+- A fila central em `lib/core/sync` usa SQLite. O modulo Logistica tambem possui fila SQLite propria que continua preservada.
 
 ## Proximos Passos
 
-Na Fase 8, ligar o dispatcher ao contrato real do servidor, definir politica de reenvio, aplicar backoff, tratar conflitos e unificar gradualmente a fila core com a fila SQLite da Logistica.
+Nos proximos ciclos, aplicar backoff exponencial, padronizar contratos de conflito no servidor e unificar gradualmente a fila core com a fila operacional da Logistica.

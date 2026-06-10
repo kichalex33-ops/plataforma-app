@@ -2,6 +2,7 @@ import '../models/sync_operation_type.dart';
 import '../models/sync_queue_item.dart';
 import '../models/sync_status.dart';
 import '../repositories/sync_queue_repository.dart';
+import 'api_sync_dispatcher.dart';
 
 typedef SyncDispatcher = Future<void> Function(SyncQueueItem item);
 
@@ -30,8 +31,13 @@ class SyncRunResult {
 class SyncQueueService {
   final SyncQueueRepository repository;
   final SyncDispatcher dispatcher;
+  final int maxAttempts;
 
-  SyncQueueService({required this.repository, required this.dispatcher});
+  SyncQueueService({
+    required this.repository,
+    required this.dispatcher,
+    this.maxAttempts = 5,
+  });
 
   Future<SyncQueueItem> enqueue({
     required SyncOperationType operationType,
@@ -54,7 +60,9 @@ class SyncQueueService {
       return SyncRunResult.skipped();
     }
 
-    final pending = await repository.listPending();
+    final pending = (await repository.listPending())
+        .where((item) => item.attempts < maxAttempts)
+        .toList(growable: false);
     var sent = 0;
     var failed = 0;
     String? lastError;
@@ -79,8 +87,19 @@ class SyncQueueService {
           ),
         );
         sent++;
+      } on SyncConflictException catch (error) {
+        lastError = 'CONFLITO: ${error.message}';
+        await repository.update(
+          processing.copyWith(
+            status: SyncStatus.failed,
+            attempts: maxAttempts,
+            error: lastError,
+          ),
+        );
+        failed++;
       } catch (error) {
-        lastError = error.toString();
+        final exhausted = processing.attempts >= maxAttempts;
+        lastError = exhausted ? 'MAX_TENTATIVAS: $error' : error.toString();
         await repository.update(
           processing.copyWith(status: SyncStatus.failed, error: lastError),
         );

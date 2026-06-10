@@ -10,19 +10,16 @@ Aplicativo mobile Flutter para operacao logistica municipal, com foco em transpo
 - Roteamento por perfil para a area logistica permitida.
 - Base preparada para inclusao futura de novos modulos, sem dependencias ativas de outros dominios.
 
-## Credenciais de Teste
+## Autenticacao
 
-Usuarios simulados do painel:
+O app usa login unico integrado ao painel/servidor:
 
-- Login: `Alexk`, `Barbara` ou `Gilyan`
-- Senha: `1234`
-- Perfil: `MOTORISTA`
-- Modulo: `Logistica`
+- `POST /api/driver/login`
+- sessao/token em armazenamento seguro;
+- roteamento por perfil e permissao;
+- sem usuarios ou senhas fixas no fluxo padrao de producao.
 
-GOD MODE:
-
-- Login: `GODMODE`
-- Senha: `app2026`
+O GOD MODE fica bloqueado por padrao e nao possui senha fixa no codigo. Fora de producao, testes internos exigem `GOD_MODE_ENABLED=true` e `GOD_MODE_PASSWORD` informado no build.
 
 ## Minhas Viagens
 
@@ -79,6 +76,10 @@ Rotas principais usadas pelo app:
 
 - `GET /api/status`
 - `POST /api/driver/login`
+- `POST /api/driver/change-password`
+- `POST /api/driver/sync`
+- `POST /api/driver/events`
+- `POST /api/driver/locations`
 - `GET /api/driver/trips?motorista_id=...`
 - `GET /api/driver/notices`
 - `POST /api/driver/trips/:id/checklist`

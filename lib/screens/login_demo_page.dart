@@ -4,6 +4,7 @@ import 'dart:async';
 
 import '../core/auth/access_router.dart';
 import '../core/auth/app_auth_models.dart';
+import '../core/auth/auth_api_service.dart';
 import '../core/auth/device_security_auth_service.dart';
 import '../core/auth/panel_auth_service.dart';
 import '../core/audit/models/audit_event_type.dart';
@@ -79,10 +80,21 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
         return;
       }
 
-      final result = await _panelAuthService.authenticate(
-        login: login,
-        senha: senha,
-      );
+      final AuthResult result;
+      try {
+        result = await _panelAuthService.authenticate(
+          login: login,
+          senha: senha,
+        );
+      } on AuthApiException catch (error) {
+        if (!mounted) return;
+        _mostrarMensagem(error.message);
+        return;
+      } catch (_) {
+        if (!mounted) return;
+        _mostrarMensagem('Nao foi possivel conectar ao painel.');
+        return;
+      }
       if (!mounted) return;
       if (!result.allowed || result.user == null) {
         _mostrarMensagem(result.message ?? 'Acesso negado.');

@@ -2,23 +2,29 @@
 
 ## Objetivo
 
-Criar uma entrada administrativa especial para demonstração avançada, com validação de credenciais, biometria opcional e animação de ativação.
+O GOD MODE e uma entrada tecnica separada para testes internos, auditoria avancada e ferramentas de desenvolvimento. Ele nao faz parte do fluxo operacional do motorista.
 
-## Credenciais Locais
+## Regras de seguranca
 
-- Login: `GODMODE`
-- Senha: `app2026`
+- O GOD MODE fica bloqueado por padrao.
+- Em producao (`APP_ENV=producao`) o GOD MODE fica sempre indisponivel.
+- Nao existe senha fixa de GOD MODE no codigo.
+- Fora de producao, o acesso so pode ser habilitado por build controlado:
 
-Essas credenciais são locais e servem apenas para demo. Em produção, o acesso deve vir do painel administrativo e de uma API segura.
+```bash
+--dart-define=GOD_MODE_ENABLED=true
+--dart-define=GOD_MODE_PASSWORD=<senha-temporaria>
+```
 
 ## Fluxo Atual
 
-1. Usuário informa login e senha na tela de login.
-2. O app valida as credenciais no `GodModeAuthService`.
-3. Se a opção de biometria estiver marcada, o app solicita validação nativa.
-4. Após autorização, o app abre `GodModeActivationScreen`.
-5. A animação MP4 é executada.
-6. Ao finalizar, o app abre `GodModeDashboard`.
+1. Usuario informa `GODMODE` na tela principal de login.
+2. `GodModeAuthService` valida se o ambiente permite GOD MODE.
+3. O servico valida a senha temporaria recebida por `dart-define`.
+4. Se a opcao de biometria for exigida, o app solicita validacao nativa.
+5. Apos autorizacao, o app abre `GodModeActivationScreen`.
+6. A animacao MP4 e executada.
+7. Ao finalizar, o app abre `GodModeDashboard`.
 
 ## Arquivos
 
@@ -27,22 +33,8 @@ Essas credenciais são locais e servem apenas para demo. Em produção, o acesso
 - `lib/screens/god_mode_dashboard.dart`
 - `assets/animations/god_mode_activation.mp4`
 
-## Segurança Atual
+## Limitacoes
 
-- Validação local de login e senha.
-- Biometria opcional via `local_auth`.
-- O painel GOD MODE exige `AppAccessMode.godMode`.
-
-## Limitações
-
-- Não existe autenticação real com backend.
-- Não existe JWT, refresh token ou sessão criptografada.
-- Não existe RBAC real para permissões finas.
-- Não existe trilha de auditoria em servidor.
-
-## Regras Para Evolução
-
-- GOD MODE futuro deve depender de autenticação real.
-- Permissões devem vir do painel administrativo.
-- Ativações devem gerar auditoria.
-- A senha local deve ser removida em build de produção.
+- O GOD MODE ainda nao consulta permissao remota.
+- O acesso de producao esta bloqueado ate existir autorizacao forte pelo backend.
+- Ativacoes devem continuar gerando auditoria local e, futuramente, auditoria no servidor.

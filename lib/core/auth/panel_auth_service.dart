@@ -1,105 +1,69 @@
 import 'app_auth_models.dart';
+import 'auth_api_service.dart';
+import 'secure_session_storage.dart';
+
+typedef AuthFallback =
+    Future<AuthApiLoginResult> Function({
+      required String login,
+      required String senha,
+    });
 
 class PanelAuthService {
   static const permissionDeniedMessage =
-      'Usuario sem permissao ativa. Procure o operador responsavel.';
+      PanelAuthMessages.permissionDeniedMessage;
 
-  final Map<String, _PanelUserRecord> _records = _initialRecords();
+  final AuthApiService apiService;
+  final SecureSessionStorage sessionStorage;
+  final AuthFallback? fallback;
+  AppUser? _lastAuthenticatedUser;
 
-  static Map<String, _PanelUserRecord> _initialRecords() => {
-    'alexk': const _PanelUserRecord(
-      user: AppUser(
-        id: 'motorista-alexk',
-        nomeCompleto: 'Alex Kich',
-        login: 'Alexk',
-        municipio: 'Municipio Demo',
-        funcao: 'Motorista',
-        perfil: AppProfile.motorista,
-        permissoes: {'viagens': true, 'checklists': true, 'ocorrencias': true},
-        modulosPermitidos: [AppModule.logistica],
-        ativo: true,
-        primeiroAcesso: true,
-      ),
-      senha: '1234',
-    ),
-    'barbara': const _PanelUserRecord(
-      user: AppUser(
-        id: 'motorista-barbara',
-        nomeCompleto: 'Barbara',
-        login: 'Barbara',
-        municipio: 'Municipio Demo',
-        funcao: 'Motorista',
-        perfil: AppProfile.motorista,
-        permissoes: {'viagens': true, 'checklists': true},
-        modulosPermitidos: [AppModule.logistica],
-        ativo: true,
-        primeiroAcesso: false,
-      ),
-      senha: '1234',
-    ),
-    'gilyan': const _PanelUserRecord(
-      user: AppUser(
-        id: 'motorista-gilyan',
-        nomeCompleto: 'Gilyan',
-        login: 'Gilyan',
-        municipio: 'Municipio Demo',
-        funcao: 'Motorista',
-        perfil: AppProfile.motorista,
-        permissoes: {'viagens': true, 'checklists': true},
-        modulosPermitidos: [AppModule.logistica],
-        ativo: true,
-        primeiroAcesso: false,
-      ),
-      senha: '1234',
-    ),
-    'operador': const _PanelUserRecord(
-      user: AppUser(
-        id: 'operador-logistica',
-        nomeCompleto: 'Operador Logistica',
-        login: 'operador',
-        municipio: 'Municipio Demo',
-        funcao: 'Controlador logistico',
-        perfil: AppProfile.operadorLogistica,
-        permissoes: {'painel_operacional': true},
-        modulosPermitidos: [AppModule.logistica],
-        ativo: true,
-        primeiroAcesso: false,
-      ),
-      senha: '1234',
-    ),
-    'inativo': const _PanelUserRecord(
-      user: AppUser(
-        id: 'inativo',
-        nomeCompleto: 'Usuario Inativo',
-        login: 'Inativo',
-        municipio: 'Municipio Demo',
-        funcao: 'Motorista',
-        perfil: AppProfile.motorista,
-        permissoes: {},
-        modulosPermitidos: [AppModule.logistica],
-        ativo: false,
-        primeiroAcesso: false,
-      ),
-      senha: '1234',
-    ),
-  };
+  PanelAuthService({
+    AuthApiService? apiService,
+    SecureSessionStorage? sessionStorage,
+    this.fallback,
+  }) : apiService = apiService ?? AuthApiService(),
+       sessionStorage = sessionStorage ?? const SecureSessionStorage();
 
   Future<AuthResult> authenticate({
     required String login,
     required String senha,
   }) async {
-    final record = _records[login.trim().toLowerCase()];
-    if (record == null || record.senha != senha.trim()) {
-      return const AuthResult.denied('Usuario ou senha invalidos.');
+    final result = await _authenticateWithApiOrFallback(
+      login: login,
+      senha: senha,
+    );
+    if (!result.authResult.allowed || result.authResult.user == null) {
+      return result.authResult;
     }
-    if (!record.user.temPermissaoAtiva) {
+
+    final user = result.authResult.user!;
+    if (!user.temPermissaoAtiva) {
       return const AuthResult.denied(permissionDeniedMessage);
     }
-    return AuthResult.allowed(record.user);
+
+    _lastAuthenticatedUser = user;
+    final token = result.token;
+    if (token != null && token.trim().isNotEmpty) {
+      await sessionStorage.save(
+        user: user,
+        token: token,
+        refreshToken: result.refreshToken,
+      );
+    }
+    return AuthResult.allowed(user);
   }
 
   Future<AppUser?> userByLogin(String login) async {
-    return _records[login.trim().toLowerCase()]?.user;
+    final session = await sessionStorage.load();
+    if (session?.user.login.trim().toLowerCase() ==
+        login.trim().toLowerCase()) {
+      return session!.user;
+    }
+    if (_lastAuthenticatedUser?.login.trim().toLowerCase() ==
+        login.trim().toLowerCase()) {
+      return _lastAuthenticatedUser;
+    }
+    return null;
   }
 
   Future<bool> alterarSenha({
@@ -108,14 +72,6 @@ class PanelAuthService {
     required String novaSenha,
     required String confirmarNovaSenha,
   }) async {
-    final key = login.trim().toLowerCase();
-    final record = _records[key];
-    if (record == null) {
-      throw const AuthValidationException('Usuario nao encontrado.');
-    }
-    if (record.senha != senhaAtual.trim()) {
-      throw const AuthValidationException('Senha atual invalida.');
-    }
     final nova = novaSenha.trim();
     if (nova != confirmarNovaSenha.trim()) {
       throw const AuthValidationException('As senhas nao conferem.');
@@ -126,11 +82,44 @@ class PanelAuthService {
       );
     }
 
-    _records[key] = _PanelUserRecord(
-      user: record.user.copyWith(primeiroAcesso: false),
-      senha: nova,
-    );
-    return true;
+    final session = await sessionStorage.load();
+    if (session == null || session.token.trim().isEmpty) {
+      throw const AuthValidationException(
+        'Sessao expirada. Entre novamente para alterar a senha.',
+      );
+    }
+
+    try {
+      await apiService.changePassword(
+        token: session.token,
+        senhaAtual: senhaAtual.trim(),
+        novaSenha: nova,
+      );
+      final updatedUser = session.user.copyWith(primeiroAcesso: false);
+      await sessionStorage.save(
+        user: updatedUser,
+        token: session.token,
+        refreshToken: session.refreshToken,
+      );
+      _lastAuthenticatedUser = updatedUser;
+      return true;
+    } on AuthApiException catch (error) {
+      throw AuthValidationException(error.message);
+    }
+  }
+
+  Future<AuthApiLoginResult> _authenticateWithApiOrFallback({
+    required String login,
+    required String senha,
+  }) async {
+    try {
+      return await apiService.login(login: login.trim(), senha: senha.trim());
+    } catch (_) {
+      if (fallback != null) {
+        return fallback!(login: login.trim(), senha: senha.trim());
+      }
+      rethrow;
+    }
   }
 
   bool _senhaForte(String senha) {
@@ -139,11 +128,4 @@ class PanelAuthService {
     final hasNumber = RegExp(r'\d').hasMatch(senha);
     return hasMinLength && hasLetter && hasNumber;
   }
-}
-
-class _PanelUserRecord {
-  final AppUser user;
-  final String senha;
-
-  const _PanelUserRecord({required this.user, required this.senha});
 }

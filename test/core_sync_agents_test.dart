@@ -4,12 +4,19 @@ import 'package:plataforma_logistica/core/connectivity/services/connectivity_ser
 import 'package:plataforma_logistica/core/sync/models/sync_operation_type.dart';
 import 'package:plataforma_logistica/core/sync/models/sync_status.dart';
 import 'package:plataforma_logistica/core/sync/repositories/sync_queue_repository.dart';
+import 'package:plataforma_logistica/core/sync/repositories/sqlite_sync_queue_repository.dart';
+import 'package:plataforma_logistica/core/sync/services/api_sync_dispatcher.dart';
 import 'package:plataforma_logistica/core/sync/services/sync_queue_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:plataforma_logistica_driver/database/database_helper.dart';
 import 'package:plataforma_logistica_driver/motorista/sync/driver_sync_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+
   group('Fase 7 - agentes de sincronizacao', () {
     late InMemorySyncQueueRepository repository;
     late ConnectivityService connectivityService;
@@ -158,11 +165,10 @@ void main() {
     );
 
     test('repositorio local preserva fila entre instancias', () async {
-      SharedPreferences.setMockInitialValues({});
-
-      final firstRepository = SharedPreferencesSyncQueueRepository(
-        storageKey: 'fase7_sync_queue_test',
-      );
+      final firstRepository = SQLiteSyncQueueRepository();
+      await firstRepository.listAll();
+      final db = await DatabaseHelper.instance.database;
+      await db.delete(SQLiteSyncQueueRepository.table);
       final firstService = SyncQueueService(
         repository: firstRepository,
         dispatcher: (_) async {},
@@ -175,9 +181,7 @@ void main() {
         payload: {'acao': 'offline'},
       );
 
-      final secondRepository = SharedPreferencesSyncQueueRepository(
-        storageKey: 'fase7_sync_queue_test',
-      );
+      final secondRepository = SQLiteSyncQueueRepository();
 
       expect(await secondRepository.unsyncedCount(), 1);
       expect(
@@ -185,6 +189,60 @@ void main() {
         'viagem-local',
       );
     });
+
+    test('limita tentativas de reenvio controlado', () async {
+      final repository = InMemorySyncQueueRepository();
+      final service = SyncQueueService(
+        repository: repository,
+        maxAttempts: 2,
+        dispatcher: (_) async => throw Exception('api fora'),
+      );
+
+      await service.enqueue(
+        operationType: SyncOperationType.event,
+        entityType: 'viagem',
+        entityId: 'viagem-retry',
+        payload: {'status': 'pendente'},
+      );
+
+      await service.syncPending(canSync: true);
+      await service.syncPending(canSync: true);
+      final third = await service.syncPending(canSync: true);
+
+      final item = (await repository.listAll()).single;
+      expect(item.attempts, 2);
+      expect(third.attempted, 0);
+      expect(item.error, contains('MAX_TENTATIVAS'));
+    });
+
+    test(
+      'conflito de API marca item para revisao sem apagar dado local',
+      () async {
+        final repository = InMemorySyncQueueRepository();
+        final service = SyncQueueService(
+          repository: repository,
+          maxAttempts: 5,
+          dispatcher: (_) async =>
+              throw const SyncConflictException('versao antiga'),
+        );
+
+        await service.enqueue(
+          operationType: SyncOperationType.update,
+          entityType: 'viagem',
+          entityId: 'viagem-conflito',
+          payload: {'versao': 1},
+        );
+
+        final result = await service.syncPending(canSync: true);
+        final item = (await repository.listAll()).single;
+
+        expect(result.failed, 1);
+        expect(item.status, SyncStatus.failed);
+        expect(item.attempts, 5);
+        expect(item.error, contains('CONFLITO'));
+        expect(item.payload['versao'], 1);
+      },
+    );
   });
 
   group('Indicador de sincronizacao do motorista', () {

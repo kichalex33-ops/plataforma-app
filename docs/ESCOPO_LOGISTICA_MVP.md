@@ -62,7 +62,9 @@ O módulo Logística copiado para `modules/logistica` já possui uma fundação 
 ### Login e sessão do motorista
 
 - Existe fluxo de login no módulo original.
-- A demo principal autentica usuários locais autorizados antes de abrir os módulos. Nesta versão, `Alexk`, `Barbara` e `Gilyan` usam senha padrão `1234`.
+- A tela principal autentica usuarios cadastrados no painel por `POST /api/driver/login` antes de abrir a area logistica permitida.
+- A sessao/token fica em armazenamento seguro local.
+- Nao existem usuarios ou senhas fixas no fluxo padrao de producao.
 - O módulo Logística possui modelo de motorista e sessão local.
 
 ### Viagens atribuídas
