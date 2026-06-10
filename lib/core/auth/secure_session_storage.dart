@@ -70,6 +70,8 @@ class SecureSessionStorage {
   static const _userKey = 'auth_user';
   static const _tokenKey = 'auth_token';
   static const _refreshTokenKey = 'auth_refresh_token';
+  static const _pairedServerUrlKey = 'paired_server_url';
+  static const _pairedLoginKey = 'paired_login';
 
   final SecureKeyValueStore store;
 
@@ -110,6 +112,19 @@ class SecureSessionStorage {
   }
 
   Future<String?> token() => store.read(key: _tokenKey);
+
+  Future<void> savePairing({String? serverUrl, String? login}) async {
+    if (serverUrl != null && serverUrl.trim().isNotEmpty) {
+      await store.write(key: _pairedServerUrlKey, value: serverUrl.trim());
+    }
+    if (login != null && login.trim().isNotEmpty) {
+      await store.write(key: _pairedLoginKey, value: login.trim());
+    }
+  }
+
+  Future<String?> pairedServerUrl() => store.read(key: _pairedServerUrlKey);
+
+  Future<String?> pairedLogin() => store.read(key: _pairedLoginKey);
 
   Future<void> clear() async {
     await store.delete(key: _userKey);

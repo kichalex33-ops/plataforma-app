@@ -13,5 +13,6 @@ void main() {
     expect(find.text('Login'), findsOneWidget);
     expect(find.text('Senha'), findsOneWidget);
     expect(find.text('Entrar usando biometria'), findsOneWidget);
+    expect(find.text('Parear com QR Code'), findsOneWidget);
   });
 }

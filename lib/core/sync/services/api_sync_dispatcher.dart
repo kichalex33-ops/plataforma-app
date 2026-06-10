@@ -33,7 +33,7 @@ class ApiSyncDispatcher {
 
     final response = await client
         .post(
-          ApiConfig.uri(_pathFor(item)),
+          await _uri(_pathFor(item)),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -69,5 +69,13 @@ class ApiSyncDispatcher {
       case SyncOperationType.delete:
         return '/api/driver/sync';
     }
+  }
+
+  Future<Uri> _uri(String path) async {
+    final pairedServerUrl = await sessionStorage.pairedServerUrl();
+    final baseUrl = pairedServerUrl == null || pairedServerUrl.trim().isEmpty
+        ? ApiConfig.baseUrl
+        : pairedServerUrl.trim();
+    return Uri.parse('$baseUrl$path');
   }
 }

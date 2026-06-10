@@ -14,6 +14,8 @@ Aplicativo mobile Flutter para operacao logistica municipal, com foco em transpo
 
 O app usa login unico integrado ao painel/servidor:
 
+- primeiro acesso por `Parear com QR Code`;
+- QR confirma `POST /api/driver/pairing/confirm`;
 - `POST /api/driver/login`
 - sessao/token em armazenamento seguro;
 - roteamento por perfil e permissao;
@@ -75,6 +77,7 @@ Em producao, `APP_ENV=producao` exige `API_BASE_URL` com HTTPS.
 Rotas principais usadas pelo app:
 
 - `GET /api/status`
+- `POST /api/driver/pairing/confirm`
 - `POST /api/driver/login`
 - `POST /api/driver/change-password`
 - `POST /api/driver/sync`

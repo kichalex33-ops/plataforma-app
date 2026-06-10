@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:plataforma_logistica_driver/core/api/api_config.dart';
 
 import 'app_auth_models.dart';
+import 'secure_session_storage.dart';
 
 class AuthApiException implements Exception {
   final String message;
@@ -29,8 +30,11 @@ class AuthApiLoginResult {
 
 class AuthApiService {
   final http.Client client;
+  final SecureSessionStorage sessionStorage;
 
-  AuthApiService({http.Client? client}) : client = client ?? http.Client();
+  AuthApiService({http.Client? client, SecureSessionStorage? sessionStorage})
+    : client = client ?? http.Client(),
+      sessionStorage = sessionStorage ?? const SecureSessionStorage();
 
   Future<AuthApiLoginResult> login({
     required String login,
@@ -38,7 +42,7 @@ class AuthApiService {
   }) async {
     final response = await client
         .post(
-          ApiConfig.uri(ApiConfig.driverLogin),
+          await _uri(ApiConfig.driverLogin),
           headers: const {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -97,7 +101,7 @@ class AuthApiService {
   }) async {
     final response = await client
         .post(
-          ApiConfig.uri('/api/driver/change-password'),
+          await _uri('/api/driver/change-password'),
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -193,6 +197,14 @@ class AuthApiService {
       'primeiro_acesso':
           json['primeiro_acesso'] == true || json['primeiroAcesso'] == true,
     });
+  }
+
+  Future<Uri> _uri(String path) async {
+    final pairedServerUrl = await sessionStorage.pairedServerUrl();
+    final baseUrl = pairedServerUrl == null || pairedServerUrl.trim().isEmpty
+        ? ApiConfig.baseUrl
+        : pairedServerUrl.trim();
+    return Uri.parse('$baseUrl$path');
   }
 }
 

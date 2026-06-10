@@ -6,6 +6,7 @@ import '../core/auth/access_router.dart';
 import '../core/auth/app_auth_models.dart';
 import '../core/auth/auth_api_service.dart';
 import '../core/auth/device_security_auth_service.dart';
+import '../core/auth/driver_pairing_service.dart';
 import '../core/auth/panel_auth_service.dart';
 import '../core/audit/models/audit_event_type.dart';
 import '../core/sync/providers/sync_providers.dart';
@@ -21,6 +22,7 @@ import 'alterar_senha_screen.dart';
 import 'appearance_settings_page.dart';
 import 'god_mode_activation_screen.dart';
 import 'module_selector_page.dart';
+import 'qr_pairing_screen.dart';
 
 class LoginDemoPage extends StatefulWidget {
   const LoginDemoPage({super.key});
@@ -172,6 +174,28 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
     } finally {
       if (mounted) setState(() => _entrando = false);
     }
+  }
+
+  Future<void> _parearComQrCode() async {
+    if (_entrando) return;
+    final result = await Navigator.push<DriverPairingResult>(
+      context,
+      MaterialPageRoute(builder: (_) => const QrPairingScreen()),
+    );
+    if (!mounted || result == null) return;
+
+    if (result.login != null && result.login!.trim().isNotEmpty) {
+      _loginController.text = result.login!;
+    }
+    if (result.temporaryPassword != null &&
+        result.temporaryPassword!.trim().isNotEmpty) {
+      _senhaController.text = result.temporaryPassword!;
+    }
+
+    final message = result.temporaryPassword == null
+        ? 'Aparelho pareado. Informe a senha gerada no painel para entrar.'
+        : 'Aparelho pareado. Login e senha inicial preenchidos.';
+    _mostrarMensagem(result.message ?? message);
   }
 
   Future<AppUser?> _oferecerAlteracaoSenha(AppUser user) async {
@@ -441,6 +465,14 @@ class _LoginDemoPageState extends State<LoginDemoPage> {
                                   label: Text(
                                     _entrando ? 'Entrando...' : 'Entrar',
                                   ),
+                                ),
+                                const SizedBox(height: AppSpacing.sm),
+                                OutlinedButton.icon(
+                                  onPressed: _entrando
+                                      ? null
+                                      : _parearComQrCode,
+                                  icon: const Icon(Icons.qr_code_scanner),
+                                  label: const Text('Parear com QR Code'),
                                 ),
                               ],
                             ),
