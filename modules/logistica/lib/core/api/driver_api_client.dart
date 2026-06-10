@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/trip_model.dart';
 import 'api_config.dart';
 
 class DriverApiClient {
@@ -49,9 +50,48 @@ class DriverApiClient {
     return _getLista('${ApiConfig.driverTrips}?motorista_id=$motoristaId');
   }
 
-  Future<List<Map<String, dynamic>>> buscarAvisosCentral() async {
+  Future<Trip?> fetchCurrentTrip(String motoristaId, {String? token}) async {
+    final uri = ApiConfig.uri(
+      '${ApiConfig.driverTrips}/active?id=${Uri.encodeQueryComponent(motoristaId)}',
+    );
+    debugPrint('[API] GET $uri');
+    try {
+      final response = await client
+          .get(
+            uri,
+            headers: token == null || token.isEmpty
+                ? const {}
+                : {'Authorization': token},
+          )
+          .timeout(ApiConfig.httpTimeout);
+      debugPrint('[API] active trip -> ${response.statusCode}');
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        return null;
+      }
+
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        final data = decoded['data'];
+        if (data is Map<String, dynamic>) return Trip.fromJson(data);
+        return Trip.fromJson(decoded);
+      }
+    } catch (error) {
+      debugPrint('[API] fetchCurrentTrip falhou: $error');
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> buscarAvisosCentral([
+    String? motoristaId,
+  ]) async {
     debugPrint('[API] GET ${ApiConfig.driverNotices}');
-    return _getLista(ApiConfig.driverNotices, listKeys: const ['avisos']);
+    final query = motoristaId == null || motoristaId.trim().isEmpty
+        ? ''
+        : '?motorista_id=${Uri.encodeQueryComponent(motoristaId)}';
+    return _getLista(
+      '${ApiConfig.driverNotices}$query',
+      listKeys: const ['avisos'],
+    );
   }
 
   Future<List<Map<String, dynamic>>> buscarLogisticaViagens() async {
@@ -154,8 +194,8 @@ class DriverApiClient {
     return _postJson('/api/driver/trips/$viagemId/km-inicial', {
       'motorista_id': motoristaId,
       'km_saida': kmSaida,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
+      'latitude': ?latitude,
+      'longitude': ?longitude,
     });
   }
 
@@ -192,8 +232,8 @@ class DriverApiClient {
     return _postJson('/api/driver/panic', {
       'viagem_id': viagemId,
       'motorista_id': motoristaId,
-      if (latitude != null) 'latitude': latitude,
-      if (longitude != null) 'longitude': longitude,
+      'latitude': ?latitude,
+      'longitude': ?longitude,
     });
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'package:plataforma_logistica_driver/core/app_info.dart';
 import 'package:plataforma_logistica_driver/main.dart';
 
 void main() {
@@ -16,10 +15,10 @@ void main() {
       const PlataformaLogisticaDriverApp(mostrarLogin: false),
     );
 
-    expect(find.text(AppInfo.nome), findsWidgets);
+    expect(find.text('Plataforma Logistica'), findsWidgets);
     expect(find.text('Motorista logado'), findsOneWidget);
     expect(find.text('Municipio local'), findsWidgets);
-    expect(find.text('Viagem atual'), findsOneWidget);
+    expect(find.text('VIAGEM ATIVA'), findsOneWidget);
     expect(find.text('Proximas viagens'), findsOneWidget);
     expect(find.text('Sincronizacao'), findsOneWidget);
 
@@ -34,12 +33,12 @@ void main() {
     expect(find.text('Sincronizar agora'), findsOneWidget);
 
     await tester.scrollUntilVisible(
-      find.text('Ver minhas viagens'),
+      find.text('Minhas viagens'),
       120,
       scrollable: scrollable,
     );
-    expect(find.text('Ver minhas viagens'), findsOneWidget);
-    expect(find.text('Continuar viagem'), findsOneWidget);
+    expect(find.text('Minhas viagens'), findsOneWidget);
+    expect(find.text('Iniciar rota'), findsOneWidget);
 
     expect(find.text('Painel'), findsNothing);
     expect(find.text('Auditoria'), findsNothing);
