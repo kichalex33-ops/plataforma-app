@@ -9,7 +9,9 @@ import 'api_config.dart';
 class DriverApiClient {
   final http.Client client;
 
-  DriverApiClient({http.Client? client}) : client = client ?? http.Client();
+  DriverApiClient({http.Client? client}) : client = client ?? http.Client() {
+    ApiConfig.validarAmbiente();
+  }
 
   Future<bool> testarConexao() async {
     debugPrint('[API] GET ${ApiConfig.status}');
@@ -57,12 +59,7 @@ class DriverApiClient {
     debugPrint('[API] GET $uri');
     try {
       final response = await client
-          .get(
-            uri,
-            headers: token == null || token.isEmpty
-                ? const {}
-                : {'Authorization': token},
-          )
+          .get(uri, headers: _headers(token: token, json: false))
           .timeout(ApiConfig.httpTimeout);
       debugPrint('[API] active trip -> ${response.statusCode}');
       if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -143,7 +140,7 @@ class DriverApiClient {
   }) async {
     try {
       final response = await client
-          .get(ApiConfig.uri(path))
+          .get(ApiConfig.uri(path), headers: _headers(json: false))
           .timeout(ApiConfig.httpTimeout);
       debugPrint('[API] GET $path -> ${response.statusCode}');
       if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -194,8 +191,10 @@ class DriverApiClient {
     return _postJson('/api/driver/trips/$viagemId/km-inicial', {
       'motorista_id': motoristaId,
       'km_saida': kmSaida,
-      'latitude': ?latitude,
-      'longitude': ?longitude,
+      // ignore: use_null_aware_elements
+      if (latitude != null) 'latitude': latitude,
+      // ignore: use_null_aware_elements
+      if (longitude != null) 'longitude': longitude,
     });
   }
 
@@ -232,8 +231,10 @@ class DriverApiClient {
     return _postJson('/api/driver/panic', {
       'viagem_id': viagemId,
       'motorista_id': motoristaId,
-      'latitude': ?latitude,
-      'longitude': ?longitude,
+      // ignore: use_null_aware_elements
+      if (latitude != null) 'latitude': latitude,
+      // ignore: use_null_aware_elements
+      if (longitude != null) 'longitude': longitude,
     });
   }
 
@@ -259,7 +260,7 @@ class DriverApiClient {
       final response = await client
           .post(
             ApiConfig.uri(path),
-            headers: {'Content-Type': 'application/json; charset=utf-8'},
+            headers: _headers(),
             body: jsonEncode(payload),
           )
           .timeout(ApiConfig.httpTimeout);
@@ -284,7 +285,7 @@ class DriverApiClient {
       final response = await client
           .post(
             ApiConfig.uri(path),
-            headers: {'Content-Type': 'application/json; charset=utf-8'},
+            headers: _headers(),
             body: jsonEncode(payload),
           )
           .timeout(ApiConfig.httpTimeout);
@@ -328,5 +329,12 @@ class DriverApiClient {
       }
     }
     return const [];
+  }
+
+  Map<String, String> _headers({String? token, bool json = true}) {
+    return {
+      if (json) 'Content-Type': 'application/json; charset=utf-8',
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+    };
   }
 }

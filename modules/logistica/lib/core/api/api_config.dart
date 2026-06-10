@@ -1,8 +1,21 @@
 class ApiConfig {
   ApiConfig._();
 
-  static const String baseUrl = 'http://10.0.0.4:3000';
-  static const Duration httpTimeout = Duration(seconds: 5);
+  static const String ambiente = String.fromEnvironment(
+    'APP_ENV',
+    defaultValue: 'dev',
+  );
+
+  static const String baseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'http://10.0.0.4:3000',
+  );
+
+  static const Duration httpTimeout = Duration(seconds: 10);
+
+  static bool get isDev => ambiente == 'dev';
+  static bool get isHomologacao => ambiente == 'homologacao';
+  static bool get isProducao => ambiente == 'producao';
 
   static const String status = '/api/status';
   static const String driverTrips = '/api/driver/trips';
@@ -21,4 +34,10 @@ class ApiConfig {
   }
 
   static Uri uri(String path) => Uri.parse('$baseUrl$path');
+
+  static void validarAmbiente() {
+    if (isProducao && !baseUrl.startsWith('https://')) {
+      throw StateError('API_BASE_URL de producao deve usar HTTPS.');
+    }
+  }
 }

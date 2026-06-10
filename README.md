@@ -48,20 +48,32 @@ C:\flutter\bin\flutter.bat run --dart-define=DEMO_SEED_ENABLED=true
 
 ## Como Rodar
 
+Servidor local de desenvolvimento:
+
 ```powershell
 git clone https://github.com/kichalex33-ops/plataforma-app.git
 cd plataforma-app
 C:\flutter\bin\flutter.bat pub get
-C:\flutter\bin\flutter.bat run
+C:\flutter\bin\flutter.bat run --dart-define=APP_ENV=dev --dart-define=API_BASE_URL=http://10.0.0.4:3000
+```
+
+Homologacao com URL publica:
+
+```powershell
+C:\flutter\bin\flutter.bat run --dart-define=APP_ENV=homologacao --dart-define=API_BASE_URL=https://homologacao.seudominio.com
+```
+
+Producao:
+
+```powershell
+C:\flutter\bin\flutter.bat run --dart-define=APP_ENV=producao --dart-define=API_BASE_URL=https://api.seudominio.com
 ```
 
 ## Integracao com Servidor
 
-O app deve permanecer alinhado ao servidor localizado em:
+O app nao depende de IP fixo em producao. A URL da API deve ser informada por `API_BASE_URL`.
 
-```text
-C:\dev\plataforma\app\server
-```
+Em producao, `APP_ENV=producao` exige `API_BASE_URL` com HTTPS.
 
 Rotas principais usadas pelo app:
 
